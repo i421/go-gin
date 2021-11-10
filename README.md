@@ -9,7 +9,7 @@ gin Web framework
 
 #### 安装教程
 
-1.  git clone https://gitee.com/i421/i421.git
+1.  git clone 
 2.  go mod tidy
 3.  go build
 
