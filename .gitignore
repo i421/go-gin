@@ -2,11 +2,10 @@
 .vscode
 */.DS_Store
 static/uploadfile
-i421.exe
 i421
-main.exe
+*.exe
 main
-log/i421.log
+log/*.log
 config/config.yaml
 */.DS_Store
 go.sum
