@@ -5,7 +5,7 @@ import (
 	"i421/config"
 	"i421/corntask"
 	ilog "i421/log"
-	"i421/module"
+	"i421/model"
 	"log"
 
 	"i421/router"
@@ -26,8 +26,8 @@ func init() {
 	// 初始化 log
 	ilog.InitLogger()
 	// 初始化数据库
-	if err := module.InitDb(); err != nil {
-		log.Fatal("module.InitDb() is failed, err: ", err)
+	if err := model.InitDb(); err != nil {
+		log.Fatal("model.InitDb() is failed, err: ", err)
 	}
 	// 初始化定时器
 	if err := corntask.InitCronTask(); err != nil {
@@ -46,7 +46,7 @@ func main() {
 	fmt.Println("db")
 
 	var users []User
-	err := module.Db.Raw("select id from user").Scan(&users)
+	err := model.Db.Raw("select id from user").Scan(&users)
 	if err != nil {
 		fmt.Println("error", err)
 	}

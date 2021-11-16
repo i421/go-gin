@@ -14,17 +14,35 @@ var (
 type AllConf struct {
 	AppName   string
 	AppPort   string
+	AmqpConf  AmqpConf  `json:"amqpConf"`
 	MysqlConf MysqlConf `json:"mysqlConf"`
+	RedisConf RedisConf `json:"redisConf"`
 	LogConf   LogConf   `json:"logConf"`
 	AuthConf  AuthConf  `json:"authConf"`
 }
 
+// redis 配置
+type RedisConf struct {
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	Password string `json:"password"`
+	Db       int    `json:"db"`
+}
+
 // mysql 配置
 type MysqlConf struct {
-	MysqlHost string `json:"mysqlHost"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-	DbName    string `json:"dbname"`
+	Host     string `json:"host"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	DbName   string `json:"dbname"`
+}
+
+// amqp 配置
+type AmqpConf struct {
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // 日志配置

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"i421/amqp"
 	"i421/config"
-	"i421/corntask"
+	"i421/crontask"
 	ilog "i421/log"
-	"i421/module"
+	"i421/model"
+	"i421/redis"
 	"log"
 
 	"i421/router"
@@ -21,13 +23,20 @@ func init() {
 	// 初始化 log
 	ilog.InitLogger()
 	// 初始化数据库
-	if err := module.InitDb(); err != nil {
-		log.Fatal("module.InitDb() is failed, err: ", err)
+	if err := model.InitDb(); err != nil {
+		log.Fatal("model.InitDb() is failed, err: ", err)
 	}
 	// 初始化定时器
-	if err := corntask.InitCronTask(); err != nil {
+	if err := crontask.InitCronTask(); err != nil {
 		log.Fatal("cronObj.AddFunc is failed, err: ", err)
 	}
+
+	if err := redis.InitRedis(); err != nil {
+		log.Fatal("redis.InitRedis() is failed, err: ", err)
+	}
+
+	// 启动amqp接收器
+	go amqp.InitAmqpRec()
 }
 
 func main() {

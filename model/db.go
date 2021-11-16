@@ -1,4 +1,4 @@
-package module
+package model
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ import (
 )
 
 // 公共模块
-type MyBaseModel struct {
+type BaseModel struct {
 	ID        int `json:"id,omitempty"`
 	CreatedAt int `json:"created_at,omitempty"`
 	UpdatedAt int `json:"updated_at,omitempty"`
@@ -40,7 +40,7 @@ func InitDb() (err error) {
 			Colorful:      false,         // 禁用彩色打印
 		},
 	)
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.Configs.MysqlConf.Username, config.Configs.MysqlConf.Password, config.Configs.MysqlConf.MysqlHost, config.Configs.MysqlConf.DbName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.Configs.MysqlConf.Username, config.Configs.MysqlConf.Password, config.Configs.MysqlConf.Host, config.Configs.MysqlConf.DbName)
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: newLogger})
 	if err != nil {
 		return err
