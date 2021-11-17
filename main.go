@@ -1,7 +1,6 @@
 package main
 
 import (
-	"i421/amqp"
 	"i421/config"
 	"i421/crontask"
 	ilog "i421/log"
@@ -36,7 +35,8 @@ func init() {
 	}
 
 	// 启动amqp接收器
-	go amqp.InitAmqpRec()
+	//myamqp := amqp.New()
+	//go myamqp.Consume()
 }
 
 func main() {
