@@ -40,6 +40,8 @@ func init() {
 }
 
 func main() {
+	gin.SetMode(config.Configs.AppMode)
+
 	routerObj := gin.Default()
 	// 路由
 	router.Routers(routerObj)

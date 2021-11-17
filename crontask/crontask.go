@@ -1,9 +1,6 @@
 package crontask
 
 import (
-	"fmt"
-	"i421/controller/user"
-
 	"github.com/robfig/cron/v3"
 )
 
@@ -13,11 +10,13 @@ func InitCronTask() error {
 
 	// 每小时统计一次
 	//_, err := cronObj.AddFunc("0 */1 * * ?", visit.StatisticsVisitByDay)
-	_, err := cronObj.AddFunc("*/1 * * * *", user.Hello)
+	//_, err := cronObj.AddFunc("*/1 * * * *", user.Hello)
 
-	if err != nil {
-		fmt.Println("err:", err)
-	}
+	/*
+		if err != nil {
+			fmt.Println("err:", err)
+		}
+	*/
 
 	cronObj.Start()
 	return nil

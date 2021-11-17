@@ -20,9 +20,18 @@ CREATE TABLE roles(
 DROP TABLE IF EXISTS role_users;
 CREATE TABLE role_users(
 `id` INT PRIMARY KEY AUTO_INCREMENT,
-`user_id` INT COMMENT 'crm_user 表 id',
-`role_id` INT COMMENT 'crm_role 表 id',
+`user_id` INT COMMENT 'users 表 id',
+`role_id` INT COMMENT 'roles 表 id',
 `created_at` INT,
 `updated_at` INT
 )ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT '用户关联角色表';
+
+DROP TABLE IF EXISTS companys;
+CREATE TABLE companys(
+`id` INT PRIMARY KEY AUTO_INCREMENT,
+`user_id` INT,
+`name` varchar(50) COMMENT '公司名称',
+`created_at` INT,
+`updated_at` INT
+)ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT '公司';
 
