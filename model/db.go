@@ -19,7 +19,6 @@ type BaseModel struct {
 	ID        int `json:"id,omitempty"`
 	CreatedAt int `json:"created_at,omitempty"`
 	UpdatedAt int `json:"updated_at,omitempty"`
-	DeletedAt int `json:"deleted_at,omitempty`
 }
 
 var (

@@ -9,8 +9,7 @@ import (
 
 func Routers(router *gin.Engine) {
 
+	router.GET("/api/login", user.Login)
+	router.GET("/api/register", user.Register)
 	router.GET("/", home.Index)
-
-	router.POST("/api/login", user.Login)
-	router.POST("/api/register", user.Register)
 }

@@ -3,18 +3,23 @@ package user
 import (
 	"i421/model"
 	"i421/model/role"
-	//"gorm.io/datatypes"
+
+	"gorm.io/datatypes"
 )
 
 // user 模型
 type User struct {
 	model.BaseModel
-	Name     string      `json:"name"` // 用户名
-	Username string      `json:"username"`
-	Password string      `json:"password"`
-	Status   string      `gorm:"default:1" json:"status"` // 默认禁用
-	Roles    []role.Role `gorm:"many2many:role_users"`
-	//Info     datatypes.JSON
+	Nickname        string         `json:"nickname"` // 用户名
+	UUID            string         `json:"uuid"`     // 唯一标志
+	Phone           string         `json:"phone"`
+	Email           string         `json:"email"`
+	EmailVerifiedAt string         `json:"email_verified_at"`
+	Password        string         `json:"password"`
+	Avatar          string         `json:"avatar"`
+	Info            datatypes.JSON `json:"info"`
+	Status          int            `gorm:"default:1" json:"status"` // 默认可用
+	Roles           []role.Role    `json:"roles" gorm:"many2many:role_user"`
 }
 
 // 指定表名

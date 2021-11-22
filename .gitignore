@@ -9,3 +9,4 @@ log/*.log
 config/config.yaml
 */.DS_Store
 go.sum
+tmp
