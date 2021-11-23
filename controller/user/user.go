@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	. "i421/controller"
+	"i421/model"
 	"i421/model/role"
 	. "i421/redis"
 	"i421/service"
@@ -18,16 +19,18 @@ func Login(c *gin.Context) {
 
 	var roles []role.Role
 	//var permissions []permission.Permission
-	//model.Db.Preload("Permissions").Find(&roles)
+	model.Db.Preload("Permissions").Find(&roles)
 	//model.Db.Model(&permission.Permission{}).Find(&permissions)
 
 	params := map[string]string{
-		"username": "admin",
+		"username": "13738284583",
 		"password": "admin",
 	}
 
-	var us service.UserService
-	data := service.UserService.Login(us, params)
+	userService := service.NewUserService()
+	userService.Login(params)
+	//data := us.Login(params)
+	//fmt.Println("data:", data)
 
 	res := Response{
 		Code: 200,
