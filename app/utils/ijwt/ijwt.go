@@ -13,13 +13,13 @@ import (
 
 //  MyClaims 自定义声明结构体并内嵌 jwt.StandardClaims
 type MyClaims struct {
-	UserId string `json:"user_id"`
+	UserId int    `json:"user_id"`
 	Phone  string `json:"phone"`
 	jwt.StandardClaims
 }
 
 // 生成 token
-func GenerateToken(user_id, phone string) (string, error) {
+func GenerateToken(user_id int, phone string) (string, error) {
 	mySecret := []byte(config.Configs.AuthConf.Secret)
 	// 过期时间
 	tokenExpireStr := config.Configs.AuthConf.TokenExpire
