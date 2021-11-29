@@ -1,8 +1,8 @@
 package user
 
 import (
-	"i421/model"
-	"i421/model/role"
+	"i421/app/model"
+	"i421/app/model/role"
 
 	"gorm.io/datatypes"
 )

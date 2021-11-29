@@ -3,9 +3,9 @@ package home
 import (
 	"net/http"
 
-	. "i421/controller"
-	"i421/model"
-	"i421/model/user"
+	. "i421/app/http/controller"
+	"i421/app/model"
+	"i421/app/model/user"
 
 	"github.com/gin-gonic/gin"
 )

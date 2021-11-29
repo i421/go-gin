@@ -2,11 +2,11 @@ package user
 
 import (
 	"context"
-	. "i421/controller"
-	"i421/model"
-	"i421/model/role"
-	. "i421/redis"
-	"i421/service"
+	. "i421/app/http/controller"
+	"i421/app/model"
+	"i421/app/model/role"
+	. "i421/app/redis"
+	"i421/app/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

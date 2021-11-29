@@ -1,8 +1,8 @@
 package role
 
 import (
-	"i421/model"
-	"i421/model/permission"
+	"i421/app/model"
+	"i421/app/model/permission"
 )
 
 // role

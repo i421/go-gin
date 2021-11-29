@@ -3,8 +3,10 @@ module i421
 go 1.17
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-redis/redis/v8 v8.11.4
+	github.com/pkg/errors v0.8.1
 	github.com/rabbitmq/amqp091-go v1.1.0
 	gorm.io/datatypes v1.0.3
 )

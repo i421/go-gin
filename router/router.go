@@ -1,8 +1,8 @@
 package router
 
 import (
-	"i421/controller/home"
-	"i421/controller/user"
+	"i421/app/http/controller/home"
+	"i421/app/http/controller/user"
 
 	"github.com/gin-gonic/gin"
 )

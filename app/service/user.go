@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"i421/model"
-	"i421/model/user"
+	"i421/app/model"
+	"i421/app/model/user"
 )
 
 type UserService struct {

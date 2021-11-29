@@ -1,7 +1,7 @@
 package permission
 
 import (
-	"i421/model"
+	"i421/app/model"
 )
 
 // permission

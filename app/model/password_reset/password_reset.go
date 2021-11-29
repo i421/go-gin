@@ -1,7 +1,7 @@
 package passwordReset
 
 import (
-	"i421/model"
+	"i421/app/model"
 )
 
 // password_reset 模型
