@@ -10,13 +10,14 @@ import (
 )
 
 var (
+	// Redis 全局对象
 	Redis *redis.Client
 	once  sync.Once
 )
 
 var ctx = context.Background()
 
-// Redis 单例模式
+// GetRedis 单例模式
 func GetRedis() *redis.Client {
 	once.Do(func() {
 		Redis = redis.NewClient(&redis.Options{

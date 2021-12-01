@@ -42,8 +42,8 @@ func Login(c *gin.Context) {
 	// 登陆失败
 	if data == nil {
 		res := Response{
-			Code: 10000,
-			Msg:  global.WRONG_USERNAME_OR_PASSWORD,
+			Code: global.USER_NAME_OR_PASSWORD_WRONG_CODE,
+			Msg:  global.USER_NAME_OR_PASSWORD_WRONG,
 		}
 
 		c.JSON(http.StatusOK, res)

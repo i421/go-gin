@@ -2,19 +2,26 @@ package ijwt
 
 import (
 	"i421/config"
-	"log"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 )
 
-type iJwt struct{}
+// iJwt 结构体
+type iJwt struct {
+	signKey     []byte
+	tokenExpire int64
+}
 
+// NewIJwt 实例化
 func NewIJwt() *iJwt {
-	return &iJwt{}
+	expireAt, _ := strconv.ParseInt(config.Configs.AuthConf.TokenExpire, 10, 64)
+	return &iJwt{
+		signKey:     []byte(config.Configs.AuthConf.Secret),
+		tokenExpire: expireAt,
+	}
 }
 
 //  MyClaims 自定义声明结构体并内嵌 jwt.StandardClaims
@@ -24,38 +31,35 @@ type MyClaims struct {
 	jwt.StandardClaims
 }
 
-// 生成 token
-func (iJwt *iJwt) GenerateToken(user_id int, phone string) (string, error) {
-	mySecret := []byte(config.Configs.AuthConf.Secret)
-	// 过期时间
-	tokenExpireStr := config.Configs.AuthConf.TokenExpire
-	// tokenExpireStr 中包含, 需要去掉 \u202c
-	tokenExpireStr = strings.Replace(tokenExpireStr, "\u202c", "", -1)
-	expireTimeInt, err := strconv.ParseInt(tokenExpireStr, 10, 64)
-	if err != nil {
-		log.Println("tokenexpire string to int is failed: ", err)
-	}
-	expireTimeInt += time.Now().Unix()
-	c := MyClaims{
-		user_id,
-		phone,
-		jwt.StandardClaims{
-			ExpiresAt: expireTimeInt,
-			Issuer:    "my-project",
-		},
-	}
-	// 使用指定的签名方法创建签名对象
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, c)
-	// 使用指定的secret签名并获得完整的编码后的字符串token
-	return token.SignedString(mySecret)
+// CreateToken 内部方法生成一个token
+func (ijwt *iJwt) createToken(claims MyClaims) (string, error) {
+	// 生成jwt格式的header、claims 部分
+	tokenPartA := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// 继续添加秘钥值，生成最后一部分
+	return tokenPartA.SignedString(ijwt.signKey)
 }
 
-// 解析 token 是否正确
-func (iJwt *iJwt) VerifyTokenIsOk(tokenStr string) (bool, error) {
-	mySecret := []byte(config.Configs.AuthConf.Secret)
+// GenerateToken 对外接口生成token
+func (ijwt *iJwt) GenerateToken(userId int, phone string) (token string, err error) {
+
+	// 根据实际业务自定义token需要包含的参数，生成token，注意：用户密码请勿包含在token
+	myC := MyClaims{
+		UserId: userId,
+		Phone:  phone,
+		// 特别注意，针对前文的匿名结构体，初始化的时候必须指定键名，并且不带 jwt. 否则报错：Mixture of field: value and value initializers
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: time.Now().Unix() - 10,               // 生效开始时间
+			ExpiresAt: time.Now().Unix() + ijwt.tokenExpire, // 失效截止时间
+		},
+	}
+	return ijwt.createToken(myC)
+}
+
+// VerifyTokenIsOk 解析 token 是否正确
+func (ijwt *iJwt) VerifyTokenIsOk(tokenStr string) (bool, error) {
 	// 解析token
 	token, err := jwt.ParseWithClaims(tokenStr, &MyClaims{}, func(token *jwt.Token) (i interface{}, err error) {
-		return mySecret, nil
+		return ijwt.signKey, nil
 	})
 	if err != nil {
 		return false, errors.Wrapf(err, "token: %v is invalid!", tokenStr)
@@ -66,12 +70,11 @@ func (iJwt *iJwt) VerifyTokenIsOk(tokenStr string) (bool, error) {
 	return false, errors.Wrapf(err, "token: %v is invalid!", tokenStr)
 }
 
-// 获取解析 token 里的数据
-func (iJwt *iJwt) ParseToken(tokenStr string) (*MyClaims, error) {
-	mySecret := []byte(config.Configs.AuthConf.Secret)
+// ParseToken 获取解析 token 里的数据
+func (ijwt *iJwt) ParseToken(tokenStr string) (*MyClaims, error) {
 	// 解析token
 	token, err := jwt.ParseWithClaims(tokenStr, &MyClaims{}, func(token *jwt.Token) (i interface{}, err error) {
-		return mySecret, nil
+		return ijwt.signKey, nil
 	})
 	if err != nil {
 		return nil, errors.Wrapf(err, "token: %v is invalid!", tokenStr)

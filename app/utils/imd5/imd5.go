@@ -6,19 +6,22 @@ import (
 	"encoding/hex"
 )
 
+// iMD5 imd5结构体
 type iMD5 struct{}
 
-func NewIMD5() *iMd5 {
+// NewIMD5 实例化
+func NewIMD5() *iMD5 {
 	return &iMD5{}
 }
 
-func (iM5 *iMD5) MD5(params string) string {
+// MD5 加密
+func (im5 *iMD5) encrypt(params string) string {
 	md5Ctx := md5.New()
 	md5Ctx.Write([]byte(params))
 	return hex.EncodeToString(md5Ctx.Sum(nil))
 }
 
-//先base64，然后MD5
-func (iM5 *iMD5) Base64Md5(params string) string {
-	return MD5(base64.StdEncoding.EncodeToString([]byte(params)))
+// Base64Md5 先base64，然后MD5
+func (im5 *iMD5) Base64Md5(params string) string {
+	return im5.encrypt(base64.StdEncoding.EncodeToString([]byte(params)))
 }

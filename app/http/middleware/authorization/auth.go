@@ -24,8 +24,8 @@ func CheckToken() gin.HandlerFunc {
 		//  推荐使用 ShouldBindHeader 方式获取头参数
 		if err := c.ShouldBindHeader(&headerParams); err != nil {
 			res := Response{
-				Code: http.StatusBadRequest,
-				Msg:  global.WRONG_TOKEN,
+				Code: global.TOKEN_MISSING_CODE,
+				Msg:  global.TOKEN_MISSING,
 			}
 			c.AbortWithStatusJSON(http.StatusBadRequest, res)
 			return
@@ -43,7 +43,7 @@ func CheckToken() gin.HandlerFunc {
 				c.Next()
 			} else {
 				res := Response{
-					Code: http.StatusBadRequest,
+					Code: global.TOKEN_AUTH_FAIL_CODE,
 					Msg:  global.TOKEN_AUTH_FAIL,
 				}
 				c.AbortWithStatusJSON(http.StatusBadRequest, res)
@@ -51,8 +51,8 @@ func CheckToken() gin.HandlerFunc {
 			}
 		} else {
 			res := Response{
-				Code: http.StatusBadRequest,
-				Msg:  global.WRONG_TOKEN,
+				Code: global.TOKEN_ILLEGAL_CODE,
+				Msg:  global.TOKEN_ILLEGAL,
 			}
 			c.AbortWithStatusJSON(http.StatusBadRequest, res)
 			return

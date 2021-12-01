@@ -2,6 +2,7 @@
 .vscode
 */.DS_Store
 static/uploadfile
+public/*
 i421
 *.exe
 main

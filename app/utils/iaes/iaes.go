@@ -9,15 +9,19 @@ import (
 	"i421/config"
 )
 
-var PwdKey = []byte(config.Configs.AppAESKEY)
-
-type iAes struct{}
-
-func NewIAes() *iAes {
-	return &iAes{}
+// iAes 结构体
+type iAes struct {
+	pwdKey []byte // 加密密钥 不能说的秘密
 }
 
-//pkcs7Padding 填充
+// NewIAes 实例化
+func NewIAes() *iAes {
+	return &iAes{
+		pwdKey: []byte(config.Configs.AppAESKey),
+	}
+}
+
+// pkcs7Padding 填充
 func pkcs7Padding(data []byte, blockSize int) []byte {
 	//判断缺少几位长度。最少1，最多 blockSize
 	padding := blockSize - len(data)%blockSize
@@ -26,7 +30,7 @@ func pkcs7Padding(data []byte, blockSize int) []byte {
 	return append(data, padText...)
 }
 
-//pkcs7UnPadding 填充的反向操作
+// pkcs7UnPadding 填充的反向操作
 func pkcs7UnPadding(data []byte) ([]byte, error) {
 	length := len(data)
 	if length == 0 {
@@ -37,8 +41,8 @@ func pkcs7UnPadding(data []byte) ([]byte, error) {
 	return data[:(length - unPadding)], nil
 }
 
-//AesEncrypt 加密
-func (iAes *iAes) aesEncrypt(data []byte, key []byte) ([]byte, error) {
+// aesEncrypt 加密
+func (ia *iAes) aesEncrypt(data []byte, key []byte) ([]byte, error) {
 	//创建加密实例
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -57,8 +61,8 @@ func (iAes *iAes) aesEncrypt(data []byte, key []byte) ([]byte, error) {
 	return crypted, nil
 }
 
-//AesDecrypt 解密
-func (iAes *iAes) aesDecrypt(data []byte, key []byte) ([]byte, error) {
+// aesDecrypt 解密
+func (ia *iAes) aesDecrypt(data []byte, key []byte) ([]byte, error) {
 	//创建实例
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -80,20 +84,20 @@ func (iAes *iAes) aesDecrypt(data []byte, key []byte) ([]byte, error) {
 	return crypted, nil
 }
 
-//EncryptByAes Aes加密 后 base64 再加
-func (iAes *iAes) EncryptByAes(data []byte) (string, error) {
-	res, err := iAes.aesEncrypt(data, PwdKey)
+// EncryptByAes Aes加密 后 base64 再加
+func (ia *iAes) EncryptByAes(data []byte) (string, error) {
+	res, err := ia.aesEncrypt(data, ia.pwdKey)
 	if err != nil {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(res), nil
 }
 
-//DecryptByAes Aes 解密
-func (iAes *iAes) DecryptByAes(data string) ([]byte, error) {
+// DecryptByAes Aes 解密
+func (ia *iAes) DecryptByAes(data string) ([]byte, error) {
 	dataByte, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
 		return nil, err
 	}
-	return iAes.aesDecrypt(dataByte, PwdKey)
+	return ia.aesDecrypt(dataByte, ia.pwdKey)
 }

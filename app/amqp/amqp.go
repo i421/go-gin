@@ -7,6 +7,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
+// Amqp rabbitmq对象
 type Amqp struct {
 	connection *amqp.Connection
 	channel    *amqp.Channel
@@ -15,15 +16,15 @@ type Amqp struct {
 /**
  * 连接Rabbitmq
  */
-func (this *Amqp) amqpConnect() {
+func (amqp *Amqp) amqpConnect() {
 	var err error
 	url := fmt.Sprintf("amqp://%s:%s@%s:%s/", config.Configs.AmqpConf.Username, config.Configs.AmqpConf.Password, config.Configs.AmqpConf.Host, config.Configs.AmqpConf.Port)
-	this.connection, err = amqp.Dial(url)
+	amqp.connection, err = amqp.Dial(url)
 	if err != nil {
 		failOnError(err, "Failed to connect to RabbitMQ")
 	}
 
-	this.channel, err = this.connection.Channel()
+	amqp.channel, err = amqp.connection.Channel()
 	if err != nil {
 		failOnError(err, "Failed to open a channel")
 	}
@@ -32,22 +33,23 @@ func (this *Amqp) amqpConnect() {
 /**
  * 关闭连接
  */
-func (this *Amqp) amqpClose() {
-	if this.channel != nil {
-		err := this.channel.Close()
+func (amqp *Amqp) amqpClose() {
+	if amqp.channel != nil {
+		err := amqp.channel.Close()
 		if err != nil {
 			fmt.Println("管道关闭失败:", err)
 		}
 	}
-	if this.connection != nil {
-		err := this.connection.Close()
+	if amqp.connection != nil {
+		err := amqp.connection.Close()
 		if err != nil {
 			fmt.Println("连接关闭失败:", err)
 		}
 	}
 }
 
-func New() *Amqp {
+// NewAmqp 工场实例化
+func NewAmqp() *Amqp {
 	return &Amqp{}
 }
 
@@ -68,33 +70,28 @@ func parseData(msg []byte) {
 	// todo 业务
 }
 
-/**
- * 发送数据
- */
-func (this *Amqp) Send(msg string) {
+// Send 发送数据
+func (amqp *Amqp) Send(msg string) {
 	// 关闭amqp管道和chan
-	defer this.amqpClose()
+	defer amqp.amqpClose()
 
-	if this.channel == nil {
-		this.amqpConnect()
+	if amqp.channel == nil {
+		amqp.amqpConnect()
 	}
 	fmt.Println("Send data:", msg)
 }
 
-/**
- * 消费数据
- */
-
-func (this *Amqp) Consume() {
+// Consume 消费数据
+func (amqp *Amqp) Consume() {
 
 	// 关闭amqp管道和chan
-	defer this.amqpClose()
+	defer amqp.amqpClose()
 
-	if this.channel == nil {
-		this.amqpConnect()
+	if amqp.channel == nil {
+		amqp.amqpConnect()
 	}
 
-	q, err := this.channel.QueueDeclare(
+	q, err := amqp.channel.QueueDeclare(
 		"hello", // name
 		false,   // durable
 		false,   // delete when unused
@@ -104,7 +101,7 @@ func (this *Amqp) Consume() {
 	)
 	failOnError(err, "Failed to declare a queue")
 
-	msgs, err := this.channel.Consume(
+	msgs, err := amqp.channel.Consume(
 		q.Name, // queue
 		"",     // consumer
 		true,   // auto-ack

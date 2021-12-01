@@ -14,7 +14,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// 公共模块
+// BaseModel 公共模块
 type BaseModel struct {
 	ID        int `json:"id,omitempty"`
 	CreatedAt int `json:"created_at,omitempty"`
@@ -22,10 +22,11 @@ type BaseModel struct {
 }
 
 var (
+	// Db 全局数据库连接
 	Db *gorm.DB // 对外的连接
 )
 
-// 连接数据库
+// InitDb 初始化连接数据库
 func InitDb() (err error) {
 	// 把日志追加到 run.log
 	handle, err := os.OpenFile(config.Configs.LogConf.LogPath, os.O_APPEND, 0666)
