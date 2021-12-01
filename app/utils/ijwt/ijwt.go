@@ -11,6 +11,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+type iJwt struct{}
+
+func NewIJwt() *iJwt {
+	return &iJwt{}
+}
+
 //  MyClaims 自定义声明结构体并内嵌 jwt.StandardClaims
 type MyClaims struct {
 	UserId string `json:"user_id"`
@@ -19,7 +25,7 @@ type MyClaims struct {
 }
 
 // 生成 token
-func GenerateToken(user_id, phone string) (string, error) {
+func (iJwt *iJwt) GenerateToken(user_id, phone string) (string, error) {
 	mySecret := []byte(config.Configs.AuthConf.Secret)
 	// 过期时间
 	tokenExpireStr := config.Configs.AuthConf.TokenExpire
@@ -45,7 +51,7 @@ func GenerateToken(user_id, phone string) (string, error) {
 }
 
 // 解析 token 是否正确
-func VerifyTokenIsOk(tokenStr string) (bool, error) {
+func (iJwt *iJwt) VerifyTokenIsOk(tokenStr string) (bool, error) {
 	mySecret := []byte(config.Configs.AuthConf.Secret)
 	// 解析token
 	token, err := jwt.ParseWithClaims(tokenStr, &MyClaims{}, func(token *jwt.Token) (i interface{}, err error) {
@@ -61,7 +67,7 @@ func VerifyTokenIsOk(tokenStr string) (bool, error) {
 }
 
 // 获取解析 token 里的数据
-func ParseToken(tokenStr string) (*MyClaims, error) {
+func (iJwt *iJwt) ParseToken(tokenStr string) (*MyClaims, error) {
 	mySecret := []byte(config.Configs.AuthConf.Secret)
 	// 解析token
 	token, err := jwt.ParseWithClaims(tokenStr, &MyClaims{}, func(token *jwt.Token) (i interface{}, err error) {

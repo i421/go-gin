@@ -15,6 +15,7 @@ type AllConf struct {
 	AppName   string    // app名称
 	AppPort   string    // app启动端口
 	AppMode   string    // gin模式 debug|release|test
+	AppAESKEY string    // aes加密密钥
 	AmqpConf  AmqpConf  `json:"amqpConf"`
 	MysqlConf MysqlConf `json:"mysqlConf"`
 	RedisConf RedisConf `json:"redisConf"`
