@@ -3,7 +3,6 @@ package main
 import (
 	"i421/app/crontask"
 	"i421/app/model"
-	"i421/app/redis"
 	"i421/config"
 	ilog "i421/log"
 	"log"
@@ -28,10 +27,6 @@ func init() {
 	// 初始化定时器
 	if err := crontask.InitCronTask(); err != nil {
 		log.Fatal("cronObj.AddFunc is failed, err: ", err)
-	}
-
-	if err := redis.InitRedis(); err != nil {
-		log.Fatal("redis.InitRedis() is failed, err: ", err)
 	}
 
 	// 启动amqp接收器

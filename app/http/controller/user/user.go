@@ -1,12 +1,13 @@
 package user
 
 import (
-	"context"
+	//"context"
+	"fmt"
 	"i421/app/global"
 	. "i421/app/http/controller"
 	request "i421/app/http/request/user"
 	"i421/app/model/user"
-	. "i421/app/redis"
+	"i421/app/redis"
 	"i421/app/service"
 	"i421/app/utils/ijwt"
 	"net/http"
@@ -14,7 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var ctx = context.Background()
+//var ctx = context.Background()
 
 // login
 func Login(c *gin.Context) {
@@ -89,9 +90,12 @@ func Del(c *gin.Context) {
 }
 
 // Hello
-func Hello() {
-	err := Redis.Set(ctx, "key", "value", 0).Err()
+func Hello(c *gin.Context) {
+	redis := redis.GetRedis()
+	err := redis.Set(c, "key", "newValue", 0).Err()
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println("done")
 }
