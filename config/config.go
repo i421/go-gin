@@ -57,8 +57,9 @@ type LogConf struct {
 
 // 权限配置
 type AuthConf struct {
-	Secret      string `json:"secret"`
-	TokenExpire string `json:"tokenExpire"`
+	BindContextKeyName string `json:"userToken"`
+	Secret             string `json:"secret"`
+	TokenExpire        string `json:"tokenExpire"`
 }
 
 // GetInfo 返回conf 详情

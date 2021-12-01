@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"i421/app/model"
 	"i421/app/model/user"
 )
@@ -13,14 +12,13 @@ func NewUserService() *UserService {
 	return &UserService{}
 }
 
-func (us *UserService) Login(params map[string]string) bool {
+func (us *UserService) Login(params map[string]string) interface{} {
 	var user user.User
-	res := model.Db.Where("phone = ? AND password = ?", params["username"], params["password"]).Or("email = ? AND password = ?", params["username"], params["password"]).Find(&user)
-	fmt.Println(user)
+	res := model.Db.Select("id, nickname, uuid, phone, email, avatar").Where("status = 1 AND phone = ? AND password = ?", params["username"], params["password"]).Or("email = ? AND password = ?", params["username"], params["password"]).Find(&user)
 	if res.RowsAffected == 0 {
-		return false
+		return nil
 	}
-	return true
+	return user
 
 }
 
