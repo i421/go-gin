@@ -2,6 +2,7 @@ package router
 
 import (
 	"i421/app/http/controller/home"
+	"i421/app/http/controller/live"
 	"i421/app/http/controller/user"
 	"i421/app/http/middleware/authorization"
 	"i421/app/http/middleware/cors"
@@ -26,5 +27,15 @@ func Routers(router *gin.Engine) {
 		{
 			api.GET("/", home.Index)
 		}
+	}
+
+	ilive := router.Group("/live/")
+	{
+		ilive.GET("/stat", live.Livestat)
+		ilive.GET("/contral/get", live.Get)
+		ilive.GET("/contral/reset", live.Reset)
+		ilive.GET("/contral/delete", live.Delete)
+		ilive.GET("/contral/push", live.Push)
+		ilive.GET("/contral/pull", live.Pull)
 	}
 }

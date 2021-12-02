@@ -16,6 +16,7 @@ func NewUserService() *UserService {
 
 // Login 用户登陆
 func (us *UserService) Login(params map[string]string) interface{} {
+	// 尝试 var user []map[string]interface{}
 	var user user.User
 	res := model.Db.Select("id, nickname, uuid, phone, email, avatar").Where("status = 1 AND phone = ? AND password = ?", params["username"], params["password"]).Or("email = ? AND password = ?", params["username"], params["password"]).Find(&user)
 	if res.RowsAffected == 0 {
