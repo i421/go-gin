@@ -1,6 +1,8 @@
 package live
 
 import (
+	"encoding/json"
+	"i421/app/global"
 	. "i421/app/http/controller"
 	"i421/app/utils/live"
 	"net/http"
@@ -13,12 +15,21 @@ func Livestat(c *gin.Context) {
 
 	ilive := live.NewILive()
 
-	res := ilive.Stat()
+	res, err := ilive.Stat()
+
+	if err != nil {
+		resp := Response{
+			Code: global.HTTP_REQUEST_ERROR_CODE,
+			Msg:  res,
+		}
+		c.JSON(http.StatusOK, resp)
+		return
+	}
 
 	resp := Response{
 		Code: 200,
 		Msg:  "success",
-		Data: res,
+		Data: json.RawMessage(res),
 	}
 	c.JSON(http.StatusOK, resp)
 }

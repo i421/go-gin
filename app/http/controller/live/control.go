@@ -1,12 +1,14 @@
 package live
 
 import (
+	"i421/app/global"
 	. "i421/app/http/controller"
 	"i421/app/utils/live"
 	"i421/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	json "github.com/json-iterator/go"
 )
 
 // Push 推流
@@ -20,12 +22,21 @@ func Push(c *gin.Context) {
 
 	ilive := live.NewILive()
 
-	res := ilive.ControlPush(oper, app, name, url)
+	res, err := ilive.ControlPush(oper, app, name, url)
+
+	if err != nil {
+		resp := Response{
+			Code: global.HTTP_REQUEST_ERROR_CODE,
+			Msg:  res,
+		}
+		c.JSON(http.StatusOK, resp)
+		return
+	}
 
 	resp := Response{
 		Code: 200,
 		Msg:  "success",
-		Data: res,
+		Data: json.RawMessage(res),
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -41,12 +52,21 @@ func Pull(c *gin.Context) {
 
 	ilive := live.NewILive()
 
-	res := ilive.ControlPush(oper, app, name, url)
+	res, err := ilive.ControlPull(oper, app, name, url)
+
+	if err != nil {
+		resp := Response{
+			Code: global.HTTP_REQUEST_ERROR_CODE,
+			Msg:  res,
+		}
+		c.JSON(http.StatusOK, resp)
+		return
+	}
 
 	resp := Response{
 		Code: 200,
 		Msg:  "success",
-		Data: res,
+		Data: json.RawMessage(res),
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -60,12 +80,21 @@ func Get(c *gin.Context) {
 
 	ilive := live.NewILive()
 
-	res := ilive.ControlGet(room)
+	res, err := ilive.ControlGet(room)
+
+	if err != nil {
+		resp := Response{
+			Code: global.HTTP_REQUEST_ERROR_CODE,
+			Msg:  res,
+		}
+		c.JSON(http.StatusOK, resp)
+		return
+	}
 
 	resp := Response{
 		Code: 200,
 		Msg:  "success",
-		Data: res,
+		Data: json.RawMessage(res),
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -78,12 +107,21 @@ func Reset(c *gin.Context) {
 
 	ilive := live.NewILive()
 
-	res := ilive.ControlReset(room)
+	res, err := ilive.ControlReset(room)
+
+	if err != nil {
+		resp := Response{
+			Code: global.HTTP_REQUEST_ERROR_CODE,
+			Msg:  res,
+		}
+		c.JSON(http.StatusOK, resp)
+		return
+	}
 
 	resp := Response{
 		Code: 200,
 		Msg:  "success",
-		Data: res,
+		Data: json.RawMessage(res),
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -96,12 +134,21 @@ func Delete(c *gin.Context) {
 
 	ilive := live.NewILive()
 
-	res := ilive.ControlDelete(room)
+	res, err := ilive.ControlDelete(room)
+
+	if err != nil {
+		resp := Response{
+			Code: global.HTTP_REQUEST_ERROR_CODE,
+			Msg:  res,
+		}
+		c.JSON(http.StatusOK, resp)
+		return
+	}
 
 	resp := Response{
 		Code: 200,
 		Msg:  "success",
-		Data: res,
+		Data: json.RawMessage(res),
 	}
 	c.JSON(http.StatusOK, resp)
 }
