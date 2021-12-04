@@ -15,6 +15,12 @@ type iLive struct {
 	address string
 }
 
+// LiveAddress livego返回数据结构
+type LiveResponse struct {
+	Status interface{} `json:"status"`
+	Data   interface{} `json:"data"`
+}
+
 // NewILive livego实例化
 func NewILive() *iLive {
 	return &iLive{
@@ -52,14 +58,15 @@ func (ilive *iLive) ControlDelete(room string) (string, error) {
 
 // ControlPull 拉流 oper: start|stop
 func (ilive *iLive) ControlPull(oper, app, name, url string) (string, error) {
-	reUrl := fmt.Sprint("%s/control/pull?oper=%s&app=%s&name=%s&url=%s", ilive.address, oper, app, name, url)
+	reUrl := fmt.Sprintf("%s/control/pull?oper=%s&app=%s&name=%s&url=%s", ilive.address, oper, app, name, url)
 	res, err := ilive.httpGet(reUrl)
 	return res, err
 }
 
 // ControlPush 推流
 func (ilive *iLive) ControlPush(oper, app, name, url string) (string, error) {
-	reUrl := fmt.Sprint("%s/control/push?oper=%s&app=%s&name=%s&url=%s", ilive.address, oper, app, name, url)
+	reUrl := fmt.Sprintf("%s/control/push?oper=%s&app=%s&name=%s&url=%s", ilive.address, oper, app, name, url)
+	fmt.Println("reUrl:", reUrl)
 	res, err := ilive.httpGet(reUrl)
 	return res, err
 }
@@ -68,7 +75,7 @@ func (ilive *iLive) ControlPush(oper, app, name, url string) (string, error) {
 func (ilive *iLive) httpGet(url string) (string, error) {
 
 	client := &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: 20 * time.Second,
 	}
 	resp, err := client.Get(url)
 	if err != nil {
@@ -84,14 +91,25 @@ func (ilive *iLive) httpGet(url string) (string, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
-	mp := make(map[string]interface{})
+	liveResponse := LiveResponse{}
+	err = jsoniter.Unmarshal(body, &liveResponse)
 
-	err = jsoniter.Unmarshal(body, &mp)
 	if err != nil {
-		return "mp error:" + err.Error(), err
+		return "unmarshal error", err
 	}
 
-	by, _ := jsoniter.Marshal(mp["data"])
+	resStr, ok := liveResponse.Data.(string)
 
-	return string(by), nil
+	if ok {
+		return resStr, nil
+	}
+
+	resMap, ok := liveResponse.Data.(map[string]interface{})
+
+	if ok {
+		resS, _ := jsoniter.Marshal(resMap)
+		return string(resS), nil
+	}
+
+	return "{}", nil
 }

@@ -32,10 +32,10 @@ func Routers(router *gin.Engine) {
 	ilive := router.Group("/live/")
 	{
 		ilive.GET("/stat", live.Livestat)
-		ilive.GET("/contral/get", live.Get)
-		ilive.GET("/contral/reset", live.Reset)
-		ilive.GET("/contral/delete", live.Delete)
-		ilive.GET("/contral/push", live.Push)
-		ilive.GET("/contral/pull", live.Pull)
+		ilive.GET("/control/get", live.Get)
+		ilive.GET("/control/reset", live.Reset)
+		ilive.GET("/control/delete", live.Delete)
+		ilive.GET("/control/push", live.Push)
+		ilive.GET("/control/pull", live.Pull)
 	}
 }
