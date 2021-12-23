@@ -71,7 +71,37 @@ func Login(c *gin.Context) {
 
 // register
 func Register(c *gin.Context) {
-	// todo
+
+	var userRegisterRequest request.UserRegisterRequest
+
+	if err := c.ShouldBind(&userRegisterRequest); err != nil {
+		res := Response{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	userService := service.NewUserService()
+	id, err := userService.Create(userRegisterRequest)
+	if err != nil {
+		res := Response{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: http.StatusOK,
+		Msg:  "success",
+		Data: id,
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 // user list

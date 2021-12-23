@@ -1,8 +1,13 @@
 package service
 
 import (
+	"errors"
+	"fmt"
+	request "i421/app/http/request/user"
 	"i421/app/model"
 	"i421/app/model/user"
+
+	"github.com/google/uuid"
 )
 
 // UserService 用户表service层
@@ -27,5 +32,29 @@ func (us *UserService) Login(params map[string]string) interface{} {
 }
 
 // Create 创建用户
-func (us *UserService) Create(users []map[string]interface{}) {
+func (us *UserService) Create(registerRequest request.UserRegisterRequest) (int, error) {
+	var user1 user.User
+	res := model.Db.Where("phone = ?", registerRequest.Phone).First(&user1)
+
+	if res.RowsAffected >= 1 {
+		return -2, errors.New("用户已存在")
+	}
+
+	user2 := user.User{
+		Nickname:        registerRequest.Phone,
+		Phone:           registerRequest.Phone,
+		Password:        registerRequest.Password,
+		EmailVerifiedAt: "2020-01-01",
+		UUID:            uuid.New().String(),
+		Status:          1,
+	}
+
+	res = model.Db.Create(&user2)
+
+	if res.Error != nil {
+		fmt.Println(res.Error)
+		return -1, errors.New("用户创建失败")
+	}
+
+	return user2.ID, nil
 }
