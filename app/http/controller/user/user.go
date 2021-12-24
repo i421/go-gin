@@ -3,10 +3,8 @@ package user
 import (
 	//"context"
 	"fmt"
-	"i421/app/global"
 	. "i421/app/http/controller"
 	request "i421/app/http/request/user"
-	"i421/app/model/user"
 	"i421/app/redis"
 	"i421/app/service"
 	"i421/app/utils/ijwt"
@@ -17,7 +15,7 @@ import (
 
 //var ctx = context.Background()
 
-// login
+// Login 用户登陆
 func Login(c *gin.Context) {
 
 	var userLoginRequest request.UserLoginRequest
@@ -31,27 +29,19 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	params := map[string]string{
-		"username": userLoginRequest.Username,
-		"password": userLoginRequest.Password,
-	}
-
 	userService := service.NewUserService()
-	data := userService.Login(params)
+	user, err := userService.Login(userLoginRequest)
 
 	// 登陆失败
-	if data == nil {
+	if err != nil {
 		res := Response{
-			Code: global.USER_NAME_OR_PASSWORD_WRONG_CODE,
-			Msg:  global.USER_NAME_OR_PASSWORD_WRONG,
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
 		}
 
 		c.JSON(http.StatusOK, res)
 		return
 	}
-
-	// 转换
-	user, _ := data.(user.User)
 
 	// 生成token
 	token, _ := ijwt.NewIJwt().GenerateToken(user.ID, user.Phone)
@@ -69,7 +59,7 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// register
+// Register 注册用户
 func Register(c *gin.Context) {
 
 	var userRegisterRequest request.UserRegisterRequest
@@ -84,7 +74,7 @@ func Register(c *gin.Context) {
 	}
 
 	userService := service.NewUserService()
-	id, err := userService.Create(userRegisterRequest)
+	user, err := userService.Create(userRegisterRequest)
 	if err != nil {
 		res := Response{
 			Code: http.StatusBadRequest,
@@ -98,7 +88,7 @@ func Register(c *gin.Context) {
 	res := Response{
 		Code: http.StatusOK,
 		Msg:  "success",
-		Data: id,
+		Data: user,
 	}
 
 	c.JSON(http.StatusOK, res)

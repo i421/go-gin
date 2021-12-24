@@ -49,7 +49,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_uuid_unique` (`uuid`),
   UNIQUE KEY `users_phone_unique` (`phone`),
-  UNIQUE KEY `users_email_unique` (`email`)
+  KEY `users_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

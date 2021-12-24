@@ -12,7 +12,7 @@ import (
 )
 
 type HeaderParams struct {
-	Authorization string `header:"Authorization" binding:"required,min=20"`
+	Authorization string `header:"Authorization" binding:"required,min=20"` // Authorization:  "token" + " " + jwt
 }
 
 // CheckTokenAuth 检查token完整性、有效性中间件
