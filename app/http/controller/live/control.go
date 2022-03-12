@@ -25,17 +25,17 @@ func Push(c *gin.Context) {
 
 	if err != nil {
 		resp := Response{
-			Code: global.HTTP_REQUEST_ERROR_CODE,
-			Msg:  res,
+			Code:    global.HTTP_REQUEST_ERROR_CODE,
+			Message: res,
 		}
 		c.JSON(http.StatusOK, resp)
 		return
 	}
 
 	resp := Response{
-		Code: 200,
-		Msg:  "success",
-		Data: res,
+		Code:    200,
+		Message: "success",
+		Result:  res,
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -55,17 +55,17 @@ func Pull(c *gin.Context) {
 
 	if err != nil {
 		resp := Response{
-			Code: global.HTTP_REQUEST_ERROR_CODE,
-			Msg:  res,
+			Code:    global.HTTP_REQUEST_ERROR_CODE,
+			Message: res,
 		}
 		c.JSON(http.StatusOK, resp)
 		return
 	}
 
 	resp := Response{
-		Code: 200,
-		Msg:  "success",
-		Data: res,
+		Code:    200,
+		Message: "success",
+		Result:  res,
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -83,17 +83,17 @@ func Get(c *gin.Context) {
 
 	if err != nil {
 		resp := Response{
-			Code: global.HTTP_REQUEST_ERROR_CODE,
-			Msg:  res,
+			Code:    global.HTTP_REQUEST_ERROR_CODE,
+			Message: res,
 		}
 		c.JSON(http.StatusOK, resp)
 		return
 	}
 
 	resp := Response{
-		Code: 200,
-		Msg:  "success",
-		Data: res,
+		Code:    200,
+		Message: "success",
+		Result:  res,
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -110,17 +110,17 @@ func Reset(c *gin.Context) {
 
 	if err != nil {
 		resp := Response{
-			Code: global.HTTP_REQUEST_ERROR_CODE,
-			Msg:  res,
+			Code:    global.HTTP_REQUEST_ERROR_CODE,
+			Message: res,
 		}
 		c.JSON(http.StatusOK, resp)
 		return
 	}
 
 	resp := Response{
-		Code: 200,
-		Msg:  "success",
-		Data: res,
+		Code:    200,
+		Message: "success",
+		Result:  res,
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -137,17 +137,17 @@ func Delete(c *gin.Context) {
 
 	if err != nil {
 		resp := Response{
-			Code: global.HTTP_REQUEST_ERROR_CODE,
-			Msg:  res,
+			Code:    global.HTTP_REQUEST_ERROR_CODE,
+			Message: res,
 		}
 		c.JSON(http.StatusOK, resp)
 		return
 	}
 
 	resp := Response{
-		Code: 200,
-		Msg:  "success",
-		Data: res,
+		Code:    200,
+		Message: "success",
+		Result:  res,
 	}
 	c.JSON(http.StatusOK, resp)
 }

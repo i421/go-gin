@@ -19,17 +19,17 @@ func Livestat(c *gin.Context) {
 
 	if err != nil {
 		resp := Response{
-			Code: global.HTTP_REQUEST_ERROR_CODE,
-			Msg:  res,
+			Code:    global.HTTP_REQUEST_ERROR_CODE,
+			Message: res,
 		}
 		c.JSON(http.StatusOK, resp)
 		return
 	}
 
 	resp := Response{
-		Code: 200,
-		Msg:  "success",
-		Data: json.RawMessage(res),
+		Code:    200,
+		Message: "success",
+		Result:  json.RawMessage(res),
 	}
 	c.JSON(http.StatusOK, resp)
 }

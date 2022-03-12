@@ -6,8 +6,6 @@ import (
 	"i421/app/model"
 	"i421/app/model/user"
 	"i421/app/utils/iaes"
-
-	"github.com/google/uuid"
 )
 
 // UserService 用户表service层
@@ -23,7 +21,7 @@ func NewUserService() *UserService {
 func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp user.User, err error) {
 	// 用户是否注册
 	var isUser user.User
-	res := model.Db.Where("phone = ?", loginRequest.Username).Or("email = ?", loginRequest.Username).First(&isUser)
+	res := model.Db.Where("phone = ?", loginRequest.Username).First(&isUser)
 
 	if res.RowsAffected < 1 {
 		return userResp, errors.New("用户不存在")
@@ -32,7 +30,7 @@ func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp us
 	iAes := iaes.NewIAes()
 	passwd, _ := iAes.EncryptByAes([]byte(loginRequest.Password))
 
-	res = model.Db.Select("id, nickname, uuid, phone, email, avatar").Where("status = 1 AND phone = ? AND password = ?", loginRequest.Username, string(passwd)).Or("email = ? AND password = ?", loginRequest.Username, string(passwd)).Find(&userResp)
+	res = model.Db.Select("id as userId, username, real_name as realName, desc").Where("status = 1 AND password = ?", loginRequest.Username, string(passwd)).Find(&userResp)
 
 	if res.RowsAffected < 1 {
 		return userResp, errors.New("用户密码不匹配")
@@ -42,6 +40,7 @@ func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp us
 }
 
 // Create 创建用户
+/*
 func (us *UserService) Create(registerRequest request.UserRegisterRequest) (userResp user.User, err error) {
 	// 用户是否注册
 	var isUser user.User
@@ -69,3 +68,4 @@ func (us *UserService) Create(registerRequest request.UserRegisterRequest) (user
 
 	return userResp, nil
 }
+*/

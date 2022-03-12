@@ -26,8 +26,8 @@ func NewIJwt() *iJwt {
 
 //  MyClaims 自定义声明结构体并内嵌 jwt.StandardClaims
 type MyClaims struct {
-	UserId int    `json:"user_id"`
-	Phone  string `json:"phone"`
+	UserId    int64  `json:"user_id"`
+	Telephone string `json:"telephone"`
 	jwt.StandardClaims
 }
 
@@ -40,12 +40,12 @@ func (ijwt *iJwt) createToken(claims MyClaims) (string, error) {
 }
 
 // GenerateToken 对外接口生成token
-func (ijwt *iJwt) GenerateToken(userId int, phone string) (token string, err error) {
+func (ijwt *iJwt) GenerateToken(userId int64, telephone string) (token string, err error) {
 
 	// 根据实际业务自定义token需要包含的参数，生成token，注意：用户密码请勿包含在token
 	myC := MyClaims{
-		UserId: userId,
-		Phone:  phone,
+		UserId:    userId,
+		Telephone: telephone,
 		// 特别注意，针对前文的匿名结构体，初始化的时候必须指定键名，并且不带 jwt. 否则报错：Mixture of field: value and value initializers
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 10,               // 生效开始时间

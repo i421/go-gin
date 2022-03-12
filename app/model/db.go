@@ -16,9 +16,9 @@ import (
 
 // BaseModel 公共模块
 type BaseModel struct {
-	ID        int `json:"id,omitempty"`
-	CreatedAt int `json:"created_at,omitempty"`
-	UpdatedAt int `json:"updated_at,omitempty"`
+	ID         int64     `json:"id,omitempty"`
+	CreateTime time.Time `json:"create_time,omitempty"`
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 var (

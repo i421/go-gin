@@ -22,8 +22,8 @@ func Login(c *gin.Context) {
 
 	if err := c.ShouldBind(&userLoginRequest); err != nil {
 		res := Response{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
 		}
 		c.JSON(http.StatusBadRequest, res)
 		return
@@ -35,8 +35,8 @@ func Login(c *gin.Context) {
 	// 登陆失败
 	if err != nil {
 		res := Response{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
 		}
 
 		c.JSON(http.StatusOK, res)
@@ -44,13 +44,13 @@ func Login(c *gin.Context) {
 	}
 
 	// 生成token
-	token, _ := ijwt.NewIJwt().GenerateToken(user.ID, user.Phone)
+	token, _ := ijwt.NewIJwt().GenerateToken(user.ID, user.Telephone)
 	//data["token"] = token
 
 	res := Response{
-		Code: http.StatusOK,
-		Msg:  "success",
-		Data: map[string]interface{}{
+		Code:    http.StatusOK,
+		Message: "success",
+		Result: map[string]interface{}{
 			"token": token,
 			"user":  user,
 		},
@@ -62,36 +62,38 @@ func Login(c *gin.Context) {
 // Register 注册用户
 func Register(c *gin.Context) {
 
-	var userRegisterRequest request.UserRegisterRequest
+	/*
+		var userRegisterRequest request.UserRegisterRequest
 
-	if err := c.ShouldBind(&userRegisterRequest); err != nil {
-		res := Response{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
+		if err := c.ShouldBind(&userRegisterRequest); err != nil {
+			res := Response{
+				Code: http.StatusBadRequest,
+				Message:  err.Error(),
+			}
+			c.JSON(http.StatusBadRequest, res)
+			return
 		}
-		c.JSON(http.StatusBadRequest, res)
-		return
-	}
 
-	userService := service.NewUserService()
-	user, err := userService.Create(userRegisterRequest)
-	if err != nil {
+		userService := service.NewUserService()
+		user, err := userService.Create(userRegisterRequest)
+		if err != nil {
+			res := Response{
+				Code: http.StatusBadRequest,
+				Message:  err.Error(),
+			}
+
+			c.JSON(http.StatusOK, res)
+			return
+		}
+
 		res := Response{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
+			Code: http.StatusOK,
+			Message:  "success",
+			Result: user,
 		}
 
 		c.JSON(http.StatusOK, res)
-		return
-	}
-
-	res := Response{
-		Code: http.StatusOK,
-		Msg:  "success",
-		Data: user,
-	}
-
-	c.JSON(http.StatusOK, res)
+	*/
 }
 
 // user list
