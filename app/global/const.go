@@ -7,6 +7,10 @@ const TOKEN_ILLEGAL_CODE = 10001
 const TOKEN_ILLEGAL = "令牌不合法"
 const TOKEN_AUTH_FAIL_CODE = 10002
 const TOKEN_AUTH_FAIL = "令牌验证失败"
+const TOKEN_DELETED_CODE = 10003
+const TOKEN_DELETED = "令牌已注销"
+const TOKEN_EXPIRED_CODE = 10004
+const TOKEN_EXPIRED = "令牌已过期"
 
 // http request 错误
 const HTTP_REQUEST_ERROR_CODE = 11000

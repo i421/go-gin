@@ -5,7 +5,6 @@ import (
 	request "i421/app/http/request/user"
 	"i421/app/model"
 	"i421/app/model/user"
-	"i421/app/utils/iaes"
 )
 
 // UserService 用户表service层
@@ -21,19 +20,31 @@ func NewUserService() *UserService {
 func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp user.User, err error) {
 	// 用户是否注册
 	var isUser user.User
-	res := model.Db.Where("phone = ?", loginRequest.Username).First(&isUser)
+	res := model.Db.Model(&user.User{}).Where("account = ?", loginRequest.Username).First(&isUser)
 
 	if res.RowsAffected < 1 {
 		return userResp, errors.New("用户不存在")
 	}
 
-	iAes := iaes.NewIAes()
-	passwd, _ := iAes.EncryptByAes([]byte(loginRequest.Password))
+	//iAes := iaes.NewIAes()
+	//passwd, _ := iAes.EncryptByAes([]byte(loginRequest.Password))
 
-	res = model.Db.Select("id as userId, username, real_name as realName, desc").Where("status = 1 AND password = ?", loginRequest.Username, string(passwd)).Find(&userResp)
+	res = model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"id", "account", "name", "avatar", "real_name", "remark"}).Where("account = ? AND password = ?", loginRequest.Username, loginRequest.Password).First(&userResp)
 
 	if res.RowsAffected < 1 {
 		return userResp, errors.New("用户密码不匹配")
+	}
+
+	return userResp, nil
+}
+
+// UserInfo 用户信息
+func (us *UserService) GetUserInfo(userId int64) (userResp user.User, err error) {
+
+	res := model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"id", "account", "name", "avatar", "real_name", "remark"}).Where("id = ?", userId).First(&userResp)
+
+	if res.RowsAffected < 1 {
+		return userResp, errors.New("用户不存在")
 	}
 
 	return userResp, nil

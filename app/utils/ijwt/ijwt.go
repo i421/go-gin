@@ -84,3 +84,14 @@ func (ijwt *iJwt) ParseToken(tokenStr string) (*MyClaims, error) {
 	}
 	return nil, errors.Wrapf(err, "token: %v is invalid!", tokenStr)
 }
+
+// 更新token
+func (ijwt *iJwt) RefreshToken(tokenString string, extraAddSeconds int64) (string, error) {
+
+	if MyClaims, err := ijwt.ParseToken(tokenString); err == nil {
+		MyClaims.ExpiresAt = time.Now().Unix() + extraAddSeconds
+		return ijwt.createToken(*MyClaims)
+	} else {
+		return "", err
+	}
+}

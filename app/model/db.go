@@ -16,9 +16,9 @@ import (
 
 // BaseModel 公共模块
 type BaseModel struct {
-	ID         int64     `json:"id,omitempty"`
-	CreateTime time.Time `json:"create_time,omitempty"`
-	UpdateTime time.Time `json:"update_time,omitempty"`
+	ID         int64     `json:"id"`
+	CreateTime time.Time `json:"createTime,omitempty"`
+	UpdateTime time.Time `json:"updateTime,omitempty"`
 }
 
 var (

@@ -14,8 +14,14 @@ import (
 func Routers(router *gin.Engine) {
 	router.Use(cors.Next())
 	router.GET("/", home.Index)
+	router.POST("/login", user.Login)
 	router.POST("/api/register", user.Register)
-	router.POST("/api/login", user.Login)
+
+	router.Use(authorization.CheckToken())
+	{
+		router.GET("getUserInfo", user.GetUserInfo)
+		router.GET("logout", user.Logout)
+	}
 
 	//处理静态资源（不建议gin框架处理静态资源，参见 public/readme.md 说明 ）
 	router.Static("/public", "./public")          //  定义静态资源路由与实际目录映射关系

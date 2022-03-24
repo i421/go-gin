@@ -50,9 +50,9 @@ func Index(c *gin.Context) {
 	//fmt.Println("phone:", token.Phone)
 
 	resp := Response{
-		Code:    200,
-		Message: "hello i421",
-		Result:  token.ExpiresAt,
+		Code: 0,
+		Msg:  "hello i421",
+		Data: token.ExpiresAt,
 	}
 
 	c.JSON(http.StatusOK, resp)
