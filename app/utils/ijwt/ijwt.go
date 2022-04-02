@@ -62,6 +62,13 @@ func (ijwt *iJwt) VerifyTokenIsOk(tokenStr string) (bool, error) {
 		return ijwt.signKey, nil
 	})
 	if err != nil {
+		if ve, ok := err.(*jwt.ValidationError); ok {
+			if ve.Errors&jwt.ValidationErrorExpired != 0 {
+				// 如果 TokenExpired ,只是过期（格式都正确），我们认为他是有效的，接下可以允许刷新操作
+				token.Valid = true
+				return true, nil
+			}
+		}
 		return false, errors.Wrapf(err, "token: %v is invalid!", tokenStr)
 	}
 	if _, ok := token.Claims.(*MyClaims); ok && token.Valid { // 校验token

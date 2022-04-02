@@ -1,6 +1,7 @@
 package router
 
 import (
+	"i421/app/http/controller/dept"
 	"i421/app/http/controller/home"
 	"i421/app/http/controller/live"
 	"i421/app/http/controller/user"
@@ -21,6 +22,17 @@ func Routers(router *gin.Engine) {
 	{
 		router.GET("getUserInfo", user.GetUserInfo)
 		router.GET("logout", user.Logout)
+	}
+
+	// system 路由
+	system := router.Group("/system/")
+	{
+		system.Use(authorization.CheckToken())
+		{
+			system.GET("getDeptList", dept.GetDeptList)
+			system.POST("updateDept", dept.UpdateDept)
+			system.DELETE("deleteDept", dept.DeleteDept)
+		}
 	}
 
 	//处理静态资源（不建议gin框架处理静态资源，参见 public/readme.md 说明 ）

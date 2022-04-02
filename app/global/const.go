@@ -11,6 +11,7 @@ const TOKEN_DELETED_CODE = 10003
 const TOKEN_DELETED = "令牌已注销"
 const TOKEN_EXPIRED_CODE = 10004
 const TOKEN_EXPIRED = "令牌已过期"
+const TOKEN_MALFORMED = "令牌格式不正确"
 
 // http request 错误
 const HTTP_REQUEST_ERROR_CODE = 11000

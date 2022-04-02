@@ -24,8 +24,8 @@ type User struct {
 	UpdateBy   string      `json:"updateBy"`                         // 更新人
 	IsDeleted  bool        `gorm:"default:0" json:"isDeleted"`       // 删除标志
 	Roles      []role.Role `gorm:"many2many:role_user" json:"roles"` // 角色
-	CreateTime time.Time   `json:"createTime"`                       // 创建时间
-	UpdateTime time.Time   `json:"updateTime"`                       // 更新时间
+	CreateTime int64       `json:"createTime"`                       // 创建时间
+	UpdateTime int64       `json:"updateTime"`                       // 更新时间
 }
 
 // 指定表名
