@@ -97,7 +97,7 @@ func DeleteDept(c *gin.Context) {
 	}
 
 	departService := service.NewDepartService()
-	_, err := departService.DeleteDepart(deleteDeptRequest.ID)
+	_, err := departService.DeleteDepart(deleteDeptRequest)
 
 	// 删除失败
 	if err != nil {

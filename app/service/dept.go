@@ -113,12 +113,21 @@ func (ds *DepartService) UpdateDepart(updateDept request.UpdateDeptRequest) (fla
 }
 
 // deleteDepart 删除部门
-func (ds *DepartService) DeleteDepart(id int64) (flag bool, err error) {
+func (ds *DepartService) DeleteDepart(deleteDeptRequest request.DeleteDeptRequest) (flag bool, err error) {
 
-	res := model.Db.Model(&depart.Depart{}).Where("id = ?", id).Updates(map[string]interface{}{"is_deleted": 1})
+	if deleteDeptRequest.Type != "" {
+		res := model.Db.Model(&depart.Depart{}).Where("id = ?", deleteDeptRequest.ID).Updates(map[string]interface{}{"is_deleted": 1})
 
-	if res.RowsAffected < 1 {
-		return false, errors.New("删除失败")
+		if res.RowsAffected < 1 {
+			return false, errors.New("删除失败")
+		}
+	} else {
+		res := model.Db.Delete(&depart.Depart{}, deleteDeptRequest.ID)
+
+		if res.RowsAffected < 1 {
+			return false, errors.New("删除失败")
+		}
 	}
+
 	return true, nil
 }

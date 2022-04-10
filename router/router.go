@@ -4,6 +4,8 @@ import (
 	"i421/app/http/controller/dept"
 	"i421/app/http/controller/home"
 	"i421/app/http/controller/live"
+	"i421/app/http/controller/menu"
+	"i421/app/http/controller/role"
 	"i421/app/http/controller/user"
 	"i421/app/http/middleware/authorization"
 	"i421/app/http/middleware/cors"
@@ -29,9 +31,22 @@ func Routers(router *gin.Engine) {
 	{
 		system.Use(authorization.CheckToken())
 		{
+			system.GET("getMenuList", menu.GetMenuList)
+			system.DELETE("deleteMenu", menu.DeleteMenu)
+
 			system.GET("getDeptList", dept.GetDeptList)
 			system.POST("updateDept", dept.UpdateDept)
 			system.DELETE("deleteDept", dept.DeleteDept)
+
+			system.POST("accountExist", user.AccountExist)
+			system.GET("getAccountList", user.GetAccountList)
+			system.DELETE("deleteAccount", user.DeleteAccount)
+
+			system.GET("getAllRoleList", role.GetAllRoleList)
+			system.GET("getRoleListByPage", role.GetRoleListByPage)
+			system.POST("updateRole", role.UpdateRole)
+			system.DELETE("deleteRole", role.DeleteRole)
+			system.POST("setRoleStatus", role.SetRoleStatus)
 		}
 	}
 

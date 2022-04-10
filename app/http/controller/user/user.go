@@ -161,8 +161,41 @@ func Register(c *gin.Context) {
 }
 
 // user list
-func List(c *gin.Context) {
+func GetAccountList(c *gin.Context) {
 	// todo
+	var accountListRequest request.AccountListRequest
+
+	if err := c.ShouldBind(&accountListRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	userService := service.NewUserService()
+	users, total, err := userService.AccountList(accountListRequest)
+
+	// 登陆失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code:  0,
+		Msg:   "success",
+		Data:  users,
+		Total: total,
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 // edit user
@@ -171,8 +204,78 @@ func Edit(c *gin.Context) {
 }
 
 // user del
-func Del(c *gin.Context) {
+func DeleteAccount(c *gin.Context) {
 	// todo
+	var deleteAccountRequest request.DeleteAccountRequest
+
+	if err := c.ShouldBind(&deleteAccountRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	userService := service.NewUserService()
+	_, err := userService.DeleteAccount(deleteAccountRequest)
+
+	// 删除失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// accountExist
+func AccountExist(c *gin.Context) {
+	// todo
+	var accountExistRequest request.AccountExistRequest
+
+	if err := c.ShouldBind(&accountExistRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
+
+	userService := service.NewUserService()
+	_, err := userService.AccountExist(accountExistRequest.Account, userToken.UserId)
+
+	// 删除失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: accountExistRequest.Account + " can use",
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 // Hello
