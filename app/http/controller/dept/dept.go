@@ -23,8 +23,8 @@ func GetDeptList(c *gin.Context) {
 		return
 	}
 
-	departService := service.NewDepartService()
-	departListResp, err := departService.GetDepartList(deptListRequest)
+	deptService := service.NewDeptService()
+	deptListResp, err := deptService.GetDeptList(deptListRequest)
 
 	// 获取失败
 	if err != nil {
@@ -40,7 +40,7 @@ func GetDeptList(c *gin.Context) {
 	res := Response{
 		Code: 0,
 		Msg:  "success",
-		Data: departListResp,
+		Data: deptListResp,
 	}
 
 	c.JSON(http.StatusOK, res)
@@ -60,8 +60,8 @@ func UpdateDept(c *gin.Context) {
 		return
 	}
 
-	departService := service.NewDepartService()
-	_, err := departService.UpdateDepart(updateDeptRequest)
+	deptService := service.NewDeptService()
+	_, err := deptService.UpdateDept(updateDeptRequest)
 
 	// 更新失败
 	if err != nil {
@@ -96,8 +96,8 @@ func DeleteDept(c *gin.Context) {
 		return
 	}
 
-	departService := service.NewDepartService()
-	_, err := departService.DeleteDepart(deleteDeptRequest)
+	deptService := service.NewDeptService()
+	_, err := deptService.DeleteDept(deleteDeptRequest)
 
 	// 删除失败
 	if err != nil {

@@ -4,11 +4,11 @@ import (
 	"errors"
 	request "i421/app/http/request/dept"
 	"i421/app/model"
-	"i421/app/model/depart"
+	"i421/app/model/dept"
 )
 
-// DepartService 部门表service层
-type DepartService struct {
+// DeptService 部门表service层
+type DeptService struct {
 }
 
 type WhereCond struct {
@@ -29,20 +29,20 @@ type TreeList struct {
 	Children   []TreeList `json:"children,omitempty"`
 }
 
-// NewDepartService 实例化
-func NewDepartService() *DepartService {
-	return &DepartService{}
+// NewDeptService 实例化
+func NewDeptService() *DeptService {
+	return &DeptService{}
 }
 
 // FormMenu 格式化菜单
-func (ds *DepartService) FormMenu(list []depart.Depart, pid int64) (formMenu []depart.Depart) {
+func (ds *DeptService) FormMenu(list []dept.Dept, pid int64) (formMenu []dept.Dept) {
 	for _, val := range list {
 		if val.ParentId == pid {
 			if pid == -1 {
 				// 顶层
 				formMenu = append(formMenu, val)
 			} else {
-				var children []depart.Depart
+				var children []dept.Dept
 				child := val
 				children = append(children, child)
 			}
@@ -52,7 +52,7 @@ func (ds *DepartService) FormMenu(list []depart.Depart, pid int64) (formMenu []d
 }
 
 // GetMenu 获取菜单
-func (ds *DepartService) GetMenu(menuList []depart.Depart, pid int64) []TreeList {
+func (ds *DeptService) GetMenu(menuList []dept.Dept, pid int64) []TreeList {
 	treeList := []TreeList{}
 	for _, v := range menuList {
 		if v.ParentId == pid {
@@ -74,10 +74,10 @@ func (ds *DepartService) GetMenu(menuList []depart.Depart, pid int64) []TreeList
 	return treeList
 }
 
-// GetDepartList 获取部门列表
-func (ds *DepartService) GetDepartList(deptListRequest request.DeptListRequest) (tree []TreeList, err error) {
+// GetDeptList 获取部门列表
+func (ds *DeptService) GetDeptList(deptListRequest request.DeptListRequest) (tree []TreeList, err error) {
 
-	var departResp []depart.Depart
+	var deptResp []dept.Dept
 
 	// 查询条件结构体
 	var whereCond WhereCond
@@ -90,21 +90,21 @@ func (ds *DepartService) GetDepartList(deptListRequest request.DeptListRequest) 
 		whereCond.Status = deptListRequest.Status
 	}
 
-	res := model.Db.Model(&depart.Depart{}).Where("is_deleted != 1").Where(whereCond).Order("sort").Find(&departResp)
+	res := model.Db.Model(&dept.Dept{}).Where("is_deleted != 1").Where(whereCond).Order("sort").Find(&deptResp)
 
 	if res.RowsAffected < 1 {
 		return tree, errors.New("查询为空")
 	}
 
-	tree = ds.GetMenu(departResp, -1)
+	tree = ds.GetMenu(deptResp, -1)
 
 	return tree, nil
 }
 
-// updateDepart 更新部门
-func (ds *DepartService) UpdateDepart(updateDept request.UpdateDeptRequest) (flag bool, err error) {
+// updateDept 更新部门
+func (ds *DeptService) UpdateDept(updateDept request.UpdateDeptRequest) (flag bool, err error) {
 
-	res := model.Db.Model(&depart.Depart{}).Where("id = ?", updateDept.ID).Select("name", "sort", "remark", "status", "parent_id").Updates(map[string]interface{}{"name": updateDept.DeptName, "sort": updateDept.OrderNo, "remark": updateDept.Remark, "status": updateDept.Status, "parent_id": updateDept.ParentDept})
+	res := model.Db.Model(&dept.Dept{}).Where("id = ?", updateDept.ID).Select("name", "sort", "remark", "status", "parent_id").Updates(map[string]interface{}{"name": updateDept.DeptName, "sort": updateDept.OrderNo, "remark": updateDept.Remark, "status": updateDept.Status, "parent_id": updateDept.ParentDept})
 
 	if res.RowsAffected < 1 {
 		return false, errors.New("更新失败")
@@ -112,17 +112,17 @@ func (ds *DepartService) UpdateDepart(updateDept request.UpdateDeptRequest) (fla
 	return true, nil
 }
 
-// deleteDepart 删除部门
-func (ds *DepartService) DeleteDepart(deleteDeptRequest request.DeleteDeptRequest) (flag bool, err error) {
+// deleteDept 删除部门
+func (ds *DeptService) DeleteDept(deleteDeptRequest request.DeleteDeptRequest) (flag bool, err error) {
 
 	if deleteDeptRequest.Type != "" {
-		res := model.Db.Model(&depart.Depart{}).Where("id = ?", deleteDeptRequest.ID).Updates(map[string]interface{}{"is_deleted": 1})
+		res := model.Db.Model(&dept.Dept{}).Where("id = ?", deleteDeptRequest.ID).Updates(map[string]interface{}{"is_deleted": 1})
 
 		if res.RowsAffected < 1 {
 			return false, errors.New("删除失败")
 		}
 	} else {
-		res := model.Db.Delete(&depart.Depart{}, deleteDeptRequest.ID)
+		res := model.Db.Delete(&dept.Dept{}, deleteDeptRequest.ID)
 
 		if res.RowsAffected < 1 {
 			return false, errors.New("删除失败")

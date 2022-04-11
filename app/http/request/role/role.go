@@ -16,13 +16,13 @@ type SetRoleStatusRequest struct {
 
 // 更新角色
 type UpdateRoleRequest struct {
-	ID          string `form:"id" json:"id" binding:"required"`
-	RoleName    string `form:"roleName" json:"roleName"  binding:"required"`
-	Value       string `form:"value" json:"value"  binding:"required"`
-	Description string `form:"description" json:"description"  binding:"required"`
-	Sort        int    `form:"sort" json:"sort" binding:"required"`
-	Status      int    `form:"status" json:"status" binding:"required"`
-	Menu        []int  `form:"menu" json:"menu" binding:"-"`
+	ID          int64   `form:"id" json:"id" binding:"required"`
+	RoleName    string  `form:"roleName" json:"roleName"  binding:"required"`
+	Value       string  `form:"value" json:"value"  binding:"required"`
+	Description string  `form:"description" json:"description"  binding:"required"`
+	Sort        int     `form:"sort" json:"sort" binding:"required"`
+	Status      int     `form:"status" json:"status" binding:"-"`
+	MenuIds     []int64 `form:"menu_ids" json:"menu_ids" binding:"-"`
 }
 
 // 删除

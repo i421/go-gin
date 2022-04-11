@@ -4,6 +4,7 @@ import (
 	"errors"
 	request "i421/app/http/request/user"
 	"i421/app/model"
+	"i421/app/model/roleUser"
 	"i421/app/model/user"
 )
 
@@ -58,7 +59,7 @@ func (us *UserService) GetUserInfo(userId int64) (userResp user.User, err error)
 }
 
 // AccountList 用户列表
-func (us *UserService) AccountList(accountListRequest request.AccountListRequest) (userResp []user.User, total int64, err error) {
+func (us *UserService) AccountList(accountListRequest request.AccountListRequest) (userResp []user.UserAppendRoleIds, total int64, err error) {
 
 	// 查询条件结构体
 	var whereCond AccountListWhereCond
@@ -75,12 +76,24 @@ func (us *UserService) AccountList(accountListRequest request.AccountListRequest
 		whereCond.DeptId = accountListRequest.DeptId
 	}
 
-	temp := model.Db.Model(&user.User{}).Preload("Roles").Joins("Depart").Select([]string{"user.id", "account", "nickname", "email", "user.create_time", "user.remark", "depart_id"}).Where("user.is_deleted != 1").Where(whereCond).Order("user.id")
+	temp := model.Db.Model(&user.User{}).Preload("Roles").Joins("left join dept on user.dept_id = dept.id").Select([]string{"user.id", "account", "nickname", "email", "user.create_time", "user.remark", "dept_id", "dept.name as dept_name"}).Where("user.is_deleted != 1").Where(whereCond).Order("user.id")
 
 	res := temp.Limit(accountListRequest.PageSize).Offset((accountListRequest.Page - 1) * accountListRequest.PageSize).Find(&userResp)
 
 	var count int64
 	temp.Count(&count)
+
+	for i, v := range userResp {
+		var ids []int64
+		var names []string
+		for _, vv := range v.Roles {
+			ids = append(ids, vv.ID)
+			names = append(names, vv.RoleName)
+		}
+
+		userResp[i].RoleIds = ids
+		userResp[i].RoleNames = names
+	}
 
 	if res.RowsAffected < 1 {
 		return userResp, 0, errors.New("查询为空")
@@ -125,6 +138,26 @@ func (us *UserService) AccountExist(account string, userId int64) (flag bool, er
 	}
 
 	return false, errors.New("不可用")
+}
+
+// updateAccount 更新用户
+func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateAccountRequest) (flag bool, err error) {
+
+	var roleUsers []roleUser.RoleUser
+
+	for _, item := range updateAccountRequest.RoleIds {
+		var roleUser roleUser.RoleUser
+		roleUser.RoleId = item
+		roleUser.UserId = updateAccountRequest.UserID
+		roleUsers = append(roleUsers, roleUser)
+	}
+
+	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "dept_id", "nickname", "email").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, DeptId: updateAccountRequest.DeptId, Nickname: updateAccountRequest.Nickname, Email: updateAccountRequest.Email})
+
+	model.Db.Model(&roleUser.RoleUser{}).Where("user_id = ?", updateAccountRequest.UserID).Delete(&roleUsers)
+	model.Db.Model(&roleUser.RoleUser{}).Create(&roleUsers)
+
+	return true, nil
 }
 
 // Create 创建用户

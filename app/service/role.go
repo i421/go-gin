@@ -2,9 +2,9 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	request "i421/app/http/request/role"
 	"i421/app/model"
+	"i421/app/model/permissionRole"
 	"i421/app/model/role"
 )
 
@@ -36,7 +36,7 @@ func (rs *RoleService) GetAllRoleList() (roles []role.Role, err error) {
 }
 
 // GetRoleListByPage 获取角色列表
-func (rs *RoleService) GetRoleListByPage(getRoleListByPageRequest request.GetRoleListByPageRequest) (roles []role.Role, total int64, err error) {
+func (rs *RoleService) GetRoleListByPage(getRoleListByPageRequest request.GetRoleListByPageRequest) (roles []role.RoleAppendMenuIds, total int64, err error) {
 
 	// 查询条件结构体
 	var whereCond RoleListWhereCond
@@ -55,6 +55,18 @@ func (rs *RoleService) GetRoleListByPage(getRoleListByPageRequest request.GetRol
 
 	var count int64
 	temp.Count(&count)
+
+	for i, v := range roles {
+		var ids []int64
+		var names []string
+		for _, vv := range v.Menus {
+			ids = append(ids, vv.ID)
+			names = append(names, vv.Name)
+		}
+
+		roles[i].MenuIds = ids
+		roles[i].MenuNames = names
+	}
 
 	if res.RowsAffected < 1 {
 		return roles, count, errors.New("查询为空")
@@ -77,17 +89,21 @@ func (rs *RoleService) SetRoleStatus(setRoleStatusRequest request.SetRoleStatusR
 // updateRole 更新角色状态
 func (rs *RoleService) UpdateRole(updateRoleRequest request.UpdateRoleRequest) (flag bool, err error) {
 
-	fmt.Println(updateRoleRequest)
+	var permissionRoles []permissionRole.PermissionRole
+
+	for _, item := range updateRoleRequest.MenuIds {
+		var permissionRole permissionRole.PermissionRole
+		permissionRole.MenuId = item
+		permissionRole.RoleId = updateRoleRequest.ID
+		permissionRoles = append(permissionRoles, permissionRole)
+	}
+
+	model.Db.Model(&role.Role{}).Where("id = ?", updateRoleRequest.ID).Select("role_name", "role_code", "description", "sort", "status").Updates(&role.Role{RoleName: updateRoleRequest.RoleName, RoleCode: updateRoleRequest.Value, Description: updateRoleRequest.Description, Sort: updateRoleRequest.Sort, Status: updateRoleRequest.Status})
+
+	model.Db.Model(&permissionRole.PermissionRole{}).Where("role_id = ?", updateRoleRequest.ID).Delete(&permissionRoles)
+	model.Db.Model(&permissionRole.PermissionRole{}).Create(&permissionRoles)
 
 	return true, nil
-	/*
-		res := model.Db.Model(&role.Role{}).Where("id = ?", setRoleStatusRequest.ID).Updates()
-
-		if res.RowsAffected < 1 {
-			return false, errors.New("设置失败")
-		}
-		return true, nil
-	*/
 }
 
 // deleteRole 删除角色

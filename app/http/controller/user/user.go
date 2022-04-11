@@ -198,9 +198,40 @@ func GetAccountList(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// edit user
-func Edit(c *gin.Context) {
-	// todo
+// 更新用户信息
+func UpdateAccount(c *gin.Context) {
+
+	var updateAccountRequest request.UpdateAccountRequest
+
+	if err := c.ShouldBind(&updateAccountRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	userService := service.NewUserService()
+	_, err := userService.UpdateAccount(updateAccountRequest)
+
+	// 更新失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 // user del
@@ -253,10 +284,8 @@ func AccountExist(c *gin.Context) {
 		return
 	}
 
-	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
-
 	userService := service.NewUserService()
-	_, err := userService.AccountExist(accountExistRequest.Account, userToken.UserId)
+	_, err := userService.AccountExist(accountExistRequest.Account, accountExistRequest.UserId)
 
 	// 删除失败
 	if err != nil {
@@ -276,6 +305,11 @@ func AccountExist(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, res)
+}
+
+// 更新密码
+func UpdatePassword(c *gin.Context) {
+	// todo
 }
 
 // Hello

@@ -1,11 +1,11 @@
-package depart
+package dept
 
 import (
 	"i421/app/model"
 )
 
-// depart
-type Depart struct {
+// dept
+type Dept struct {
 	model.BaseModel
 	Name      string `json:"name"`                         // 部门名称
 	Sort      int64  `gorm:"default:0" json:"sort"`        // 排序
@@ -17,6 +17,6 @@ type Depart struct {
 	ParentId  int64  `gorm:"default:0" json:"parentId"`    // 上级ID
 }
 
-func (Depart) TableName() string {
-	return "depart"
+func (Dept) TableName() string {
+	return "dept"
 }

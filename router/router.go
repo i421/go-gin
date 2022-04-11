@@ -32,6 +32,7 @@ func Routers(router *gin.Engine) {
 		system.Use(authorization.CheckToken())
 		{
 			system.GET("getMenuList", menu.GetMenuList)
+			system.POST("updateMenu", menu.UpdateMenu)
 			system.DELETE("deleteMenu", menu.DeleteMenu)
 
 			system.GET("getDeptList", dept.GetDeptList)
@@ -40,7 +41,9 @@ func Routers(router *gin.Engine) {
 
 			system.POST("accountExist", user.AccountExist)
 			system.GET("getAccountList", user.GetAccountList)
+			system.POST("updateAccount", user.UpdateAccount)
 			system.DELETE("deleteAccount", user.DeleteAccount)
+			system.POST("updatePassword", user.UpdatePassword)
 
 			system.GET("getAllRoleList", role.GetAllRoleList)
 			system.GET("getRoleListByPage", role.GetRoleListByPage)
