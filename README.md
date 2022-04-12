@@ -1,7 +1,7 @@
-# i421
+# go-gin
 
 #### 介绍
-gin Web framework
+gin Web framework, vben-admin-thin-next后台
 
 #### 软件架构
 软件架构说明

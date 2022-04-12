@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2022-04-11 11:59:51
+-- 生成日期： 2022-04-12 12:17:44
 -- 服务器版本： 8.0.28-0ubuntu0.20.04.3
 -- PHP 版本： 8.0.13
 
@@ -399,7 +399,6 @@ INSERT INTO `menu` (`id`, `name`, `permission`, `path`, `component`, `parent_id`
 (2020, '数据源导出', 'sys:datasource:export', NULL, NULL, 2016, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (2021, '代码生成', NULL, '/devops/generator', '/devops/generator/index', 2015, 'ant-design:experiment-outlined', 2, '0', '1', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (2022, '代码生成', 'devops:gen', NULL, NULL, 2021, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
-(2023, '监控配置中心ss', 'test', '/devops/monitor', '/devops/monitor/index', 0, 'ant-design:desktop-outlined', 1, '0', '1', '1', '0', NULL, NULL, NULL, 1649677441, '0', '0'),
 (2026, '客户端管理', NULL, '/system/client', '/system/client/index', 1000, 'ant-design:mobile-outlined', 7, '0', '1', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (2027, '新增客户端', 'sys:client:add', NULL, NULL, 2026, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (2028, '修改客户端', 'sys:client:edit', NULL, NULL, 2026, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
@@ -605,7 +604,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `account`, `password`, `nickname`, `real_name`, `avatar`, `email`, `telephone`, `birthday`, `sex`, `dept_id`, `status`, `remark`, `create_by`, `update_by`, `create_time`, `update_time`, `is_deleted`) VALUES
-(2, 'vben', '123456', 'admi1', '超级管理员', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'vben@mate.vip1', '18810001000', NULL, 1, 1, '1', 'test', NULL, NULL, NULL, NULL, '0'),
+(2, 'vben', 'RAnMjfWJfm2T92IZkrYHxw==', 'admi1', '超级管理员', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'vben@mate.vip1', '18810001000', NULL, 1, 1, '1', 'test', NULL, NULL, NULL, NULL, '0'),
 (3, 'amin2', '{bcrypt}$2a$10$pDzXQpiSIl74Jekj9CxMWOPbEV9MHkjkZ7GXX/RomtIyXz8m6Ruia', 'amin2', '杨幂', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'mat02e@mate.vip', '18910001002', NULL, 1, 4, '0', NULL, NULL, NULL, NULL, NULL, '0'),
 (4, 'amin4', '{bcrypt}$2a$10$UIrEMyC0GUIUdJuGPYeGO.Nc8AZYlTiC8MUttPaYQ7P.V5q/cTAAG', 'adin4', '刘德华', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'mate3@mate.vip', '18910001004', NULL, 1, 1, '0', NULL, NULL, NULL, NULL, NULL, '0'),
 (6, 'adm6n', '{bcrypt}$2a$10$pDzXQpiSIl74Jekj9CxMWOPbEV9MHkjkZ7GXX/RomtIyXz8m6Ruia', 'adin6', 'mate6', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'mat6e@mate.vip', '18910001006', NULL, 1, 1, '0', NULL, NULL, NULL, NULL, NULL, '1'),

@@ -6,13 +6,14 @@ import (
 	"i421/app/model"
 	"i421/app/model/roleUser"
 	"i421/app/model/user"
+	"i421/app/utils/iaes"
 )
 
 // UserService 用户表service层
 type UserService struct {
 }
 
-// 用户列表查询
+// AccountListWhereCond 用户列表查询
 type AccountListWhereCond struct {
 	Account  string `json:"account"`
 	Nickname string `json:"nickname"`
@@ -26,6 +27,7 @@ func NewUserService() *UserService {
 
 // Login 用户登陆
 func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp user.User, err error) {
+
 	// 用户是否注册
 	var isUser user.User
 	res := model.Db.Model(&user.User{}).Where("account = ?", loginRequest.Username).First(&isUser)
@@ -34,10 +36,10 @@ func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp us
 		return userResp, errors.New("用户不存在")
 	}
 
-	//iAes := iaes.NewIAes()
-	//passwd, _ := iAes.EncryptByAes([]byte(loginRequest.Password))
+	iAes := iaes.NewIAes()
+	passwd, _ := iAes.EncryptByAes([]byte(loginRequest.Password))
 
-	res = model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"id", "account", "nickname", "avatar", "real_name", "remark"}).Where("account = ? AND password = ?", loginRequest.Username, loginRequest.Password).First(&userResp)
+	res = model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"id", "account", "nickname", "avatar", "real_name", "remark"}).Where("account = ? AND password = ?", loginRequest.Username, passwd).First(&userResp)
 
 	if res.RowsAffected < 1 {
 		return userResp, errors.New("用户密码不匹配")
@@ -46,7 +48,7 @@ func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp us
 	return userResp, nil
 }
 
-// UserInfo 用户信息
+// UserInfo 获取用户信息
 func (us *UserService) GetUserInfo(userId int64) (userResp user.User, err error) {
 
 	res := model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"id", "account", "nickname", "avatar", "real_name", "remark"}).Where("id = ?", userId).First(&userResp)
@@ -58,7 +60,7 @@ func (us *UserService) GetUserInfo(userId int64) (userResp user.User, err error)
 	return userResp, nil
 }
 
-// AccountList 用户列表
+// AccountList 获取用户列表
 func (us *UserService) AccountList(accountListRequest request.AccountListRequest) (userResp []user.UserAppendRoleIds, total int64, err error) {
 
 	// 查询条件结构体
@@ -86,6 +88,7 @@ func (us *UserService) AccountList(accountListRequest request.AccountListRequest
 	for i, v := range userResp {
 		var ids []int64
 		var names []string
+
 		for _, vv := range v.Roles {
 			ids = append(ids, vv.ID)
 			names = append(names, vv.RoleName)
@@ -112,7 +115,6 @@ func (us *UserService) DeleteAccount(deleteAccountRequest request.DeleteAccountR
 			return false, errors.New("删除失败")
 		}
 	} else {
-
 		res := model.Db.Delete(&user.User{}, deleteAccountRequest.ID)
 
 		if res.RowsAffected < 1 {
@@ -156,6 +158,34 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateAccountR
 
 	model.Db.Model(&roleUser.RoleUser{}).Where("user_id = ?", updateAccountRequest.UserID).Delete(&roleUsers)
 	model.Db.Model(&roleUser.RoleUser{}).Create(&roleUsers)
+
+	return true, nil
+}
+
+// UpdatePassword 更新用户
+func (us *UserService) UpdatePassword(updatePasswordRequest request.UpdatePasswordRequest) (flag bool, err error) {
+
+	var userResp user.User
+
+	iAes := iaes.NewIAes()
+	oldPasswd, _ := iAes.EncryptByAes([]byte(updatePasswordRequest.OldPwd))
+	newPasswd, _ := iAes.EncryptByAes([]byte(updatePasswordRequest.NewPwd))
+
+	res := model.Db.Model(&user.User{}).Where("id = ?", updatePasswordRequest.ID).Find(&userResp)
+
+	if res.RowsAffected < 1 {
+		return false, errors.New("用户不存在")
+	}
+
+	if userResp.Password != oldPasswd {
+		return false, errors.New("原密码不正确")
+	}
+
+	if userResp.Password == newPasswd {
+		return false, errors.New("新密码不能与原密码一致")
+	}
+
+	model.Db.Model(&user.User{}).Where("id = ?", updatePasswordRequest.ID).Update("password", newPasswd)
 
 	return true, nil
 }

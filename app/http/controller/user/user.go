@@ -16,11 +16,13 @@ import (
 
 //var ctx = context.Background()
 
+// LoginResp 用户登陆返回结构体
 type LoginResp struct {
 	user.User        // 登陆用户
 	Token     string `json:"token"` // 登陆后添加令牌
 }
 
+// GetUserInfoResp 用户信息结构体
 type GetUserInfoResp struct {
 	user.User        // 登陆用户
 	Token     string `json:"token"`    // 登陆后添加令牌
@@ -72,7 +74,7 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// 获取用户信息
+// GetUserInfo 获取用户信息
 func GetUserInfo(c *gin.Context) {
 
 	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
@@ -160,9 +162,9 @@ func Register(c *gin.Context) {
 	*/
 }
 
-// user list
+// GetAccountList 获取账户列表
 func GetAccountList(c *gin.Context) {
-	// todo
+
 	var accountListRequest request.AccountListRequest
 
 	if err := c.ShouldBind(&accountListRequest); err != nil {
@@ -198,7 +200,7 @@ func GetAccountList(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// 更新用户信息
+// UpdateAccount 更新用户信息
 func UpdateAccount(c *gin.Context) {
 
 	var updateAccountRequest request.UpdateAccountRequest
@@ -234,9 +236,9 @@ func UpdateAccount(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// user del
+// DeleteAccount 删除用户
 func DeleteAccount(c *gin.Context) {
-	// todo
+
 	var deleteAccountRequest request.DeleteAccountRequest
 
 	if err := c.ShouldBind(&deleteAccountRequest); err != nil {
@@ -270,9 +272,9 @@ func DeleteAccount(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// accountExist
+// AccountExist 检查账户是否可用
 func AccountExist(c *gin.Context) {
-	// todo
+
 	var accountExistRequest request.AccountExistRequest
 
 	if err := c.ShouldBind(&accountExistRequest); err != nil {
@@ -307,9 +309,41 @@ func AccountExist(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// 更新密码
+// UpdatePassword 更新用户密码
 func UpdatePassword(c *gin.Context) {
-	// todo
+
+	var updatePasswordRequest request.UpdatePasswordRequest
+
+	if err := c.ShouldBind(&updatePasswordRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	userService := service.NewUserService()
+	_, err := userService.UpdatePassword(updatePasswordRequest)
+
+	// 删除失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: 0,
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 // Hello
