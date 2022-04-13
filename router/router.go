@@ -3,7 +3,6 @@ package router
 import (
 	"i421/app/http/controller/dept"
 	"i421/app/http/controller/home"
-	"i421/app/http/controller/live"
 	"i421/app/http/controller/menu"
 	"i421/app/http/controller/role"
 	"i421/app/http/controller/upload"
@@ -18,16 +17,16 @@ import (
 func Routers(router *gin.Engine) {
 	router.Use(cors.Next())
 	router.GET("/", home.Index)
-	router.POST("/login", user.Login)
+	router.POST("/basic-api/login", user.Login)
 
 	router.Use(authorization.CheckToken())
 	{
-		router.GET("getUserInfo", user.GetUserInfo)
-		router.GET("logout", user.Logout)
+		router.GET("basic-api/getUserInfo", user.GetUserInfo)
+		router.GET("basic-api/logout", user.Logout)
 	}
 
 	// system 路由
-	system := router.Group("/system/")
+	system := router.Group("basic-api/system/")
 	{
 		system.Use(authorization.CheckToken())
 		{
@@ -54,31 +53,25 @@ func Routers(router *gin.Engine) {
 	}
 
 	//处理静态资源（不建议gin框架处理静态资源，参见 public/readme.md 说明 ）
-	router.Static("/public", "./public")          //  定义静态资源路由与实际目录映射关系
-	router.StaticFS("/dir", http.Dir("./public")) // 将public目录内的文件列举展示
+	router.Static("/basic-api/public", "./public")          //  定义静态资源路由与实际目录映射关系
+	router.StaticFS("/basic-api/dir", http.Dir("./public")) // 将public目录内的文件列举展示
 
-	api := router.Group("/api/")
-	{
-		api.Use(authorization.CheckToken())
-		{
-			api.GET("/", home.Index)
-		}
-	}
-
-	file := router.Group("/file")
+	file := router.Group("/basic-api/file")
 	{
 		file.POST("upload", upload.Upload)
 		// 个人上传
 		file.POST("private-upload", authorization.CheckToken(), upload.PrivateUpload)
 	}
 
-	ilive := router.Group("/live/")
-	{
-		ilive.GET("/stat", live.Livestat)
-		ilive.GET("/control/get", live.Get)
-		ilive.GET("/control/reset", live.Reset)
-		ilive.GET("/control/delete", live.Delete)
-		ilive.GET("/control/push", live.Push)
-		ilive.GET("/control/pull", live.Pull)
-	}
+	/*
+		ilive := router.Group("/live/")
+		{
+			ilive.GET("/stat", live.Livestat)
+			ilive.GET("/control/get", live.Get)
+			ilive.GET("/control/reset", live.Reset)
+			ilive.GET("/control/delete", live.Delete)
+			ilive.GET("/control/push", live.Push)
+			ilive.GET("/control/pull", live.Pull)
+		}
+	*/
 }
