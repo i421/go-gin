@@ -6,6 +6,7 @@ import (
 	"i421/app/http/controller/live"
 	"i421/app/http/controller/menu"
 	"i421/app/http/controller/role"
+	"i421/app/http/controller/upload"
 	"i421/app/http/controller/user"
 	"i421/app/http/middleware/authorization"
 	"i421/app/http/middleware/cors"
@@ -62,6 +63,13 @@ func Routers(router *gin.Engine) {
 		{
 			api.GET("/", home.Index)
 		}
+	}
+
+	file := router.Group("/file")
+	{
+		file.POST("upload", upload.Upload)
+		// 个人上传
+		file.POST("private-upload", authorization.CheckToken(), upload.PrivateUpload)
 	}
 
 	ilive := router.Group("/live/")
