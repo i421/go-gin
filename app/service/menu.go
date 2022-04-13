@@ -91,12 +91,25 @@ func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (tre
 }
 
 // updateMenu 更新菜单
-func (ms *MenuService) UpdateMenu(updateMenuRequest request.UpdateMenuRequest) (flag bool, err error) {
+func (ms *MenuService) UpdateMenu(updateMenuRequest request.UpdateOrCreateMenuRequest) (flag bool, err error) {
 
 	res := model.Db.Model(&menu.Menu{}).Where("id = ?", updateMenuRequest.ID).Select("name", "icon", "permission", "status", "sort", "hidden", "target", "type", "parent_id", "path", "sort").Updates(map[string]interface{}{"name": updateMenuRequest.MenuName, "icon": updateMenuRequest.Icon, "permission": updateMenuRequest.Permission, "status": updateMenuRequest.Status, "sort": updateMenuRequest.OrderNo, "hidden": updateMenuRequest.Show, "target": updateMenuRequest.IsExt, "type": updateMenuRequest.Type, "parent_id": updateMenuRequest.ParentMenu, "path": updateMenuRequest.RoutePath})
 
 	if res.RowsAffected < 1 {
 		return false, errors.New("更新失败")
+	}
+	return true, nil
+}
+
+// createMenu 创建菜单
+func (ms *MenuService) CreateMenu(createMenuRequest request.UpdateOrCreateMenuRequest) (flag bool, err error) {
+
+	menuResp := menu.Menu{Name: createMenuRequest.MenuName, Icon: createMenuRequest.Icon, Permission: createMenuRequest.Permission, Status: createMenuRequest.Status, Sort: createMenuRequest.OrderNo, Hidden: createMenuRequest.Show, Target: createMenuRequest.IsExt, Type: createMenuRequest.Type, ParentId: createMenuRequest.ParentMenu, Path: createMenuRequest.RoutePath}
+
+	res := model.Db.Create(&menuResp)
+
+	if res.RowsAffected < 1 {
+		return false, errors.New("菜单已存在")
 	}
 	return true, nil
 }

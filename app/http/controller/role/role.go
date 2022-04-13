@@ -110,11 +110,11 @@ func SetRoleStatus(c *gin.Context) {
 }
 
 // 更新角色信息
-func UpdateRole(c *gin.Context) {
+func UpdateOrCreateRole(c *gin.Context) {
 
-	var updateRoleRequest request.UpdateRoleRequest
+	var updateOrCreateRoleRequest request.UpdateOrCreateRoleRequest
 
-	if err := c.ShouldBind(&updateRoleRequest); err != nil {
+	if err := c.ShouldBind(&updateOrCreateRoleRequest); err != nil {
 		res := Response{
 			Code: 1,
 			Msg:  err.Error(),
@@ -123,8 +123,14 @@ func UpdateRole(c *gin.Context) {
 		return
 	}
 
+	var err error
+
 	roleService := service.NewRoleService()
-	_, err := roleService.UpdateRole(updateRoleRequest)
+	if updateOrCreateRoleRequest.ID != 0 {
+		_, err = roleService.UpdateRole(updateOrCreateRoleRequest)
+	} else {
+		_, err = roleService.CreateRole(updateOrCreateRoleRequest)
+	}
 
 	// 更新失败
 	if err != nil {
@@ -176,6 +182,7 @@ func DeleteRole(c *gin.Context) {
 	res := Response{
 		Code: 0,
 		Msg:  "success",
+		Data: 0,
 	}
 
 	c.JSON(http.StatusOK, res)

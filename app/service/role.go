@@ -87,7 +87,7 @@ func (rs *RoleService) SetRoleStatus(setRoleStatusRequest request.SetRoleStatusR
 }
 
 // updateRole 更新角色状态
-func (rs *RoleService) UpdateRole(updateRoleRequest request.UpdateRoleRequest) (flag bool, err error) {
+func (rs *RoleService) UpdateRole(updateRoleRequest request.UpdateOrCreateRoleRequest) (flag bool, err error) {
 
 	var permissionRoles []permissionRole.PermissionRole
 
@@ -106,12 +106,38 @@ func (rs *RoleService) UpdateRole(updateRoleRequest request.UpdateRoleRequest) (
 	return true, nil
 }
 
+// createRole 创建角色
+func (rs *RoleService) CreateRole(createRoleRequest request.UpdateOrCreateRoleRequest) (flag bool, err error) {
+
+	roleResp := role.Role{RoleName: createRoleRequest.RoleName, RoleCode: createRoleRequest.Value, Description: createRoleRequest.Description, Sort: createRoleRequest.Sort, Status: createRoleRequest.Status}
+
+	res := model.Db.Create(&roleResp)
+
+	if res.RowsAffected < 1 {
+		return false, errors.New("角色已存在")
+	}
+
+	var permissionRoles []permissionRole.PermissionRole
+
+	for _, item := range createRoleRequest.MenuIds {
+		var permissionRole permissionRole.PermissionRole
+		permissionRole.MenuId = item
+		permissionRole.RoleId = roleResp.ID
+		permissionRoles = append(permissionRoles, permissionRole)
+	}
+
+	model.Db.Model(&permissionRole.PermissionRole{}).Create(&permissionRoles)
+
+	return true, nil
+}
+
 // deleteRole 删除角色
 func (rs *RoleService) DeleteRole(deleteRoleRequest request.DeleteRoleRequest) (flag bool, err error) {
 
 	if deleteRoleRequest.Type != "" {
 		// 强制删除
 		res := model.Db.Model(&role.Role{}).Where("id = ?", deleteRoleRequest.ID).Updates(map[string]interface{}{"is_deleted": 1})
+		model.Db.Where("role_id = ?", deleteRoleRequest.ID).Delete(&permissionRole.PermissionRole{})
 
 		if res.RowsAffected < 1 {
 			return false, errors.New("删除失败")

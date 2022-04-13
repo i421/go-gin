@@ -47,11 +47,11 @@ func GetMenuList(c *gin.Context) {
 }
 
 // 更新菜单信息
-func UpdateMenu(c *gin.Context) {
+func UpdateOrCreateMenu(c *gin.Context) {
 
-	var updateMenuRequest request.UpdateMenuRequest
+	var updateOrCreateMenuRequest request.UpdateOrCreateMenuRequest
 
-	if err := c.ShouldBind(&updateMenuRequest); err != nil {
+	if err := c.ShouldBind(&updateOrCreateMenuRequest); err != nil {
 		res := Response{
 			Code: 1,
 			Msg:  err.Error(),
@@ -60,8 +60,14 @@ func UpdateMenu(c *gin.Context) {
 		return
 	}
 
+	var err error
+
 	menuService := service.NewMenuService()
-	_, err := menuService.UpdateMenu(updateMenuRequest)
+	if updateOrCreateMenuRequest.ID != 0 {
+		_, err = menuService.UpdateMenu(updateOrCreateMenuRequest)
+	} else {
+		_, err = menuService.CreateMenu(updateOrCreateMenuRequest)
+	}
 
 	// 更新失败
 	if err != nil {
@@ -113,6 +119,7 @@ func DeleteMenu(c *gin.Context) {
 	res := Response{
 		Code: 0,
 		Msg:  "success",
+		Data: 0,
 	}
 
 	c.JSON(http.StatusOK, res)

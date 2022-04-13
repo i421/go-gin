@@ -6,15 +6,9 @@ type UserLoginRequest struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
-// UserRegisterRequest 用户注册
-type UserRegisterRequest struct {
-	Phone    string `form:"phone", json:"phone" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
-}
-
-// UpdateAccountRequest 更新账号
-type UpdateAccountRequest struct {
-	UserID   int64   `form:"userId" json:"userId" binding:"required"`
+// UpdateOrCreateAccountRequest 更新账号
+type UpdateOrCreateAccountRequest struct {
+	UserID   int64   `form:"userId" json:"userId" binding:"-"`
 	Account  string  `form:"account" json:"account"  binding:"required"`
 	RoleIds  []int64 `form:"role_ids" json:"role_ids" binding:"required"`
 	DeptId   int64   `form:"deptId" json:"deptId" binding:"-"`

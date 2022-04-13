@@ -47,11 +47,11 @@ func GetDeptList(c *gin.Context) {
 }
 
 // 更新部门信息
-func UpdateDept(c *gin.Context) {
+func UpdateOrCreateDept(c *gin.Context) {
 
-	var updateDeptRequest request.UpdateDeptRequest
+	var updateOrCreateDeptRequest request.UpdateOrCreateDeptRequest
 
-	if err := c.ShouldBind(&updateDeptRequest); err != nil {
+	if err := c.ShouldBind(&updateOrCreateDeptRequest); err != nil {
 		res := Response{
 			Code: 1,
 			Msg:  err.Error(),
@@ -60,8 +60,14 @@ func UpdateDept(c *gin.Context) {
 		return
 	}
 
+	var err error
+
 	deptService := service.NewDeptService()
-	_, err := deptService.UpdateDept(updateDeptRequest)
+	if updateOrCreateDeptRequest.ID != 0 {
+		_, err = deptService.UpdateDept(updateOrCreateDeptRequest)
+	} else {
+		_, err = deptService.CreateDept(updateOrCreateDeptRequest)
+	}
 
 	// 更新失败
 	if err != nil {
@@ -113,6 +119,7 @@ func DeleteDept(c *gin.Context) {
 	res := Response{
 		Code: 0,
 		Msg:  "success",
+		Data: 0,
 	}
 
 	c.JSON(http.StatusOK, res)

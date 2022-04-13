@@ -18,7 +18,6 @@ func Routers(router *gin.Engine) {
 	router.Use(cors.Next())
 	router.GET("/", home.Index)
 	router.POST("/login", user.Login)
-	router.POST("/api/register", user.Register)
 
 	router.Use(authorization.CheckToken())
 	{
@@ -32,22 +31,22 @@ func Routers(router *gin.Engine) {
 		system.Use(authorization.CheckToken())
 		{
 			system.GET("getMenuList", menu.GetMenuList)
-			system.POST("updateMenu", menu.UpdateMenu)
+			system.POST("updateOrCreateMenu", menu.UpdateOrCreateMenu)
 			system.DELETE("deleteMenu", menu.DeleteMenu)
 
 			system.GET("getDeptList", dept.GetDeptList)
-			system.POST("updateDept", dept.UpdateDept)
+			system.POST("updateOrCreateDept", dept.UpdateOrCreateDept)
 			system.DELETE("deleteDept", dept.DeleteDept)
 
 			system.POST("accountExist", user.AccountExist)
 			system.GET("getAccountList", user.GetAccountList)
-			system.POST("updateAccount", user.UpdateAccount)
+			system.POST("updateOrCreateAccount", user.UpdateOrCreateAccount)
 			system.DELETE("deleteAccount", user.DeleteAccount)
 			system.POST("updatePassword", user.UpdatePassword)
 
 			system.GET("getAllRoleList", role.GetAllRoleList)
 			system.GET("getRoleListByPage", role.GetRoleListByPage)
-			system.POST("updateRole", role.UpdateRole)
+			system.POST("updateOrCreateRole", role.UpdateOrCreateRole)
 			system.DELETE("deleteRole", role.DeleteRole)
 			system.POST("setRoleStatus", role.SetRoleStatus)
 		}

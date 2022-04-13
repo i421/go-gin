@@ -15,8 +15,8 @@ type SetRoleStatusRequest struct {
 }
 
 // 更新角色
-type UpdateRoleRequest struct {
-	ID          int64   `form:"id" json:"id" binding:"required"`
+type UpdateOrCreateRoleRequest struct {
+	ID          int64   `form:"id" json:"id" binding:"-"`
 	RoleName    string  `form:"roleName" json:"roleName"  binding:"required"`
 	Value       string  `form:"value" json:"value"  binding:"required"`
 	Description string  `form:"description" json:"description"  binding:"required"`

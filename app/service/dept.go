@@ -102,13 +102,27 @@ func (ds *DeptService) GetDeptList(deptListRequest request.DeptListRequest) (tre
 }
 
 // updateDept 更新部门
-func (ds *DeptService) UpdateDept(updateDept request.UpdateDeptRequest) (flag bool, err error) {
+func (ds *DeptService) UpdateDept(updateDept request.UpdateOrCreateDeptRequest) (flag bool, err error) {
 
 	res := model.Db.Model(&dept.Dept{}).Where("id = ?", updateDept.ID).Select("name", "sort", "remark", "status", "parent_id").Updates(map[string]interface{}{"name": updateDept.DeptName, "sort": updateDept.OrderNo, "remark": updateDept.Remark, "status": updateDept.Status, "parent_id": updateDept.ParentDept})
 
 	if res.RowsAffected < 1 {
 		return false, errors.New("更新失败")
 	}
+	return true, nil
+}
+
+// createDept 创建部门
+func (ds *DeptService) CreateDept(createDept request.UpdateOrCreateDeptRequest) (flag bool, err error) {
+
+	deptResp := dept.Dept{Name: createDept.DeptName, Sort: createDept.OrderNo, Remark: createDept.Remark, Status: createDept.Status, ParentId: createDept.ParentDept}
+
+	res := model.Db.Create(&deptResp)
+
+	if res.RowsAffected < 1 {
+		return false, errors.New("部门已存在")
+	}
+
 	return true, nil
 }
 

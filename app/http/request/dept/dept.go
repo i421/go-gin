@@ -7,10 +7,10 @@ type DeptListRequest struct {
 }
 
 // 更新部门
-type UpdateDeptRequest struct {
-	ID         string `form:"id" json:"id" binding:"required"`
+type UpdateOrCreateDeptRequest struct {
+	ID         int64  `form:"id" json:"id" binding:"-"`
 	DeptName   string `form:"deptName" json:"deptName"  binding:"required"`
-	ParentDept int    `form:"parentDept" json:"parentDept" binding:"required"`
+	ParentDept int64  `form:"parentDept" json:"parentDept" binding:"required"`
 	Status     int    `form:"status" json:"status" binding:"-"`
 	OrderNo    int64  `form:"orderNo" json:"orderNo" binding:"required"`
 	Remark     string `form:"remark" json:"remark" binding:"required"`

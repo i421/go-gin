@@ -110,6 +110,7 @@ func (us *UserService) DeleteAccount(deleteAccountRequest request.DeleteAccountR
 
 	if deleteAccountRequest.Type != "" {
 		res := model.Db.Model(&user.User{}).Where("id = ?", deleteAccountRequest.ID).Updates(map[string]interface{}{"is_deleted": 1})
+		model.Db.Where("user_id = ?", deleteAccountRequest.ID).Delete(&roleUser.RoleUser{})
 
 		if res.RowsAffected < 1 {
 			return false, errors.New("删除失败")
@@ -143,7 +144,7 @@ func (us *UserService) AccountExist(account string, userId int64) (flag bool, er
 }
 
 // updateAccount 更新用户
-func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateAccountRequest) (flag bool, err error) {
+func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateOrCreateAccountRequest) (flag bool, err error) {
 
 	var roleUsers []roleUser.RoleUser
 
@@ -156,7 +157,32 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateAccountR
 
 	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "dept_id", "nickname", "email").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, DeptId: updateAccountRequest.DeptId, Nickname: updateAccountRequest.Nickname, Email: updateAccountRequest.Email})
 
-	model.Db.Model(&roleUser.RoleUser{}).Where("user_id = ?", updateAccountRequest.UserID).Delete(&roleUsers)
+	model.Db.Where("user_id = ?", updateAccountRequest.UserID).Delete(&roleUser.RoleUser{})
+	model.Db.Model(&roleUser.RoleUser{}).Create(&roleUsers)
+
+	return true, nil
+}
+
+// CreateAccount 创建用户
+func (us *UserService) CreateAccount(createAccountRequest request.UpdateOrCreateAccountRequest) (flag bool, err error) {
+
+	userResp := user.User{Account: createAccountRequest.Account, Remark: createAccountRequest.Remark, DeptId: createAccountRequest.DeptId, Nickname: createAccountRequest.Nickname, Email: createAccountRequest.Email}
+
+	res := model.Db.Create(&userResp)
+
+	if res.RowsAffected < 1 {
+		return false, errors.New("用户已存在")
+	}
+
+	var roleUsers []roleUser.RoleUser
+
+	for _, item := range createAccountRequest.RoleIds {
+		var roleUser roleUser.RoleUser
+		roleUser.RoleId = item
+		roleUser.UserId = userResp.ID
+		roleUsers = append(roleUsers, roleUser)
+	}
+
 	model.Db.Model(&roleUser.RoleUser{}).Create(&roleUsers)
 
 	return true, nil
@@ -189,34 +215,3 @@ func (us *UserService) UpdatePassword(updatePasswordRequest request.UpdatePasswo
 
 	return true, nil
 }
-
-// Create 创建用户
-/*
-func (us *UserService) Create(registerRequest request.UserRegisterRequest) (userResp user.User, err error) {
-	// 用户是否注册
-	var isUser user.User
-	res := model.Db.Where("phone = ?", registerRequest.Phone).First(&isUser)
-
-	if res.RowsAffected > 0 {
-		return userResp, errors.New("用户已存在")
-	}
-
-	iAes := iaes.NewIAes()
-	passwd, _ := iAes.EncryptByAes([]byte(registerRequest.Password))
-	userResp = user.User{
-		Nickname:        registerRequest.Phone,
-		Phone:           registerRequest.Phone,
-		Password:        passwd,
-		EmailVerifiedAt: "2020-01-01",
-		UUID:            uuid.New().String(),
-		Status:          1,
-	}
-
-	err = model.Db.Create(&userResp).Error
-	if err != nil {
-		return userResp, errors.New("用户创建失败")
-	}
-
-	return userResp, nil
-}
-*/

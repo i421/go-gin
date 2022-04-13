@@ -125,43 +125,6 @@ func Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// Register 注册用户
-func Register(c *gin.Context) {
-
-	/*
-		var userRegisterRequest request.UserRegisterRequest
-
-		if err := c.ShouldBind(&userRegisterRequest); err != nil {
-			res := Response{
-				Code: http.StatusBadRequest,
-				Message:  err.Error(),
-			}
-			c.JSON(http.StatusBadRequest, res)
-			return
-		}
-
-		userService := service.NewUserService()
-		user, err := userService.Create(userRegisterRequest)
-		if err != nil {
-			res := Response{
-				Code: http.StatusBadRequest,
-				Message:  err.Error(),
-			}
-
-			c.JSON(http.StatusOK, res)
-			return
-		}
-
-		res := Response{
-			Code: http.StatusOK,
-			Message:  "success",
-			Result: user,
-		}
-
-		c.JSON(http.StatusOK, res)
-	*/
-}
-
 // GetAccountList 获取账户列表
 func GetAccountList(c *gin.Context) {
 
@@ -200,12 +163,12 @@ func GetAccountList(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// UpdateAccount 更新用户信息
-func UpdateAccount(c *gin.Context) {
+// UpdateOrCreateAccount 更新用户信息
+func UpdateOrCreateAccount(c *gin.Context) {
 
-	var updateAccountRequest request.UpdateAccountRequest
+	var updateOrCreateAccountRequest request.UpdateOrCreateAccountRequest
 
-	if err := c.ShouldBind(&updateAccountRequest); err != nil {
+	if err := c.ShouldBind(&updateOrCreateAccountRequest); err != nil {
 		res := Response{
 			Code: 1,
 			Msg:  err.Error(),
@@ -214,8 +177,14 @@ func UpdateAccount(c *gin.Context) {
 		return
 	}
 
+	var err error
+
 	userService := service.NewUserService()
-	_, err := userService.UpdateAccount(updateAccountRequest)
+	if updateOrCreateAccountRequest.UserID != 0 {
+		_, err = userService.UpdateAccount(updateOrCreateAccountRequest)
+	} else {
+		_, err = userService.CreateAccount(updateOrCreateAccountRequest)
+	}
 
 	// 更新失败
 	if err != nil {
@@ -267,6 +236,7 @@ func DeleteAccount(c *gin.Context) {
 	res := Response{
 		Code: 0,
 		Msg:  "success",
+		Data: 0,
 	}
 
 	c.JSON(http.StatusOK, res)
