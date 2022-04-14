@@ -18,12 +18,10 @@ func Routers(router *gin.Engine) {
 	router.Use(cors.Next())
 	router.GET("/", home.Index)
 	router.POST("/basic-api/login", user.Login)
-
-	router.Use(authorization.CheckToken())
-	{
-		router.GET("basic-api/getUserInfo", user.GetUserInfo)
-		router.GET("basic-api/logout", user.Logout)
-	}
+	router.GET("basic-api/getUserInfo", authorization.CheckToken(), user.GetUserInfo)
+	router.GET("basic-api/getPermCode", authorization.CheckToken(), menu.GetPermCode)
+	router.GET("basic-api/getMenuList", authorization.CheckToken(), menu.GetRoleMenuList)
+	router.GET("basic-api/logout", authorization.CheckToken(), user.Logout)
 
 	// system 路由
 	system := router.Group("basic-api/system/")

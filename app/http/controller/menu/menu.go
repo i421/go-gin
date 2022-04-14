@@ -4,10 +4,39 @@ import (
 	. "i421/app/http/controller"
 	request "i421/app/http/request/menu"
 	"i421/app/service"
+	"i421/app/utils/ijwt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+// 获取角色菜单
+func GetRoleMenuList(c *gin.Context) {
+
+	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
+
+	menuService := service.NewMenuService()
+	menuListResp, err := menuService.GetRoleMenuList(userToken.UserId)
+
+	// 获取失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: menuListResp,
+	}
+
+	c.JSON(http.StatusOK, res)
+}
 
 // 获取权限信息
 func GetMenuList(c *gin.Context) {
@@ -41,6 +70,34 @@ func GetMenuList(c *gin.Context) {
 		Code: 0,
 		Msg:  "success",
 		Data: menuListResp,
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// 获取按钮权限ID列表
+func GetPermCode(c *gin.Context) {
+
+	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
+
+	menuService := service.NewMenuService()
+	permCodeListResp, err := menuService.GetPermCode(userToken.UserId)
+
+	// 获取失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: permCodeListResp,
 	}
 
 	c.JSON(http.StatusOK, res)

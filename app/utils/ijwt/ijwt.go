@@ -84,7 +84,14 @@ func (ijwt *iJwt) ParseToken(tokenStr string) (*MyClaims, error) {
 		return ijwt.signKey, nil
 	})
 	if err != nil {
-		return nil, errors.Wrapf(err, "token: %v is invalid!", tokenStr)
+		if ve, ok := err.(*jwt.ValidationError); ok {
+			if ve.Errors&jwt.ValidationErrorExpired != 0 {
+				// 如果 TokenExpired ,只是过期（格式都正确），我们认为他是有效的，接下可以允许刷新操作
+				token.Valid = true
+			}
+		} else {
+			return nil, errors.Wrapf(err, "token: %v is invalid!", tokenStr)
+		}
 	}
 	if myClamis, ok := token.Claims.(*MyClaims); ok && token.Valid { // 校验token
 		return myClamis, nil

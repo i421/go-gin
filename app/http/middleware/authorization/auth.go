@@ -6,7 +6,6 @@ import (
 	"i421/app/utils/ijwt"
 	"i421/config"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,14 +42,6 @@ func CheckToken() gin.HandlerFunc {
 						res := Response{
 							Code: global.TOKEN_DELETED_CODE,
 							Msg:  global.TOKEN_DELETED,
-						}
-						c.AbortWithStatusJSON(http.StatusBadRequest, res)
-						return
-					} else if customeToken.ExpiresAt < time.Now().Unix() {
-						// 过期
-						res := Response{
-							Code: global.TOKEN_EXPIRED_CODE,
-							Msg:  global.TOKEN_EXPIRED,
 						}
 						c.AbortWithStatusJSON(http.StatusBadRequest, res)
 						return

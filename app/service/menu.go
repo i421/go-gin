@@ -12,6 +12,29 @@ type MenuWhereCond struct {
 	Status int    `json:"status"`
 }
 
+type Meta struct {
+	Hidden    int    `json:"hiddenMenu"`
+	Title     string `json:"title"`
+	KeepAlive bool   `json:"ignoreKeepAlive"`
+}
+
+// 用户菜单
+type RoleMenuTreeList struct {
+	ID         int64              `json:"id"`
+	Icon       string             `json:"icon"`                      // 图标
+	Component  string             `json:"component"`                 // 组建
+	Type       int                `json:"type"`                      // 类型
+	Path       string             `json:"path"`                      // 类型
+	Menu       string             `json:"name"`                      // 名称
+	Permission string             `json:"permission"`                // 权限
+	ParentId   int64              `gorm:"default:0" json:"parentId"` // 上级ID
+	Sort       int                `json:"orderNo"`                   // 排序
+	CreateTime int64              `json:"createTime"`                // 时间
+	Status     int                `json:"status"`                    // 状态
+	Meta       Meta               `json:"meta"`
+	Children   []RoleMenuTreeList `json:"children,omitempty"`
+}
+
 // MenuTreeList 菜单
 type MenuTreeList struct {
 	ID         int64          `json:"id"`
@@ -63,6 +86,56 @@ func (ms *MenuService) GetMenu(menuList []menu.Menu, pid int64) []MenuTreeList {
 	return treeList
 }
 
+// GetMenu 获取菜单
+func (ms *MenuService) GetRoleMenu(menuList []menu.Menu, pid int64) []RoleMenuTreeList {
+	treeList := []RoleMenuTreeList{}
+	for _, v := range menuList {
+		if v.ParentId == pid {
+			child := ms.GetRoleMenu(menuList, v.ID)
+			node := RoleMenuTreeList{
+				ID:         v.ID,
+				Icon:       v.Icon,
+				Menu:       v.Name,
+				Component:  v.Component,
+				Type:       v.Type,
+				Permission: v.Permission,
+				ParentId:   v.ParentId,
+				Sort:       v.Sort,
+				Path:       v.Path,
+				Status:     v.Status,
+				CreateTime: v.CreateTime,
+				Meta: Meta{
+					Title:     v.Name,
+					Hidden:    v.Hidden,
+					KeepAlive: v.KeepAlive,
+				},
+			}
+			node.Children = child
+			treeList = append(treeList, node)
+		}
+	}
+	return treeList
+}
+
+// GetRoleMenu 获取部门列表
+func (ms *MenuService) GetRoleMenuList(userId int64) (tree []RoleMenuTreeList, err error) {
+
+	var roleIds []int64
+
+	model.Db.Table("role_user").Where("user_id", userId).Pluck("role_id", &roleIds)
+
+	var menuResp []menu.Menu
+	res := model.Db.Raw("SELECT menu.id, name, permission, path, component, parent_id, icon, sort, keep_alive, type, hidden, target FROM menu INNER JOIN permission_role ON menu.id = permission_role.menu_id WHERE menu.status != 1 AND menu.is_deleted != 1 AND menu.type < 2 AND permission_role.role_id IN ?", roleIds).Scan(&menuResp)
+
+	if res.RowsAffected < 1 {
+		return tree, errors.New("查询为空")
+	}
+
+	tree = ms.GetRoleMenu(menuResp, 0)
+
+	return tree, nil
+}
+
 // GetMenuList 获取部门列表
 func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (tree []MenuTreeList, err error) {
 
@@ -88,6 +161,23 @@ func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (tre
 	tree = ms.GetMenu(menuResp, 0)
 
 	return tree, nil
+}
+
+// GetPermCode 获取用户按钮权限ID数组
+func (ms *MenuService) GetPermCode(userId int64) (ids []int64, err error) {
+
+	var roleIds []int64
+
+	model.Db.Table("role_user").Where("user_id", userId).Pluck("role_id", &roleIds)
+
+	var menus []menu.Menu
+	model.Db.Raw("SELECT menu.id FROM menu INNER JOIN permission_role ON menu.id = permission_role.menu_id WHERE menu.type = 2 AND permission_role.role_id IN ?", roleIds).Scan(&menus)
+
+	for _, item := range menus {
+		ids = append(ids, item.ID)
+	}
+
+	return ids, nil
 }
 
 // updateMenu 更新菜单
