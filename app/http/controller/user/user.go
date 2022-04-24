@@ -99,7 +99,7 @@ func GetUserInfo(c *gin.Context) {
 
 	userInfoResp.User = user
 	userInfoResp.Token = token
-	userInfoResp.HomePath = "/dashboard/analysis"
+	userInfoResp.HomePath = "/dashboard"
 
 	res := Response{
 		Code: 0,

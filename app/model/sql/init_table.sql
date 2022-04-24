@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2022-04-12 12:17:44
+-- 生成日期： 2022-04-14 11:25:55
 -- 服务器版本： 8.0.28-0ubuntu0.20.04.3
 -- PHP 版本： 8.0.13
 
@@ -253,7 +253,8 @@ INSERT INTO `dept` (`id`, `name`, `sort`, `remark`, `status`, `create_by`, `upda
 (3, '开发二部', 2, '测试更新', 0, NULL, NULL, NULL, 1648880538, '0', 1),
 (4, '产品部', 2, 'sa', 0, NULL, NULL, NULL, 1648880550, '0', -1),
 (5, '产品一部', 1, 'da', 1, NULL, NULL, NULL, 1649231206, '0', 4),
-(6, 'sjsj', 0, NULL, 0, NULL, NULL, NULL, 1648886605, '1', -1);
+(6, 'sjsj', 0, NULL, 0, NULL, NULL, NULL, 1648886605, '1', -1),
+(8, 'test', 1, 'test', 0, '', '', 1649830238, 1649830238, '0', 1);
 
 -- --------------------------------------------------------
 
@@ -366,7 +367,7 @@ CREATE TABLE `menu` (
 
 INSERT INTO `menu` (`id`, `name`, `permission`, `path`, `component`, `parent_id`, `icon`, `sort`, `keep_alive`, `type`, `hidden`, `target`, `create_by`, `update_by`, `create_time`, `update_time`, `status`, `is_deleted`) VALUES
 (1000, '系统管理', NULL, '/system', 'Layout', 0, 'ant-design:appstore-outlined', 1, '0', '0', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
-(1100, '用户管理', NULL, '/system/user', '/system/user/index', 1000, 'ant-design:user-outlined', 2, '0', '1', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
+(1100, '用户管理', NULL, '/system/account', '/system/account/index', 1000, 'ant-design:user-outlined', 2, '0', '1', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1101, '用户新增', 'sys:user:add', '', NULL, 1100, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1102, '用户修改', 'sys:user:edit', NULL, NULL, 1100, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1103, '用户删除', 'sys:user:delete', NULL, NULL, 1100, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
@@ -386,7 +387,7 @@ INSERT INTO `menu` (`id`, `name`, `permission`, `path`, `component`, `parent_id`
 (1304, '菜单启用', 'sys:menu:enable', NULL, NULL, 1300, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1305, '菜单禁用', 'sys:menu:disable', NULL, NULL, 1300, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1306, '菜单导出', 'sys:menu:export', NULL, NULL, 1300, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
-(1400, '部门管理', NULL, '/system/depart', '/system/depart/index', 1000, 'ant-design:apartment-outlined', 3, '0', '1', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
+(1400, '部门管理', NULL, '/system/dept', '/system/dept/index', 1000, 'ant-design:apartment-outlined', 3, '0', '1', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1401, '部门新增', 'sys:depart:add', NULL, NULL, 1400, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1402, '部门修改', 'sys:depart:edit', NULL, NULL, 1400, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
 (1403, '部门删除', 'sys:depart:delete', NULL, NULL, 1400, NULL, 1, '0', '2', '0', '1', NULL, NULL, NULL, NULL, '0', '0'),
@@ -450,45 +451,139 @@ CREATE TABLE `permission_role` (
 --
 
 INSERT INTO `permission_role` (`id`, `menu_id`, `role_id`, `create_time`, `update_time`) VALUES
-(2716, 1000, 2, 0, 0),
-(2717, 1300, 2, 0, 0),
-(2718, 1301, 2, 0, 0),
-(2719, 1302, 2, 0, 0),
-(2720, 1303, 2, 0, 0),
-(2721, 1304, 2, 0, 0),
-(2722, 1305, 2, 0, 0),
-(2723, 1306, 2, 0, 0),
-(2724, 1100, 2, 0, 0),
-(2725, 1101, 2, 0, 0),
-(2726, 1102, 2, 0, 0),
-(2727, 1103, 2, 0, 0),
-(2728, 1104, 2, 0, 0),
-(2729, 1105, 2, 0, 0),
-(2730, 1106, 2, 0, 0),
-(2731, 1400, 2, 0, 0),
-(2732, 1401, 2, 0, 0),
-(2733, 1402, 2, 0, 0),
-(2734, 1403, 2, 0, 0),
-(2735, 1404, 2, 0, 0),
-(2736, 1200, 2, 0, 0),
-(2737, 1201, 2, 0, 0),
-(2738, 1202, 2, 0, 0),
-(2739, 1203, 2, 0, 0),
-(2740, 1204, 2, 0, 0),
-(2741, 1205, 2, 0, 0),
-(2742, 2035, 2, 0, 0),
-(2743, 2036, 2, 0, 0),
-(2744, 2037, 2, 0, 0),
-(2745, 2038, 2, 0, 0),
-(2746, 2026, 2, 0, 0),
-(2747, 2027, 2, 0, 0),
-(2748, 2028, 2, 0, 0),
-(2749, 2029, 2, 0, 0),
-(2750, 2030, 2, 0, 0),
-(2751, 2031, 2, 0, 0),
-(2752, 2032, 2, 0, 0),
-(2753, 2034, 2, 0, 0),
-(2754, 2033, 2, 0, 0);
+(2767, 2064, 1, 0, 0),
+(2768, 2065, 1, 0, 0),
+(2769, 2068, 1, 0, 0),
+(2770, 1000, 1, 0, 0),
+(2771, 1300, 1, 0, 0),
+(2772, 1304, 1, 0, 0),
+(2773, 1301, 1, 0, 0),
+(2774, 1302, 1, 0, 0),
+(2775, 1303, 1, 0, 0),
+(2776, 1305, 1, 0, 0),
+(2777, 1306, 1, 0, 0),
+(2778, 1100, 1, 0, 0),
+(2779, 1106, 1, 0, 0),
+(2780, 1105, 1, 0, 0),
+(2781, 1104, 1, 0, 0),
+(2782, 1103, 1, 0, 0),
+(2783, 1102, 1, 0, 0),
+(2784, 1101, 1, 0, 0),
+(2785, 1400, 1, 0, 0),
+(2786, 1401, 1, 0, 0),
+(2787, 1402, 1, 0, 0),
+(2788, 1403, 1, 0, 0),
+(2789, 1404, 1, 0, 0),
+(2790, 1200, 1, 0, 0),
+(2791, 1202, 1, 0, 0),
+(2792, 1201, 1, 0, 0),
+(2793, 1203, 1, 0, 0),
+(2794, 1204, 1, 0, 0),
+(2795, 1205, 1, 0, 0),
+(2796, 2035, 1, 0, 0),
+(2797, 2036, 1, 0, 0),
+(2798, 2037, 1, 0, 0),
+(2799, 2038, 1, 0, 0),
+(2800, 2026, 1, 0, 0),
+(2801, 2027, 1, 0, 0),
+(2802, 2028, 1, 0, 0),
+(2803, 2029, 1, 0, 0),
+(2804, 2030, 1, 0, 0),
+(2805, 2031, 1, 0, 0),
+(2806, 2032, 1, 0, 0),
+(2807, 2033, 1, 0, 0),
+(2808, 2034, 1, 0, 0),
+(2810, 2045, 1, 0, 0),
+(2811, 2056, 1, 0, 0),
+(2812, 2060, 1, 0, 0),
+(2813, 2061, 1, 0, 0),
+(2814, 2062, 1, 0, 0),
+(2815, 2055, 1, 0, 0),
+(2816, 2057, 1, 0, 0),
+(2817, 2058, 1, 0, 0),
+(2818, 2059, 1, 0, 0),
+(2819, 2047, 1, 0, 0),
+(2820, 2048, 1, 0, 0),
+(2821, 2049, 1, 0, 0),
+(2822, 2050, 1, 0, 0),
+(2823, 2051, 1, 0, 0),
+(2824, 2015, 1, 0, 0),
+(2825, 2016, 1, 0, 0),
+(2826, 2018, 1, 0, 0),
+(2827, 2019, 1, 0, 0),
+(2828, 2020, 1, 0, 0),
+(2829, 2017, 1, 0, 0),
+(2830, 2021, 1, 0, 0),
+(2831, 2022, 1, 0, 0),
+(2832, 2069, 1, 0, 0),
+(2833, 2064, 2, 0, 0),
+(2834, 2065, 2, 0, 0),
+(2835, 2068, 2, 0, 0),
+(2836, 1000, 2, 0, 0),
+(2837, 1300, 2, 0, 0),
+(2838, 1304, 2, 0, 0),
+(2839, 1301, 2, 0, 0),
+(2840, 1302, 2, 0, 0),
+(2841, 1303, 2, 0, 0),
+(2842, 1305, 2, 0, 0),
+(2843, 1306, 2, 0, 0),
+(2844, 1100, 2, 0, 0),
+(2845, 1106, 2, 0, 0),
+(2846, 1105, 2, 0, 0),
+(2847, 1104, 2, 0, 0),
+(2848, 1103, 2, 0, 0),
+(2849, 1102, 2, 0, 0),
+(2850, 1101, 2, 0, 0),
+(2851, 1400, 2, 0, 0),
+(2852, 1401, 2, 0, 0),
+(2853, 1402, 2, 0, 0),
+(2854, 1403, 2, 0, 0),
+(2855, 1404, 2, 0, 0),
+(2856, 1200, 2, 0, 0),
+(2857, 1202, 2, 0, 0),
+(2858, 1201, 2, 0, 0),
+(2859, 1203, 2, 0, 0),
+(2860, 1204, 2, 0, 0),
+(2861, 1205, 2, 0, 0),
+(2862, 2035, 2, 0, 0),
+(2863, 2036, 2, 0, 0),
+(2864, 2037, 2, 0, 0),
+(2865, 2038, 2, 0, 0),
+(2866, 2026, 2, 0, 0),
+(2867, 2027, 2, 0, 0),
+(2868, 2028, 2, 0, 0),
+(2869, 2029, 2, 0, 0),
+(2870, 2030, 2, 0, 0),
+(2871, 2031, 2, 0, 0),
+(2872, 2032, 2, 0, 0),
+(2873, 2033, 2, 0, 0),
+(2874, 2034, 2, 0, 0),
+(2875, 2045, 2, 0, 0),
+(2876, 2056, 2, 0, 0),
+(2877, 2060, 2, 0, 0),
+(2878, 2061, 2, 0, 0),
+(2879, 2062, 2, 0, 0),
+(2880, 2055, 2, 0, 0),
+(2881, 2057, 2, 0, 0),
+(2882, 2058, 2, 0, 0),
+(2883, 2059, 2, 0, 0),
+(2884, 2047, 2, 0, 0),
+(2885, 2048, 2, 0, 0),
+(2886, 2049, 2, 0, 0),
+(2887, 2050, 2, 0, 0),
+(2888, 2051, 2, 0, 0),
+(2889, 2015, 2, 0, 0),
+(2890, 2016, 2, 0, 0),
+(2891, 2018, 2, 0, 0),
+(2892, 2019, 2, 0, 0),
+(2893, 2020, 2, 0, 0),
+(2894, 2017, 2, 0, 0),
+(2895, 2021, 2, 0, 0),
+(2896, 2022, 2, 0, 0),
+(2897, 2069, 2, 0, 0),
+(2898, 2064, 8, 0, 0),
+(2899, 2065, 8, 0, 0),
+(2900, 2068, 8, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -515,8 +610,9 @@ CREATE TABLE `role` (
 --
 
 INSERT INTO `role` (`id`, `role_name`, `role_code`, `description`, `sort`, `status`, `create_by`, `update_by`, `create_time`, `update_time`, `is_deleted`) VALUES
-(1, '超级管理员', 'super', '超级管理员组', 1, '0', NULL, NULL, 1649578786, 1649673962, '0'),
-(2, '管理员', 'admin', '管理员', 2, '0', NULL, NULL, 1649578786, 1649674792, '0');
+(1, '超级管理员', 'super', '超级管理员组', 1, '0', NULL, NULL, 1649578786, 1649934648, '0'),
+(2, '管理员', 'admin', '管理员', 2, '0', NULL, NULL, 1649578786, 1649934663, '0'),
+(8, '测试角色', 'test', 'test', 3, '0', '', '', 1649925084, 1649934668, '0');
 
 -- --------------------------------------------------------
 
@@ -539,7 +635,14 @@ CREATE TABLE `role_user` (
 INSERT INTO `role_user` (`id`, `user_id`, `role_id`, `create_time`, `update_time`) VALUES
 (2, 3, 2, NULL, NULL),
 (9, 22, 2, 0, 0),
-(10, 2, 1, 0, 0);
+(10, 2, 1, 0, 0),
+(11, 23, 2, 0, 0),
+(14, 25, 2, 0, 0),
+(15, 26, 2, 0, 0),
+(17, 27, 2, 0, 0),
+(18, 28, 2, 0, 0),
+(19, 29, 2, 0, 0),
+(20, 30, 8, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -608,7 +711,8 @@ INSERT INTO `user` (`id`, `account`, `password`, `nickname`, `real_name`, `avata
 (3, 'amin2', '{bcrypt}$2a$10$pDzXQpiSIl74Jekj9CxMWOPbEV9MHkjkZ7GXX/RomtIyXz8m6Ruia', 'amin2', '杨幂', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'mat02e@mate.vip', '18910001002', NULL, 1, 4, '0', NULL, NULL, NULL, NULL, NULL, '0'),
 (4, 'amin4', '{bcrypt}$2a$10$UIrEMyC0GUIUdJuGPYeGO.Nc8AZYlTiC8MUttPaYQ7P.V5q/cTAAG', 'adin4', '刘德华', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'mate3@mate.vip', '18910001004', NULL, 1, 1, '0', NULL, NULL, NULL, NULL, NULL, '0'),
 (6, 'adm6n', '{bcrypt}$2a$10$pDzXQpiSIl74Jekj9CxMWOPbEV9MHkjkZ7GXX/RomtIyXz8m6Ruia', 'adin6', 'mate6', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'mat6e@mate.vip', '18910001006', NULL, 1, 1, '0', NULL, NULL, NULL, NULL, NULL, '1'),
-(22, 'pp1', '{bcrypt}$2a$10$jddK.xwTn99XM9ggy64Zgu.eBK2GBiyk9RmtQEjg99S2F8otQ8ieq', 'pp1', '11', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'pp1@163.com', '1899', NULL, 2, 1, '0', '', NULL, NULL, NULL, NULL, '0');
+(22, 'pp1', '{bcrypt}$2a$10$jddK.xwTn99XM9ggy64Zgu.eBK2GBiyk9RmtQEjg99S2F8otQ8ieq', 'pp1', '11', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg', 'pp1@163.com', '1899', NULL, 2, 1, '0', '', NULL, NULL, NULL, NULL, '0'),
+(30, 'test', 'RAnMjfWJfm2T92IZkrYHxw==', 'test', '', '', 'test@gmail.com', '', 0, 0, 1, '', 'test', '', '', 0, 0, '0');
 
 --
 -- 转储表的索引
@@ -761,7 +865,7 @@ ALTER TABLE `data_source`
 -- 使用表AUTO_INCREMENT `dept`
 --
 ALTER TABLE `dept`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '部门ID', AUTO_INCREMENT=7;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '部门ID', AUTO_INCREMENT=9;
 
 --
 -- 使用表AUTO_INCREMENT `dept_role`
@@ -785,25 +889,25 @@ ALTER TABLE `log`
 -- 使用表AUTO_INCREMENT `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '菜单ID', AUTO_INCREMENT=2070;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '菜单ID', AUTO_INCREMENT=2072;
 
 --
 -- 使用表AUTO_INCREMENT `permission_role`
 --
 ALTER TABLE `permission_role`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键', AUTO_INCREMENT=2755;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键', AUTO_INCREMENT=2901;
 
 --
 -- 使用表AUTO_INCREMENT `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id', AUTO_INCREMENT=6;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id', AUTO_INCREMENT=9;
 
 --
 -- 使用表AUTO_INCREMENT `role_user`
 --
 ALTER TABLE `role_user`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- 使用表AUTO_INCREMENT `route`
@@ -815,7 +919,7 @@ ALTER TABLE `route`
 -- 使用表AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键', AUTO_INCREMENT=23;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键', AUTO_INCREMENT=31;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

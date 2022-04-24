@@ -49,7 +49,11 @@ func (rs *RoleService) GetRoleListByPage(getRoleListByPageRequest request.GetRol
 		whereCond.Status = getRoleListByPageRequest.Status
 	}
 
-	temp := model.Db.Model(&role.Role{}).Preload("Menus").Select([]string{"id", "role_name", "role_code", "description", "status", "create_time", "sort"}).Where("is_deleted != 1").Where(whereCond).Order("sort")
+	// 树父节点
+	var parentIds []int64
+	model.Db.Raw("select id from menu where id in (select parent_id from menu where type = 2) or parent_id = 0").Scan(&parentIds)
+
+	temp := model.Db.Model(&role.Role{}).Preload("Menus", "id not in (?)", parentIds).Select([]string{"id", "role_name", "role_code", "description", "status", "create_time", "sort"}).Where("is_deleted != 1").Where(whereCond).Order("sort")
 
 	res := temp.Limit(getRoleListByPageRequest.PageSize).Offset((getRoleListByPageRequest.Page - 1) * getRoleListByPageRequest.PageSize).Find(&roles)
 
