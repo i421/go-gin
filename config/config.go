@@ -12,24 +12,13 @@ var (
 
 // 保存所有配置
 type AllConf struct {
-	AppName     string    // app名称
-	AppPort     string    // app启动端口
-	AppMode     string    // gin模式 debug|release|test
-	AppAESKey   string    // aes加密密钥
-	LiveAddress string    // 直播服务器地址
-	AmqpConf    AmqpConf  `json:"amqpConf"`
-	MysqlConf   MysqlConf `json:"mysqlConf"`
-	RedisConf   RedisConf `json:"redisConf"`
-	LogConf     LogConf   `json:"logConf"`
-	AuthConf    AuthConf  `json:"authConf"`
-}
-
-// redis 配置
-type RedisConf struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	Password string `json:"password"`
-	Db       int    `json:"db"`
+	AppName   string    // app名称
+	AppPort   string    // app启动端口
+	AppMode   string    // gin模式 debug|release|test
+	AppAESKey string    // aes加密密钥
+	MysqlConf MysqlConf `json:"mysqlConf"`
+	LogConf   LogConf   `json:"logConf"`
+	AuthConf  AuthConf  `json:"authConf"`
 }
 
 // mysql 配置
@@ -38,14 +27,6 @@ type MysqlConf struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	DbName   string `json:"dbname"`
-}
-
-// amqp 配置
-type AmqpConf struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	Username string `json:"username"`
-	Password string `json:"password"`
 }
 
 // 日志配置

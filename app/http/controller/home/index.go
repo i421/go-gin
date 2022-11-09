@@ -1,11 +1,9 @@
 package home
 
 import (
-	"fmt"
 	"net/http"
 
 	. "i421/app/http/controller"
-	"i421/app/utils/ijwt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,16 +41,16 @@ func Index(c *gin.Context) {
 	// 多对多
 	//model.Db.Preload("Roles").Find(&users)
 
-	token := c.MustGet("userToken").(*ijwt.MyClaims)
+	//token := c.MustGet("userToken").(*ijwt.MyClaims)
 
-	fmt.Println("ExpiresAt:", token.ExpiresAt)
+	//fmt.Println("ExpiresAt:", token.ExpiresAt)
 	//fmt.Println("user_id:", token.UserId)
 	//fmt.Println("phone:", token.Phone)
 
 	resp := Response{
 		Code: 0,
 		Msg:  "hello i421",
-		Data: token.ExpiresAt,
+		//Data: token.ExpiresAt,
 	}
 
 	c.JSON(http.StatusOK, resp)

@@ -60,16 +60,4 @@ func Routers(router *gin.Engine) {
 		// 个人上传
 		file.POST("private-upload", authorization.CheckToken(), upload.PrivateUpload)
 	}
-
-	/*
-		ilive := router.Group("/live/")
-		{
-			ilive.GET("/stat", live.Livestat)
-			ilive.GET("/control/get", live.Get)
-			ilive.GET("/control/reset", live.Reset)
-			ilive.GET("/control/delete", live.Delete)
-			ilive.GET("/control/push", live.Push)
-			ilive.GET("/control/pull", live.Pull)
-		}
-	*/
 }

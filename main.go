@@ -28,10 +28,6 @@ func init() {
 	if err := crontask.InitCronTask(); err != nil {
 		log.Fatal("cronObj.AddFunc is failed, err: ", err)
 	}
-
-	// 启动amqp接收器
-	//myamqp := amqp.New()
-	//go myamqp.Consume()
 }
 
 func main() {
