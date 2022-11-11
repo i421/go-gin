@@ -125,7 +125,7 @@ func (ms *MenuService) GetRoleMenuList(userId int64) (tree []RoleMenuTreeList, e
 	model.Db.Table("role_user").Where("user_id", userId).Pluck("role_id", &roleIds)
 
 	var menuResp []menu.Menu
-	res := model.Db.Raw("SELECT menu.id, name, permission, path, component, parent_id, icon, sort, keep_alive, type, hidden, target FROM menu INNER JOIN permission_role ON menu.id = permission_role.menu_id WHERE menu.status != 1 AND menu.is_deleted != 1 AND menu.type < 2 AND permission_role.role_id IN ?", roleIds).Scan(&menuResp)
+	res := model.Db.Raw("SELECT menu.id, name, permission, path, component, parent_id, icon, sort, keep_alive, type, hidden, target FROM menu INNER JOIN permission_role ON menu.id = permission_role.menu_id WHERE menu.status != 1 AND menu.is_deleted != 1 AND menu.type < 2 AND permission_role.role_id IN ? order by sort asc", roleIds).Scan(&menuResp)
 
 	if res.RowsAffected < 1 {
 		return tree, errors.New("查询为空")
@@ -152,7 +152,7 @@ func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (tre
 		whereCond.Status = menuListRequest.Status
 	}
 
-	res := model.Db.Model(&menu.Menu{}).Where("is_deleted != 1").Where(whereCond).Order("sort").Find(&menuResp)
+	res := model.Db.Model(&menu.Menu{}).Where("is_deleted != 1").Where(whereCond).Order("sort asc").Find(&menuResp)
 
 	if res.RowsAffected < 1 {
 		return tree, errors.New("查询为空")

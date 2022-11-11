@@ -2,7 +2,6 @@ package role
 
 import (
 	"i421/app/model"
-	"i421/app/model/dept"
 	"i421/app/model/menu"
 )
 
@@ -17,7 +16,6 @@ type Role struct {
 	CreateBy    string      `json:"createBy"`                               // 创建人
 	UpdateBy    string      `json:"updateBy"`                               // 更新人
 	IsDeleted   bool        `json:"isDeleted"`                              // 删除标志
-	Depts       []dept.Dept `json:"depts" gorm:"many2many:dept_role"`       // 多部门
 	Menus       []menu.Menu `json:"menus" gorm:"many2many:permission_role"` // 多权限
 }
 
@@ -32,7 +30,6 @@ type RoleAppendMenuIds struct {
 	CreateBy    string      `json:"createBy"`                               // 创建人
 	UpdateBy    string      `json:"updateBy"`                               // 更新人
 	IsDeleted   bool        `json:"isDeleted"`                              // 删除标志
-	Depts       []dept.Dept `json:"depts" gorm:"many2many:dept_role"`       // 多部门
 	Menus       []menu.Menu `json:"menus" gorm:"many2many:permission_role"` // 多权限
 	MenuIds     []int64     `gorm:"type:text" json:"menu_ids,omitempty"`    // 角色id
 	MenuNames   []string    `gorm:"type:text" json:"menu_names,omitempty"`  // 角色名称

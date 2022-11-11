@@ -11,9 +11,7 @@ type UpdateOrCreateAccountRequest struct {
 	UserID   int64   `form:"userId" json:"userId" binding:"-"`
 	Account  string  `form:"account" json:"account"  binding:"required"`
 	RoleIds  []int64 `form:"role_ids" json:"role_ids" binding:"required"`
-	DeptId   int64   `form:"deptId" json:"deptId" binding:"-"`
 	Nickname string  `form:"nickname" json:"nickname" binding:"required"`
-	Email    string  `form:"email" json:"email" binding:"required"`
 	Remark   string  `form:"remark" json:"remark" binding:"-"`
 }
 
@@ -21,7 +19,6 @@ type UpdateOrCreateAccountRequest struct {
 type AccountListRequest struct {
 	Page     int    `form:"page", json:"page" binding:"required"`
 	PageSize int    `form:"pageSize" json:"pageSize" binding:"required"`
-	DeptId   int64  `form:"deptId" json:"deptId,omitempty" binding:"-"`
 	Account  string `form:"account" json:"account,omitempty" binding:"-"`
 	Nickname string `form:"nickname" json:"nickname,omitempty" binding:"-"`
 }

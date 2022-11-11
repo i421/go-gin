@@ -31,7 +31,7 @@ func Upload(c *gin.Context) {
 
 	files := form.File["files"]
 
-	resArr := make([]string, len(files))
+	resArr := []string{}
 
 	for _, file := range files {
 

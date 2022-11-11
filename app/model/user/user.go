@@ -1,7 +1,6 @@
 package user
 
 import (
-	"i421/app/model/dept"
 	"i421/app/model/role"
 )
 
@@ -13,12 +12,6 @@ type User struct {
 	Nickname   string      `json:"nickname"`                         // 昵称
 	RealName   string      `json:"realName"`                         // 真名
 	Avatar     string      `json:"avatar"`                           // 头像
-	Email      string      `json:"email"`                            // 邮件
-	Telephone  string      `json:"telephone"`                        // 手机
-	Birthday   int64       `json:"birthday"`                         // 生日
-	Sex        int         `json:"sex"`                              // 性别
-	DeptId     int64       `gorm:"default:0" json:"deptId"`          // 部门ID
-	Dept       dept.Dept   `json:"dept"`                             // 部门信息
 	Status     string      `json:"status"`                           // 默认
 	Remark     string      `json:"remark"`                           // 默认备注
 	CreateBy   string      `json:"createBy"`                         // 创建人
@@ -37,12 +30,6 @@ type UserAppendRoleIds struct {
 	Nickname   string      `json:"nickname"`                                   // 昵称
 	RealName   string      `json:"realName"`                                   // 真名
 	Avatar     string      `json:"avatar"`                                     // 头像
-	Email      string      `json:"email"`                                      // 邮件
-	Telephone  string      `json:"telephone"`                                  // 手机
-	Birthday   int64       `json:"birthday"`                                   // 生日
-	Sex        int         `json:"sex"`                                        // 性别
-	DeptId     int64       `gorm:"default:0" json:"deptId"`                    // 部门ID
-	Dept       dept.Dept   `json:"dept"`                                       // 部门信息
 	Status     int         `json:"status"`                                     // 默认
 	Remark     string      `json:"remark"`                                     // 默认备注
 	CreateBy   string      `json:"createBy"`                                   // 创建人
@@ -51,7 +38,6 @@ type UserAppendRoleIds struct {
 	Roles      []role.Role `gorm:"many2many:role_user" json:"roles,omitempty"` // 角色
 	CreateTime int64       `json:"createTime"`                                 // 创建时间
 	UpdateTime int64       `json:"updateTime"`                                 // 更新时间
-	DeptName   string      `json:"dept_name,omitempty"`                        // 部门名称
 	RoleIds    []int64     `gorm:"type:text" json:"role_ids,omitempty"`        // 角色id
 	RoleNames  []string    `gorm:"type:text" json:"role_names,omitempty"`      // 角色名称
 }

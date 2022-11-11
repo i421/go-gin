@@ -57,7 +57,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 生成token
-	token, _ := ijwt.NewIJwt().GenerateToken(user.ID, user.Telephone)
+	token, _ := ijwt.NewIJwt().GenerateToken(user.ID, user.Account)
 
 	var loginResp LoginResp
 

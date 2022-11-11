@@ -17,7 +17,6 @@ type UserService struct {
 type AccountListWhereCond struct {
 	Account  string `json:"account"`
 	Nickname string `json:"nickname"`
-	DeptId   int64  `json:"deptId"`
 }
 
 // NewUserService 实例化
@@ -74,11 +73,7 @@ func (us *UserService) AccountList(accountListRequest request.AccountListRequest
 		whereCond.Nickname = accountListRequest.Nickname
 	}
 
-	if accountListRequest.DeptId != 0 {
-		whereCond.DeptId = accountListRequest.DeptId
-	}
-
-	temp := model.Db.Model(&user.User{}).Preload("Roles").Joins("left join dept on user.dept_id = dept.id").Select([]string{"user.id", "account", "nickname", "email", "user.create_time", "user.remark", "dept_id", "dept.name as dept_name"}).Where("user.is_deleted != 1").Where(whereCond).Order("user.id")
+	temp := model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"user.id", "account", "nickname", "user.create_time", "user.remark"}).Where("user.is_deleted != 1").Where(whereCond).Order("user.id")
 
 	res := temp.Limit(accountListRequest.PageSize).Offset((accountListRequest.Page - 1) * accountListRequest.PageSize).Find(&userResp)
 
@@ -155,7 +150,7 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateOrCreate
 		roleUsers = append(roleUsers, roleUser)
 	}
 
-	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "dept_id", "nickname", "email").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, DeptId: updateAccountRequest.DeptId, Nickname: updateAccountRequest.Nickname, Email: updateAccountRequest.Email})
+	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "nickname").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, Nickname: updateAccountRequest.Nickname})
 
 	model.Db.Where("user_id = ?", updateAccountRequest.UserID).Delete(&roleUser.RoleUser{})
 	model.Db.Model(&roleUser.RoleUser{}).Create(&roleUsers)
@@ -166,7 +161,7 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateOrCreate
 // CreateAccount 创建用户
 func (us *UserService) CreateAccount(createAccountRequest request.UpdateOrCreateAccountRequest) (flag bool, err error) {
 
-	userResp := user.User{Account: createAccountRequest.Account, Remark: createAccountRequest.Remark, DeptId: createAccountRequest.DeptId, Nickname: createAccountRequest.Nickname, Email: createAccountRequest.Email}
+	userResp := user.User{Account: createAccountRequest.Account, Remark: createAccountRequest.Remark, Nickname: createAccountRequest.Nickname}
 
 	res := model.Db.Create(&userResp)
 

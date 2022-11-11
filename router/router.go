@@ -1,7 +1,7 @@
 package router
 
 import (
-	"i421/app/http/controller/dept"
+	"i421/app/http/controller/company"
 	"i421/app/http/controller/home"
 	"i421/app/http/controller/menu"
 	"i421/app/http/controller/role"
@@ -28,13 +28,14 @@ func Routers(router *gin.Engine) {
 	{
 		system.Use(authorization.CheckToken())
 		{
+			system.GET("getAllCompanyList", company.GetAllCompanyList)
+			system.GET("getCompanyListByPage", company.GetCompanyListByPage)
+			system.POST("updateOrCreateCompany", company.UpdateOrCreateCompany)
+			system.DELETE("deleteCompany", company.DeleteCompany)
+
 			system.GET("getMenuList", menu.GetMenuList)
 			system.POST("updateOrCreateMenu", menu.UpdateOrCreateMenu)
 			system.DELETE("deleteMenu", menu.DeleteMenu)
-
-			system.GET("getDeptList", dept.GetDeptList)
-			system.POST("updateOrCreateDept", dept.UpdateOrCreateDept)
-			system.DELETE("deleteDept", dept.DeleteDept)
 
 			system.POST("accountExist", user.AccountExist)
 			system.GET("getAccountList", user.GetAccountList)
