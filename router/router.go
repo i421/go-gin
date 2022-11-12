@@ -32,6 +32,7 @@ func Routers(router *gin.Engine) {
 			system.GET("getCompanyListByPage", company.GetCompanyListByPage)
 			system.POST("updateOrCreateCompany", company.UpdateOrCreateCompany)
 			system.DELETE("deleteCompany", company.DeleteCompany)
+			system.POST("setCompanyStatus", company.SetCompanyStatus)
 
 			system.GET("getMenuList", menu.GetMenuList)
 			system.POST("updateOrCreateMenu", menu.UpdateOrCreateMenu)

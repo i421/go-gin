@@ -43,7 +43,7 @@ func (cs *CompanyService) GetCompanyListByPage(getCompanyListByPageRequest reque
 		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
 	}
 
-	temp := model.Db.Model(&company.Company{}).Select([]string{"id", "company_name"}).Where("is_deleted != 1").Where(whereCond).Order("sort")
+	temp := model.Db.Model(&company.Company{}).Select([]string{"id", "company_name", "remark", "province"}).Where("is_deleted != 1").Where(whereCond).Order("id")
 
 	res := temp.Limit(getCompanyListByPageRequest.PageSize).Offset((getCompanyListByPageRequest.Page - 1) * getCompanyListByPageRequest.PageSize).Find(&companies)
 
