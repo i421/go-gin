@@ -24,7 +24,26 @@ func NewCompanyService() *CompanyService {
 // GetAllCompanyList 获取所有公司
 func (cs *CompanyService) GetAllCompanyList() (companies []company.Company, err error) {
 
-	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1").Order("sort").Find(&companies)
+	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1").Order("id").Find(&companies)
+
+	if res.RowsAffected < 1 {
+		return companies, errors.New("查询为空")
+	}
+
+	return companies, nil
+}
+
+// GetMyCompanyList 获取我的公司
+func (cs *CompanyService) GetMyCompanyList(userId int64, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
+
+	// 查询条件结构体
+	var whereCond CompanyListWhereCond
+
+	if getCompanyListByPageRequest.CompanyName != "" {
+		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
+	}
+
+	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and user_id = ?", userId).Where(whereCond).Order("id").Find(&companies)
 
 	if res.RowsAffected < 1 {
 		return companies, errors.New("查询为空")
@@ -43,7 +62,7 @@ func (cs *CompanyService) GetCompanyListByPage(getCompanyListByPageRequest reque
 		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
 	}
 
-	temp := model.Db.Model(&company.Company{}).Select([]string{"id", "company_name", "remark", "province"}).Where("is_deleted != 1").Where(whereCond).Order("id")
+	temp := model.Db.Model(&company.Company{}).Select([]string{"id", "company_name", "remark", "province", "city", "area", "address", "legal_person", "env_person", "env_person_phone", "handle_person", "handle_person_phone", "remark", "status"}).Where("is_deleted != 1").Where(whereCond).Order("id")
 
 	res := temp.Limit(getCompanyListByPageRequest.PageSize).Offset((getCompanyListByPageRequest.Page - 1) * getCompanyListByPageRequest.PageSize).Find(&companies)
 
@@ -58,9 +77,16 @@ func (cs *CompanyService) GetCompanyListByPage(getCompanyListByPageRequest reque
 }
 
 // GetPublishedCompanyList 获取发布公司
-func (cs *CompanyService) GetPublishedCompanyList() (companies []company.Company, err error) {
+func (cs *CompanyService) GetPublishedCompanyList(getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
 
-	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and status = 2").Order("sort").Find(&companies)
+	// 查询条件结构体
+	var whereCond CompanyListWhereCond
+
+	if getCompanyListByPageRequest.CompanyName != "" {
+		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
+	}
+
+	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and status = 2").Where(whereCond).Order("id").Find(&companies)
 
 	if res.RowsAffected < 1 {
 		return companies, errors.New("查询为空")

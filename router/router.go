@@ -29,7 +29,9 @@ func Routers(router *gin.Engine) {
 		system.Use(authorization.CheckToken())
 		{
 			system.GET("getAllCompanyList", company.GetAllCompanyList)
+			system.GET("getMyCompanyList", company.GetMyCompanyList)
 			system.GET("getCompanyListByPage", company.GetCompanyListByPage)
+			system.GET("getPublishedCompanyList", company.GetPublishedCompanyList)
 			system.POST("updateOrCreateCompany", company.UpdateOrCreateCompany)
 			system.DELETE("deleteCompany", company.DeleteCompany)
 			system.POST("setCompanyStatus", company.SetCompanyStatus)
