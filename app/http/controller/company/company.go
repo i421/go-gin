@@ -200,6 +200,8 @@ func UpdateOrCreateCompany(c *gin.Context) {
 		return
 	}
 
+	// filepath := strings.Join(updateOrCreateCompanyRequest.File, ",")
+
 	var err error
 
 	companyService := service.NewCompanyService()

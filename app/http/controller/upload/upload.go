@@ -17,10 +17,10 @@ import (
 func Upload(c *gin.Context) {
 
 	// Multipart form
-	form, err := c.MultipartForm()
+	file, err := c.FormFile("file")
 
 	if err != nil {
-		res := Response{
+		res := FileResponse{
 			Code: http.StatusBadRequest,
 			Msg:  "get from err: " + err.Error(),
 		}
@@ -29,29 +29,22 @@ func Upload(c *gin.Context) {
 		return
 	}
 
-	files := form.File["files"]
+	filename := filepath.Base(file.Filename)
 
-	resArr := []string{}
+	resArr := c.Request.Host + "/basic-api/dir/uploads/anonymous/" + filename
 
-	for _, file := range files {
-
-		filename := filepath.Base(file.Filename)
-
-		resArr = append(resArr, c.Request.Host+"/dir/"+filename)
-
-		// mv to dist
-		if err := c.SaveUploadedFile(file, "public/uploads/anonymous/"+filename); err != nil {
-			res := Response{
-				Code: http.StatusBadRequest,
-				Msg:  "get from err: " + err.Error(),
-			}
-
-			c.JSON(http.StatusOK, res)
-			return
+	// mv to dist
+	if err := c.SaveUploadedFile(file, "public/uploads/anonymous/"+filename); err != nil {
+		res := FileResponse{
+			Code: http.StatusBadRequest,
+			Msg:  "get from err: " + err.Error(),
 		}
+
+		c.JSON(http.StatusOK, res)
+		return
 	}
 
-	res := Response{
+	res := FileResponse{
 		Code: http.StatusOK,
 		Msg:  "success",
 		Data: resArr,
