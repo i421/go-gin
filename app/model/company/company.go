@@ -1,9 +1,11 @@
 package company
 
+import "i421/app/model"
+
 // company 模型
 type Company struct {
-	ID                int64  `json:"companyId"`                  // 公司ID
-	UserId            string `json:"userId"`                     // 账号
+	model.BaseModel
+	UserId            int64  `json:"userId"`                     // 账号
 	CompanyName       string `json:"companyName"`                // 密码
 	Province          string `json:"province"`                   // 省份
 	City              string `json:"city"`                       // 城市

@@ -206,7 +206,8 @@ func UpdateOrCreateCompany(c *gin.Context) {
 	if updateOrCreateCompanyRequest.ID != 0 {
 		_, err = companyService.UpdateCompany(updateOrCreateCompanyRequest)
 	} else {
-		_, err = companyService.CreateCompany(updateOrCreateCompanyRequest)
+		token := c.MustGet("userToken").(*ijwt.MyClaims)
+		_, err = companyService.CreateCompany(token.UserId, updateOrCreateCompanyRequest)
 	}
 
 	// 更新失败

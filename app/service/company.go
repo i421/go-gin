@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	request "i421/app/http/request/company"
 	"i421/app/model"
 	"i421/app/model/company"
@@ -111,6 +112,7 @@ func (cs *CompanyService) UpdateCompany(updateOrCreateCompanyRequest request.Upd
 
 	res := model.Db.Model(&company.Company{}).Where("id = ?", updateOrCreateCompanyRequest.ID).Select("company_name", "province", "city", "area", "address", "legal_person", "env_person", "ent_person_phone", "handle_person", "handle_person_phone", "status", "remark").Updates(map[string]interface{}{"company_name": updateOrCreateCompanyRequest.CompanyName, "province": updateOrCreateCompanyRequest.Province, "city": updateOrCreateCompanyRequest.City, "area": updateOrCreateCompanyRequest.Area, "address": updateOrCreateCompanyRequest.Address, "legal_person": updateOrCreateCompanyRequest.LegalPerson, "env_person": updateOrCreateCompanyRequest.EnvPerson, "env_person_phone": updateOrCreateCompanyRequest.EnvPersonPhone, "handle_person": updateOrCreateCompanyRequest.HandlePerson, "handle_person_phone": updateOrCreateCompanyRequest.HandlePersonPhone, "status": updateOrCreateCompanyRequest.Status, "remark": updateOrCreateCompanyRequest.Remark})
 
+	fmt.Println(res)
 	if res.RowsAffected < 1 {
 		return false, errors.New("更新失败")
 	}
@@ -118,10 +120,11 @@ func (cs *CompanyService) UpdateCompany(updateOrCreateCompanyRequest request.Upd
 }
 
 // createCompany 创建公司
-func (cs *CompanyService) CreateCompany(createCompanyRequest request.UpdateOrCreateCompanyRequest) (flag bool, err error) {
+func (cs *CompanyService) CreateCompany(userId int64, createCompanyRequest request.UpdateOrCreateCompanyRequest) (flag bool, err error) {
 
 	companyResp := company.Company{
 		CompanyName:       createCompanyRequest.CompanyName,
+		UserId:            userId,
 		Province:          createCompanyRequest.Province,
 		City:              createCompanyRequest.City,
 		Area:              createCompanyRequest.Area,
@@ -137,6 +140,7 @@ func (cs *CompanyService) CreateCompany(createCompanyRequest request.UpdateOrCre
 
 	res := model.Db.Create(&companyResp)
 
+	fmt.Println(res)
 	if res.RowsAffected < 1 {
 		return false, errors.New("公司已存在")
 	}
