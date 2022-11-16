@@ -63,7 +63,7 @@ func (cs *CompanyService) GetCompanyListByPage(getCompanyListByPageRequest reque
 		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
 	}
 
-	temp := model.Db.Model(&company.Company{}).Select([]string{"id", "company_name", "remark", "province", "city", "area", "address", "legal_person", "env_person", "env_person_phone", "handle_person", "handle_person_phone", "remark", "status", "files"}).Where("is_deleted != 1").Where(whereCond).Order("id")
+	temp := model.Db.Model(&company.Company{}).Select([]string{"id", "company_name", "remark", "province", "city", "area", "address", "legal_person", "env_person", "env_person_phone", "handle_person", "handle_person_phone", "remark", "status", "path"}).Where("is_deleted != 1").Where(whereCond).Order("id")
 
 	res := temp.Limit(getCompanyListByPageRequest.PageSize).Offset((getCompanyListByPageRequest.Page - 1) * getCompanyListByPageRequest.PageSize).Find(&companies)
 
@@ -110,7 +110,7 @@ func (cs *CompanyService) SetCompanyStatus(setCompanyStatusRequest request.SetCo
 // updateCompany 更新公司状态
 func (cs *CompanyService) UpdateCompany(updateOrCreateCompanyRequest request.UpdateOrCreateCompanyRequest) (flag bool, err error) {
 
-	res := model.Db.Model(&company.Company{}).Where("id = ?", updateOrCreateCompanyRequest.ID).Select("company_name", "province", "city", "area", "address", "legal_person", "env_person", "ent_person_phone", "handle_person", "handle_person_phone", "status", "remark", "files").Updates(map[string]interface{}{"company_name": updateOrCreateCompanyRequest.CompanyName, "province": updateOrCreateCompanyRequest.Province, "city": updateOrCreateCompanyRequest.City, "area": updateOrCreateCompanyRequest.Area, "address": updateOrCreateCompanyRequest.Address, "legal_person": updateOrCreateCompanyRequest.LegalPerson, "env_person": updateOrCreateCompanyRequest.EnvPerson, "env_person_phone": updateOrCreateCompanyRequest.EnvPersonPhone, "handle_person": updateOrCreateCompanyRequest.HandlePerson, "handle_person_phone": updateOrCreateCompanyRequest.HandlePersonPhone, "status": updateOrCreateCompanyRequest.Status, "remark": updateOrCreateCompanyRequest.Remark, "files": updateOrCreateCompanyRequest.File})
+	res := model.Db.Model(&company.Company{}).Where("id = ?", updateOrCreateCompanyRequest.ID).Select("company_name", "province", "city", "area", "address", "legal_person", "env_person", "ent_person_phone", "handle_person", "handle_person_phone", "status", "remark", "path").Updates(map[string]interface{}{"company_name": updateOrCreateCompanyRequest.CompanyName, "province": updateOrCreateCompanyRequest.Province, "city": updateOrCreateCompanyRequest.City, "area": updateOrCreateCompanyRequest.Area, "address": updateOrCreateCompanyRequest.Address, "legal_person": updateOrCreateCompanyRequest.LegalPerson, "env_person": updateOrCreateCompanyRequest.EnvPerson, "env_person_phone": updateOrCreateCompanyRequest.EnvPersonPhone, "handle_person": updateOrCreateCompanyRequest.HandlePerson, "handle_person_phone": updateOrCreateCompanyRequest.HandlePersonPhone, "status": updateOrCreateCompanyRequest.Status, "remark": updateOrCreateCompanyRequest.Remark, "path": updateOrCreateCompanyRequest.Path})
 
 	if res.RowsAffected < 1 {
 		return false, errors.New("更新失败")
@@ -135,7 +135,7 @@ func (cs *CompanyService) CreateCompany(userId int64, createCompanyRequest reque
 		HandlePersonPhone: createCompanyRequest.HandlePersonPhone,
 		Remark:            createCompanyRequest.Remark,
 		Status:            createCompanyRequest.Status,
-		File:              createCompanyRequest.File,
+		Path:              createCompanyRequest.Path,
 	}
 
 	res := model.Db.Create(&companyResp)

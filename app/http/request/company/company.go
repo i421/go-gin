@@ -22,7 +22,7 @@ type UpdateOrCreateCompanyRequest struct {
 	HandlePersonPhone string `form:"handlePersonPhone" json:"handlePersonPhone" binding:"-"`
 	Status            string `form:"status" json:"status" binding:"-"`
 	Remark            string `form:"remark" json:"remark" binding:"-"`
-	File              string `form:"file" json:"file" binding:"-"`
+	Path              string `form:"path" json:"path" binding:"-"`
 }
 
 // CompanyListByPageRequest 账号列表

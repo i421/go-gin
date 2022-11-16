@@ -18,7 +18,7 @@ type Company struct {
 	HandlePersonPhone string `json:"handlePersonPhone"`          // 处理人电话
 	Status            string `json:"status"`                     // 1未发布 2已发布
 	Remark            string `json:"remark"`                     // 默认备注
-	File              string `json:"files"`                      // 文件
+	Path              string `json:"path"`                       // 文件
 	CreateBy          string `json:"createBy"`                   // 创建人
 	UpdateBy          string `json:"updateBy"`                   // 更新人
 	IsDeleted         bool   `gorm:"default:0" json:"isDeleted"` // 删除标志
