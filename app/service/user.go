@@ -73,12 +73,14 @@ func (us *UserService) AccountList(accountListRequest request.AccountListRequest
 		whereCond.Nickname = accountListRequest.Nickname
 	}
 
-	temp := model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"user.id", "account", "nickname", "user.create_time", "user.remark"}).Where("user.is_deleted != 1").Where(whereCond).Order("user.id")
+	temp := model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"user.id", "account", "nickname", "password", "user.status", "user.create_time", "user.remark"}).Where("user.is_deleted != 1").Where(whereCond).Order("user.id")
 
 	var count int64
 	temp.Count(&count)
 
 	res := temp.Limit(accountListRequest.PageSize).Offset((accountListRequest.Page - 1) * accountListRequest.PageSize).Find(&userResp)
+
+	iAes := iaes.NewIAes()
 
 	for i, v := range userResp {
 		var ids []int64
@@ -89,6 +91,9 @@ func (us *UserService) AccountList(accountListRequest request.AccountListRequest
 			names = append(names, vv.RoleName)
 		}
 
+		passwd, _ := iAes.DecryptByAes(userResp[i].Password)
+
+		userResp[i].Password = string(passwd)
 		userResp[i].RoleIds = ids
 		userResp[i].RoleNames = names
 	}
@@ -150,7 +155,7 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateOrCreate
 		roleUsers = append(roleUsers, roleUser)
 	}
 
-	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "nickname").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, Nickname: updateAccountRequest.Nickname})
+	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "nickname", "password", "status").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, Nickname: updateAccountRequest.Nickname, Password: updateAccountRequest.Password, Status: updateAccountRequest.Status})
 
 	model.Db.Where("user_id = ?", updateAccountRequest.UserID).Delete(&roleUser.RoleUser{})
 	model.Db.Model(&roleUser.RoleUser{}).Create(&roleUsers)
@@ -161,7 +166,10 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateOrCreate
 // CreateAccount 创建用户
 func (us *UserService) CreateAccount(createAccountRequest request.UpdateOrCreateAccountRequest) (flag bool, err error) {
 
-	userResp := user.User{Account: createAccountRequest.Account, Remark: createAccountRequest.Remark, Nickname: createAccountRequest.Nickname}
+	iAes := iaes.NewIAes()
+	passwd, _ := iAes.EncryptByAes([]byte(createAccountRequest.Password))
+
+	userResp := user.User{Account: createAccountRequest.Account, Remark: createAccountRequest.Remark, Nickname: createAccountRequest.Nickname, Password: passwd, Status: createAccountRequest.Status}
 
 	res := model.Db.Create(&userResp)
 

@@ -10,8 +10,10 @@ type UserLoginRequest struct {
 type UpdateOrCreateAccountRequest struct {
 	UserID   int64   `form:"userId" json:"userId" binding:"-"`
 	Account  string  `form:"account" json:"account"  binding:"required"`
+	Password string  `form:"password" json:"password"  binding:"required"`
 	RoleIds  []int64 `form:"role_ids" json:"role_ids" binding:"required"`
 	Nickname string  `form:"nickname" json:"nickname" binding:"required"`
+	Status   string  `form:"status" json:"status"  binding:"required"`
 	Remark   string  `form:"remark" json:"remark" binding:"-"`
 }
 
