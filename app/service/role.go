@@ -55,10 +55,10 @@ func (rs *RoleService) GetRoleListByPage(getRoleListByPageRequest request.GetRol
 
 	temp := model.Db.Model(&role.Role{}).Preload("Menus", "id not in (?)", parentIds).Select([]string{"id", "role_name", "role_code", "description", "status", "create_time", "sort"}).Where("is_deleted != 1").Where(whereCond).Order("sort")
 
-	res := temp.Limit(getRoleListByPageRequest.PageSize).Offset((getRoleListByPageRequest.Page - 1) * getRoleListByPageRequest.PageSize).Find(&roles)
-
 	var count int64
 	temp.Count(&count)
+
+	res := temp.Limit(getRoleListByPageRequest.PageSize).Offset((getRoleListByPageRequest.Page - 1) * getRoleListByPageRequest.PageSize).Find(&roles)
 
 	for i, v := range roles {
 		var ids []int64

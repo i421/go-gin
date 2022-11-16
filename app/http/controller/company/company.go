@@ -118,7 +118,7 @@ func GetCompanyListByPage(c *gin.Context) {
 	var getCompanyListByPageRequest request.GetCompanyListByPageRequest
 
 	if err := c.ShouldBind(&getCompanyListByPageRequest); err != nil {
-		res := Response{
+		res := PaginationResponse{
 			Code: 1,
 			Msg:  err.Error(),
 		}
@@ -131,7 +131,7 @@ func GetCompanyListByPage(c *gin.Context) {
 
 	// 获取失败
 	if err != nil {
-		res := Response{
+		res := PaginationResponse{
 			Code: 1,
 			Msg:  err.Error(),
 		}
@@ -140,11 +140,13 @@ func GetCompanyListByPage(c *gin.Context) {
 		return
 	}
 
-	res := Response{
-		Code:  0,
-		Msg:   "success",
-		Data:  companyListResp,
-		Total: total,
+	res := PaginationResponse{
+		Code: 0,
+		Msg:  "success",
+		Data: PaginationStruct{
+			Total: total,
+			Items: companyListResp,
+		},
 	}
 
 	c.JSON(http.StatusOK, res)

@@ -41,7 +41,7 @@ func GetRoleListByPage(c *gin.Context) {
 	var getRoleListByPageRequest request.GetRoleListByPageRequest
 
 	if err := c.ShouldBind(&getRoleListByPageRequest); err != nil {
-		res := Response{
+		res := PaginationResponse{
 			Code: 1,
 			Msg:  err.Error(),
 		}
@@ -54,7 +54,7 @@ func GetRoleListByPage(c *gin.Context) {
 
 	// 获取失败
 	if err != nil {
-		res := Response{
+		res := PaginationResponse{
 			Code: 1,
 			Msg:  err.Error(),
 		}
@@ -63,11 +63,13 @@ func GetRoleListByPage(c *gin.Context) {
 		return
 	}
 
-	res := Response{
-		Code:  0,
-		Msg:   "success",
-		Data:  roleListResp,
-		Total: total,
+	res := PaginationResponse{
+		Code: 0,
+		Msg:  "success",
+		Data: PaginationStruct{
+			Total: total,
+			Items: roleListResp,
+		},
 	}
 
 	c.JSON(http.StatusOK, res)

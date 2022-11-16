@@ -75,10 +75,10 @@ func (us *UserService) AccountList(accountListRequest request.AccountListRequest
 
 	temp := model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"user.id", "account", "nickname", "user.create_time", "user.remark"}).Where("user.is_deleted != 1").Where(whereCond).Order("user.id")
 
-	res := temp.Limit(accountListRequest.PageSize).Offset((accountListRequest.Page - 1) * accountListRequest.PageSize).Find(&userResp)
-
 	var count int64
 	temp.Count(&count)
+
+	res := temp.Limit(accountListRequest.PageSize).Offset((accountListRequest.Page - 1) * accountListRequest.PageSize).Find(&userResp)
 
 	for i, v := range userResp {
 		var ids []int64

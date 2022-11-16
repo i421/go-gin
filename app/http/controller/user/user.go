@@ -130,7 +130,7 @@ func GetAccountList(c *gin.Context) {
 	var accountListRequest request.AccountListRequest
 
 	if err := c.ShouldBind(&accountListRequest); err != nil {
-		res := Response{
+		res := PaginationResponse{
 			Code: 1,
 			Msg:  err.Error(),
 		}
@@ -143,7 +143,7 @@ func GetAccountList(c *gin.Context) {
 
 	// 登陆失败
 	if err != nil {
-		res := Response{
+		res := PaginationResponse{
 			Code: 1,
 			Msg:  err.Error(),
 		}
@@ -152,11 +152,13 @@ func GetAccountList(c *gin.Context) {
 		return
 	}
 
-	res := Response{
-		Code:  0,
-		Msg:   "success",
-		Data:  users,
-		Total: total,
+	res := PaginationResponse{
+		Code: 0,
+		Msg:  "success",
+		Data: PaginationStruct{
+			Total: total,
+			Items: users,
+		},
 	}
 
 	c.JSON(http.StatusOK, res)

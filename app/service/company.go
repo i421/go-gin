@@ -65,10 +65,10 @@ func (cs *CompanyService) GetCompanyListByPage(getCompanyListByPageRequest reque
 
 	temp := model.Db.Model(&company.Company{}).Select([]string{"id", "company_name", "remark", "province", "city", "area", "address", "legal_person", "env_person", "env_person_phone", "handle_person", "handle_person_phone", "remark", "status", "path"}).Where("is_deleted != 1").Where(whereCond).Order("id")
 
-	res := temp.Limit(getCompanyListByPageRequest.PageSize).Offset((getCompanyListByPageRequest.Page - 1) * getCompanyListByPageRequest.PageSize).Find(&companies)
-
 	var count int64
 	temp.Count(&count)
+
+	res := temp.Limit(getCompanyListByPageRequest.PageSize).Offset((getCompanyListByPageRequest.Page - 1) * getCompanyListByPageRequest.PageSize).Find(&companies)
 
 	if res.RowsAffected < 1 {
 		return companies, count, errors.New("查询为空")
