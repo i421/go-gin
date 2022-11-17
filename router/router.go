@@ -1,6 +1,7 @@
 package router
 
 import (
+	"i421/app/http/controller/address"
 	"i421/app/http/controller/company"
 	"i421/app/http/controller/home"
 	"i421/app/http/controller/menu"
@@ -18,6 +19,9 @@ func Routers(router *gin.Engine) {
 	router.Use(cors.Next())
 	router.GET("/", home.Index)
 	router.POST("/basic-api/login", user.Login)
+	router.GET("/basic-api/province", address.ProvinceList)
+	router.GET("/basic-api/city", address.CityList)
+	router.GET("/basic-api/area", address.AreaList)
 	router.GET("basic-api/getUserInfo", authorization.CheckToken(), user.GetUserInfo)
 	router.GET("basic-api/getPermCode", authorization.CheckToken(), menu.GetPermCode)
 	router.GET("basic-api/getMenuList", authorization.CheckToken(), menu.GetRoleMenuList)
