@@ -35,6 +35,18 @@ func (rs *RoleService) GetAllRoleList() (roles []role.Role, err error) {
 	return roles, nil
 }
 
+// GetRegisterRoleList 获取注册角色
+func (rs *RoleService) GetRegisterRoleList() (roles []role.Role, err error) {
+
+	res := model.Db.Model(&role.Role{}).Where("is_deleted != 1 and role_code != 'superAdmin'").Order("sort").Find(&roles)
+
+	if res.RowsAffected < 1 {
+		return roles, errors.New("查询为空")
+	}
+
+	return roles, nil
+}
+
 // GetRoleListByPage 获取角色列表
 func (rs *RoleService) GetRoleListByPage(getRoleListByPageRequest request.GetRoleListByPageRequest) (roles []role.RoleAppendMenuIds, total int64, err error) {
 

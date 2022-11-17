@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	request "i421/app/http/request/user"
 	"i421/app/model"
 	"i421/app/model/roleUser"
@@ -38,10 +39,16 @@ func (us *UserService) Login(loginRequest request.UserLoginRequest) (userResp us
 	iAes := iaes.NewIAes()
 	passwd, _ := iAes.EncryptByAes([]byte(loginRequest.Password))
 
-	res = model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"id", "account", "nickname", "avatar", "real_name", "remark"}).Where("account = ? AND password = ?", loginRequest.Username, passwd).First(&userResp)
+	res = model.Db.Model(&user.User{}).Preload("Roles").Select([]string{"id", "account", "nickname", "avatar", "user.status", "real_name", "remark"}).Where("account = ? AND password = ?", loginRequest.Username, passwd).First(&userResp)
 
 	if res.RowsAffected < 1 {
 		return userResp, errors.New("用户密码不匹配")
+	}
+
+	fmt.Println(userResp.Status)
+
+	if userResp.Status == 1 {
+		return userResp, errors.New("用户禁止登录")
 	}
 
 	return userResp, nil
@@ -148,6 +155,9 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateOrCreate
 
 	var roleUsers []roleUser.RoleUser
 
+	iAes := iaes.NewIAes()
+	passwd, _ := iAes.EncryptByAes([]byte(updateAccountRequest.Password))
+
 	for _, item := range updateAccountRequest.RoleIds {
 		var roleUser roleUser.RoleUser
 		roleUser.RoleId = item
@@ -155,7 +165,7 @@ func (us *UserService) UpdateAccount(updateAccountRequest request.UpdateOrCreate
 		roleUsers = append(roleUsers, roleUser)
 	}
 
-	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "nickname", "password", "status").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, Nickname: updateAccountRequest.Nickname, Password: updateAccountRequest.Password, Status: updateAccountRequest.Status})
+	model.Db.Model(&user.User{}).Where("id = ?", updateAccountRequest.UserID).Select("account", "remark", "nickname", "password", "status").Updates(&user.User{Account: updateAccountRequest.Account, Remark: updateAccountRequest.Remark, Nickname: updateAccountRequest.Nickname, Password: passwd, Status: updateAccountRequest.Status})
 
 	model.Db.Where("user_id = ?", updateAccountRequest.UserID).Delete(&roleUser.RoleUser{})
 	model.Db.Model(&roleUser.RoleUser{}).Create(&roleUsers)
@@ -216,5 +226,16 @@ func (us *UserService) UpdatePassword(updatePasswordRequest request.UpdatePasswo
 
 	model.Db.Model(&user.User{}).Where("id = ?", updatePasswordRequest.ID).Update("password", newPasswd)
 
+	return true, nil
+}
+
+// setAccountStatus 调整用户状态
+func (us *UserService) SetAccountStatus(setAccountStatusRequest request.SetAccountStatusRequest) (flag bool, err error) {
+
+	res := model.Db.Model(&user.User{}).Where("id = ?", setAccountStatusRequest.ID).Updates(map[string]interface{}{"status": setAccountStatusRequest.Status})
+
+	if res.RowsAffected < 1 {
+		return false, errors.New("设置失败")
+	}
 	return true, nil
 }

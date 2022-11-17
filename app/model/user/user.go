@@ -12,7 +12,7 @@ type User struct {
 	Nickname   string      `json:"nickname"`                         // 昵称
 	RealName   string      `json:"realName"`                         // 真名
 	Avatar     string      `json:"avatar"`                           // 头像
-	Status     string      `json:"status"`                           // 默认
+	Status     int         `json:"status"`                           // 默认
 	Remark     string      `json:"remark"`                           // 默认备注
 	CreateBy   string      `json:"createBy"`                         // 创建人
 	UpdateBy   string      `json:"updateBy"`                         // 更新人

@@ -9,6 +9,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// 获取注册页角色信息
+func GetRegisterRoleList(c *gin.Context) {
+
+	roleService := service.NewRoleService()
+	roleListResp, err := roleService.GetRegisterRoleList()
+
+	// 获取失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: roleListResp,
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
 // 获取角色信息
 func GetAllRoleList(c *gin.Context) {
 
@@ -89,8 +115,8 @@ func SetRoleStatus(c *gin.Context) {
 		return
 	}
 
-	departService := service.NewRoleService()
-	_, err := departService.SetRoleStatus(setRoleStatusRequest)
+	roleService := service.NewRoleService()
+	_, err := roleService.SetRoleStatus(setRoleStatusRequest)
 
 	// 更新失败
 	if err != nil {

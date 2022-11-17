@@ -22,6 +22,8 @@ func Routers(router *gin.Engine) {
 	router.GET("basic-api/getPermCode", authorization.CheckToken(), menu.GetPermCode)
 	router.GET("basic-api/getMenuList", authorization.CheckToken(), menu.GetRoleMenuList)
 	router.GET("basic-api/logout", authorization.CheckToken(), user.Logout)
+	router.GET("basic-api/getRegisterRoleList", role.GetRegisterRoleList)
+	router.POST("basic-api/createAccount", user.UpdateOrCreateAccount)
 
 	// system 路由
 	system := router.Group("basic-api/system/")
@@ -45,6 +47,7 @@ func Routers(router *gin.Engine) {
 			system.POST("updateOrCreateAccount", user.UpdateOrCreateAccount)
 			system.DELETE("deleteAccount", user.DeleteAccount)
 			system.POST("updatePassword", user.UpdatePassword)
+			system.POST("setAccountStatus", user.SetAccountStatus)
 
 			system.GET("getAllRoleList", role.GetAllRoleList)
 			system.GET("getRoleListByPage", role.GetRoleListByPage)

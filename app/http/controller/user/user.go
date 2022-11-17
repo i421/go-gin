@@ -316,3 +316,39 @@ func UpdatePassword(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+// 设置用户状态
+func SetAccountStatus(c *gin.Context) {
+
+	var setAccountStatusRequest request.SetAccountStatusRequest
+
+	if err := c.ShouldBind(&setAccountStatusRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	userService := service.NewUserService()
+	_, err := userService.SetAccountStatus(setAccountStatusRequest)
+
+	// 更新失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+	}
+
+	c.JSON(http.StatusOK, res)
+}

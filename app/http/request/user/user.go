@@ -13,7 +13,7 @@ type UpdateOrCreateAccountRequest struct {
 	Password string  `form:"password" json:"password"  binding:"required"`
 	RoleIds  []int64 `form:"role_ids" json:"role_ids" binding:"required"`
 	Nickname string  `form:"nickname" json:"nickname" binding:"required"`
-	Status   string  `form:"status" json:"status"  binding:"required"`
+	Status   int     `form:"status" json:"status" binding:"-"`
 	Remark   string  `form:"remark" json:"remark" binding:"-"`
 }
 
@@ -42,4 +42,10 @@ type UpdatePasswordRequest struct {
 	ID     int64  `form:"id" json:"id" binding:"required"`
 	OldPwd string `form:"oldPwd" json:"oldPwd" binding:"required"`
 	NewPwd string `form:"newPwd" json:"newPwd" binding:"required"`
+}
+
+// 设置用户状态
+type SetAccountStatusRequest struct {
+	ID     int `form:"id" json:"id" binding:"required"`
+	Status int `form:"status" json:"status" binding:"-"`
 }
