@@ -35,9 +35,10 @@ func Routers(router *gin.Engine) {
 		system.Use(authorization.CheckToken())
 		{
 			system.GET("getAllCompanyList", company.GetAllCompanyList)
-			system.GET("getMyCompanyList", company.GetMyCompanyList)
+			// 1 平湖 2 桐乡 3 嘉善
+			system.GET("getMyCompanyList/:area", company.GetMyCompanyList)
+			system.GET("getPublishedCompanyList/:area", company.GetPublishedCompanyList)
 			system.GET("getCompanyListByPage", company.GetCompanyListByPage)
-			system.GET("getPublishedCompanyList", company.GetPublishedCompanyList)
 			system.POST("updateOrCreateCompany", company.UpdateOrCreateCompany)
 			system.DELETE("deleteCompany", company.DeleteCompany)
 			system.POST("setCompanyStatus", company.SetCompanyStatus)

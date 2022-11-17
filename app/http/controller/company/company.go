@@ -50,8 +50,10 @@ func GetPublishedCompanyList(c *gin.Context) {
 		return
 	}
 
+	area := c.Param("area")
+
 	companyService := service.NewCompanyService()
-	companyListResp, err := companyService.GetPublishedCompanyList(getCompanyListByPageRequest)
+	companyListResp, err := companyService.GetPublishedCompanyList(area, getCompanyListByPageRequest)
 
 	// 获取失败
 	if err != nil {
@@ -87,10 +89,12 @@ func GetMyCompanyList(c *gin.Context) {
 		return
 	}
 
+	area := c.Param("area")
+
 	token := c.MustGet("userToken").(*ijwt.MyClaims)
 
 	companyService := service.NewCompanyService()
-	companyListResp, err := companyService.GetMyCompanyList(token.UserId, getCompanyListByPageRequest)
+	companyListResp, err := companyService.GetMyCompanyList(token.UserId, area, getCompanyListByPageRequest)
 
 	// 获取失败
 	if err != nil {

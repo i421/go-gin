@@ -11,6 +11,7 @@ import (
 // 公司列表查询
 type CompanyListWhereCond struct {
 	CompanyName string `json:"companyName"`
+	Area        string `json:"area"`
 }
 
 // CompanyService 公司表service层
@@ -35,13 +36,21 @@ func (cs *CompanyService) GetAllCompanyList() (companies []company.Company, err 
 }
 
 // GetMyCompanyList 获取我的公司
-func (cs *CompanyService) GetMyCompanyList(userId int64, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
+func (cs *CompanyService) GetMyCompanyList(userId int64, area string, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
 
 	// 查询条件结构体
 	var whereCond CompanyListWhereCond
 
 	if getCompanyListByPageRequest.CompanyName != "" {
 		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
+	}
+
+	if area == "1" {
+		whereCond.Area = "平湖市"
+	} else if area == "2" {
+		whereCond.Area = "桐乡市"
+	} else if area == "3" {
+		whereCond.Area = "嘉善县"
 	}
 
 	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and user_id = ?", userId).Where(whereCond).Order("id").Find(&companies)
@@ -78,13 +87,21 @@ func (cs *CompanyService) GetCompanyListByPage(getCompanyListByPageRequest reque
 }
 
 // GetPublishedCompanyList 获取发布公司
-func (cs *CompanyService) GetPublishedCompanyList(getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
+func (cs *CompanyService) GetPublishedCompanyList(area string, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
 
 	// 查询条件结构体
 	var whereCond CompanyListWhereCond
 
 	if getCompanyListByPageRequest.CompanyName != "" {
 		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
+	}
+
+	if area == "1" {
+		whereCond.Area = "平湖市"
+	} else if area == "2" {
+		whereCond.Area = "桐乡市"
+	} else if area == "3" {
+		whereCond.Area = "嘉善县"
 	}
 
 	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and status = 2").Where(whereCond).Order("id").Find(&companies)
