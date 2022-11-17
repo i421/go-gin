@@ -31,7 +31,7 @@ func Upload(c *gin.Context) {
 
 	filename := filepath.Base(file.Filename)
 
-	resArr := c.Request.Host + "/basic-api/dir/uploads/anonymous/" + filename
+	resArr := "http://" + c.Request.Host + "/basic-api/dir/uploads/anonymous/" + filename
 
 	// mv to dist
 	if err := c.SaveUploadedFile(file, "public/uploads/anonymous/"+filename); err != nil {
