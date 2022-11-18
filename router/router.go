@@ -28,6 +28,7 @@ func Routers(router *gin.Engine) {
 	router.GET("basic-api/logout", authorization.CheckToken(), user.Logout)
 	router.GET("basic-api/getRegisterRoleList", role.GetRegisterRoleList)
 	router.POST("basic-api/createAccount", user.UpdateOrCreateAccount)
+	router.GET("basic-api/getPublishedCompany/:area", company.GetPublishedCompanyList)
 
 	// system 路由
 	system := router.Group("basic-api/system/")
