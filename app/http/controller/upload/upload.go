@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -86,6 +87,8 @@ func PrivateUpload(c *gin.Context) {
 	now := time.Now().Unix()
 	nowString := strconv.FormatInt(now, 10)
 	filename := nowString + "-" + filepath.Base(file.Filename)
+	filename = strings.Replace(filename, " ", "", -1)
+	filename = strings.Replace(filename, "\n", "", -1)
 
 	resArr := "http://" + c.Request.Host + "/basic-api/dir/uploads/" + strconv.FormatInt(token.UserId, 10) + "/" + filename
 
