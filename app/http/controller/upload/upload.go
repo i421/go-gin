@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -70,11 +71,10 @@ func PrivateUpload(c *gin.Context) {
 		return
 	}
 
-	// Multipart form
-	form, err := c.MultipartForm()
+	file, err := c.FormFile("file")
 
 	if err != nil {
-		res := Response{
+		res := FileResponse{
 			Code: http.StatusBadRequest,
 			Msg:  "get from err: " + err.Error(),
 		}
@@ -83,29 +83,24 @@ func PrivateUpload(c *gin.Context) {
 		return
 	}
 
-	files := form.File["files"]
+	now := time.Now().Unix()
+	nowString := strconv.FormatInt(now, 10)
+	filename := nowString + "-" + filepath.Base(file.Filename)
 
-	resArr := make([]string, len(files))
+	resArr := "http://" + c.Request.Host + "/basic-api/dir/uploads/" + strconv.FormatInt(token.UserId, 10) + "/" + filename
 
-	for _, file := range files {
-
-		filename := filepath.Base(file.Filename)
-
-		resArr = append(resArr, c.Request.Host+"/public/uploads/"+strconv.FormatInt(token.UserId, 10)+"/"+filename)
-
-		// mv to dist
-		if err := c.SaveUploadedFile(file, "public/uploads/"+strconv.FormatInt(token.UserId, 10)+"/"+filename); err != nil {
-			res := Response{
-				Code: http.StatusBadRequest,
-				Msg:  "get from err: " + err.Error(),
-			}
-
-			c.JSON(http.StatusOK, res)
-			return
+	// mv to dist
+	if err := c.SaveUploadedFile(file, "public/uploads/"+strconv.FormatInt(token.UserId, 10)+"/"+filename); err != nil {
+		res := FileResponse{
+			Code: http.StatusBadRequest,
+			Msg:  "get from err: " + err.Error(),
 		}
+
+		c.JSON(http.StatusOK, res)
+		return
 	}
 
-	res := Response{
+	res := FileResponse{
 		Code: http.StatusOK,
 		Msg:  "success",
 		Data: resArr,
