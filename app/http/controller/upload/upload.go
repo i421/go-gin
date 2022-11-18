@@ -60,16 +60,18 @@ func PrivateUpload(c *gin.Context) {
 
 	token := c.MustGet("userToken").(*ijwt.MyClaims)
 
-	err := os.Mkdir("public/uploads/"+strconv.FormatInt(token.UserId, 10), 0755)
+	if _, err := os.Stat("public/uploads/" + strconv.FormatInt(token.UserId, 10)); os.IsNotExist(err) {
+		err = os.Mkdir("public/uploads/"+strconv.FormatInt(token.UserId, 10), 0755)
 
-	if err != nil {
-		res := Response{
-			Code: http.StatusBadRequest,
-			Msg:  "目录不存在" + err.Error(),
+		if err != nil {
+			res := Response{
+				Code: http.StatusBadRequest,
+				Msg:  "目录不存在" + err.Error(),
+			}
+
+			c.JSON(http.StatusOK, res)
+			return
 		}
-
-		c.JSON(http.StatusOK, res)
-		return
 	}
 
 	file, err := c.FormFile("file")
