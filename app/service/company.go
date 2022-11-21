@@ -14,6 +14,12 @@ type CompanyListWhereCond struct {
 	Area        string `json:"area"`
 }
 
+type RoleList struct {
+	Id          int64  `json:"id"`
+	RoleCode    string `json:"role_code"`
+	Description string `json:"description"`
+}
+
 // CompanyService 公司表service层
 type CompanyService struct {
 }
@@ -45,6 +51,21 @@ func (cs *CompanyService) GetMyCompanyList(userId int64, area string, getCompany
 		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
 	}
 
+	var roleIds []int64
+	var roleList []string
+
+	model.Db.Raw("select role_id from role_user where user_id = ?", userId).Scan(&roleIds)
+	model.Db.Raw("select description from role where id in ?", roleIds).Scan(&roleList)
+
+	// 判断是不是公司角色,是则只返回对应的公司数据, 否则返回全部公司数据
+	flag := false
+
+	for _, v := range roleList {
+		if v == "company" {
+			flag = true
+		}
+	}
+
 	if area == "1" {
 		whereCond.Area = "平湖市"
 	} else if area == "2" {
@@ -53,10 +74,16 @@ func (cs *CompanyService) GetMyCompanyList(userId int64, area string, getCompany
 		whereCond.Area = "嘉善县"
 	}
 
-	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and user_id = ?", userId).Where(whereCond).Order("id").Find(&companies)
-
-	if res.RowsAffected < 1 {
-		return companies, errors.New("查询为空")
+	if flag {
+		res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and user_id = ?", userId).Where(whereCond).Order("id").Find(&companies)
+		if res.RowsAffected < 1 {
+			return companies, errors.New("查询为空")
+		}
+	} else {
+		res := model.Db.Model(&company.Company{}).Where("is_deleted != 1").Where(whereCond).Order("id").Find(&companies)
+		if res.RowsAffected < 1 {
+			return companies, errors.New("查询为空")
+		}
 	}
 
 	return companies, nil
