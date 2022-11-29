@@ -92,7 +92,8 @@ func PrivateUpload(c *gin.Context) {
 	filename = strings.Replace(filename, " ", "", -1)
 	filename = strings.Replace(filename, "\n", "", -1)
 
-	resArr := "http://" + c.Request.Host + "/basic-api/dir/uploads/" + strconv.FormatInt(token.UserId, 10) + "/" + filename
+	// resArr := "http://" + c.Request.Host + "/basic-api/dir/uploads/" + strconv.FormatInt(token.UserId, 10) + "/" + filename
+	resArr := "/basic-api/dir/uploads/" + strconv.FormatInt(token.UserId, 10) + "/" + filename
 
 	// mv to dist
 	if err := c.SaveUploadedFile(file, "public/uploads/"+strconv.FormatInt(token.UserId, 10)+"/"+filename); err != nil {
