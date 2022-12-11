@@ -23,6 +23,9 @@ type UpdateOrCreateCompanyRequest struct {
 	Status            string `form:"status" json:"status" binding:"-"`
 	Remark            string `form:"remark" json:"remark" binding:"-"`
 	Path              string `form:"path" json:"path" binding:"-"`
+	Plan              string `form:"plan" json:"plan" binding:"-"`
+	Report            string `form:"report" json:"report" binding:"-"`
+	Other             string `form:"other" json:"other" binding:"-"`
 }
 
 // CompanyListByPageRequest 账号列表

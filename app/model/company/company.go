@@ -19,6 +19,9 @@ type Company struct {
 	Status            string `json:"status"`                     // 1未发布 2已发布
 	Remark            string `json:"remark"`                     // 默认备注
 	Path              string `json:"path"`                       // 文件
+	Plan              string `json:"plan"`                       // 方案
+	Report            string `json:"report"`                     // 报告
+	Other             string `json:"other"`                      // 其他(评论)
 	CreateBy          string `json:"createBy"`                   // 创建人
 	UpdateBy          string `json:"updateBy"`                   // 更新人
 	IsDeleted         bool   `gorm:"default:0" json:"isDeleted"` // 删除标志
