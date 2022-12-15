@@ -8,7 +8,7 @@ import (
 	"i421/app/model/company"
 )
 
-// 公司列表查询
+// 企业列表查询
 type CompanyListWhereCond struct {
 	CompanyName string `json:"companyName"`
 	Area        string `json:"area"`
@@ -20,7 +20,7 @@ type RoleList struct {
 	Description string `json:"description"`
 }
 
-// CompanyService 公司表service层
+// CompanyService 企业表service层
 type CompanyService struct {
 }
 
@@ -29,7 +29,7 @@ func NewCompanyService() *CompanyService {
 	return &CompanyService{}
 }
 
-// GetAllCompanyList 获取所有公司
+// GetAllCompanyList 获取所有企业
 func (cs *CompanyService) GetAllCompanyList() (companies []company.Company, err error) {
 
 	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1").Order("id").Find(&companies)
@@ -41,7 +41,58 @@ func (cs *CompanyService) GetAllCompanyList() (companies []company.Company, err 
 	return companies, nil
 }
 
-// GetMyCompanyList 获取我的公司
+// GetYhpcList 获取隐患排查
+func (cs *CompanyService) GetYhpcList(area string, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
+
+	// 查询条件结构体
+	var whereCond CompanyListWhereCond
+
+	if getCompanyListByPageRequest.CompanyName != "" {
+		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
+	}
+
+	if area == "1" {
+		whereCond.Area = "平湖市"
+	} else if area == "2" {
+		whereCond.Area = "桐乡市"
+	} else if area == "3" {
+		whereCond.Area = "嘉善县"
+	}
+
+	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and yhpc_report != ''").Where(whereCond).Order("id").Find(&companies)
+	if res.RowsAffected < 1 {
+		return companies, errors.New("查询为空")
+	}
+
+	return companies, nil
+}
+
+// GetDqbgList 获取定期报告
+func (cs *CompanyService) GetDqbgList(area string, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
+	// 查询条件结构体
+	var whereCond CompanyListWhereCond
+
+	if getCompanyListByPageRequest.CompanyName != "" {
+		whereCond.CompanyName = getCompanyListByPageRequest.CompanyName
+	}
+
+	if area == "1" {
+		whereCond.Area = "平湖市"
+	} else if area == "2" {
+		whereCond.Area = "桐乡市"
+	} else if area == "3" {
+		whereCond.Area = "嘉善县"
+	}
+
+	res := model.Db.Model(&company.Company{}).Where("is_deleted != 1 and dqbg_report != ''").Where(whereCond).Order("id").Find(&companies)
+	if res.RowsAffected < 1 {
+		return companies, errors.New("查询为空")
+	}
+
+	return companies, nil
+}
+
+// GetMyCompanyList 获取我的企业
 func (cs *CompanyService) GetMyCompanyList(userId int64, area string, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
 
 	// 查询条件结构体
@@ -57,7 +108,7 @@ func (cs *CompanyService) GetMyCompanyList(userId int64, area string, getCompany
 	model.Db.Raw("select role_id from role_user where user_id = ?", userId).Scan(&roleIds)
 	model.Db.Raw("select description from role where id in ?", roleIds).Scan(&roleList)
 
-	// 判断是不是公司角色,是则只返回对应的公司数据, 否则返回全部公司数据
+	// 判断是不是企业角色,是则只返回对应的企业数据, 否则返回全部企业数据
 	flag := false
 
 	for _, v := range roleList {
@@ -113,7 +164,7 @@ func (cs *CompanyService) GetCompanyListByPage(getCompanyListByPageRequest reque
 	return companies, count, nil
 }
 
-// GetPublishedCompanyList 获取发布公司
+// GetPublishedCompanyList 获取发布企业
 func (cs *CompanyService) GetPublishedCompanyList(area string, getCompanyListByPageRequest request.GetCompanyListByPageRequest) (companies []company.Company, err error) {
 
 	// 查询条件结构体
@@ -140,7 +191,7 @@ func (cs *CompanyService) GetPublishedCompanyList(area string, getCompanyListByP
 	return companies, nil
 }
 
-// setCompanyStatus 调整公司状态
+// setCompanyStatus 调整企业状态
 func (cs *CompanyService) SetCompanyStatus(setCompanyStatusRequest request.SetCompanyStatusRequest) (flag bool, err error) {
 
 	res := model.Db.Model(&company.Company{}).Where("id = ?", setCompanyStatusRequest.ID).Updates(map[string]interface{}{"status": setCompanyStatusRequest.Status})
@@ -151,10 +202,10 @@ func (cs *CompanyService) SetCompanyStatus(setCompanyStatusRequest request.SetCo
 	return true, nil
 }
 
-// updateCompany 更新公司状态
+// updateCompany 更新企业状态
 func (cs *CompanyService) UpdateCompany(updateOrCreateCompanyRequest request.UpdateOrCreateCompanyRequest) (flag bool, err error) {
 
-	res := model.Db.Model(&company.Company{}).Where("id = ?", updateOrCreateCompanyRequest.ID).Select("company_name", "province", "city", "area", "address", "legal_person", "env_person", "ent_person_phone", "handle_person", "handle_person_phone", "status", "remark", "path", "plan", "report", "other").Updates(map[string]interface{}{"company_name": updateOrCreateCompanyRequest.CompanyName, "province": updateOrCreateCompanyRequest.Province, "city": updateOrCreateCompanyRequest.City, "area": updateOrCreateCompanyRequest.Area, "address": updateOrCreateCompanyRequest.Address, "legal_person": updateOrCreateCompanyRequest.LegalPerson, "env_person": updateOrCreateCompanyRequest.EnvPerson, "env_person_phone": updateOrCreateCompanyRequest.EnvPersonPhone, "handle_person": updateOrCreateCompanyRequest.HandlePerson, "handle_person_phone": updateOrCreateCompanyRequest.HandlePersonPhone, "status": updateOrCreateCompanyRequest.Status, "remark": updateOrCreateCompanyRequest.Remark, "path": updateOrCreateCompanyRequest.Path, "plan": updateOrCreateCompanyRequest.Plan, "report": updateOrCreateCompanyRequest.Report, "other": updateOrCreateCompanyRequest.Other})
+	res := model.Db.Model(&company.Company{}).Where("id = ?", updateOrCreateCompanyRequest.ID).Select("company_name", "province", "city", "area", "address", "legal_person", "env_person", "ent_person_phone", "handle_person", "handle_person_phone", "status", "remark", "path", "plan", "report", "other", "yhpc_report", "dqbg_report").Updates(map[string]interface{}{"company_name": updateOrCreateCompanyRequest.CompanyName, "province": updateOrCreateCompanyRequest.Province, "city": updateOrCreateCompanyRequest.City, "area": updateOrCreateCompanyRequest.Area, "address": updateOrCreateCompanyRequest.Address, "legal_person": updateOrCreateCompanyRequest.LegalPerson, "env_person": updateOrCreateCompanyRequest.EnvPerson, "env_person_phone": updateOrCreateCompanyRequest.EnvPersonPhone, "handle_person": updateOrCreateCompanyRequest.HandlePerson, "handle_person_phone": updateOrCreateCompanyRequest.HandlePersonPhone, "status": updateOrCreateCompanyRequest.Status, "remark": updateOrCreateCompanyRequest.Remark, "path": updateOrCreateCompanyRequest.Path, "plan": updateOrCreateCompanyRequest.Plan, "report": updateOrCreateCompanyRequest.Report, "other": updateOrCreateCompanyRequest.Other, "yhpc_report": updateOrCreateCompanyRequest.YhpcReport, "dqbg_report": updateOrCreateCompanyRequest.DqbgReport})
 
 	if res.RowsAffected < 1 {
 		return false, errors.New("更新失败")
@@ -162,7 +213,7 @@ func (cs *CompanyService) UpdateCompany(updateOrCreateCompanyRequest request.Upd
 	return true, nil
 }
 
-// createCompany 创建公司
+// createCompany 创建企业
 func (cs *CompanyService) CreateCompany(userId int64, createCompanyRequest request.UpdateOrCreateCompanyRequest) (flag bool, err error) {
 
 	companyResp := company.Company{
@@ -183,13 +234,15 @@ func (cs *CompanyService) CreateCompany(userId int64, createCompanyRequest reque
 		Plan:              createCompanyRequest.Plan,
 		Report:            createCompanyRequest.Report,
 		Other:             createCompanyRequest.Other,
+		YhpcReport:        createCompanyRequest.YhpcReport,
+		DqbgReport:        createCompanyRequest.DqbgReport,
 	}
 
 	res := model.Db.Create(&companyResp)
 
 	fmt.Println(res)
 	if res.RowsAffected < 1 {
-		return false, errors.New("公司已存在")
+		return false, errors.New("企业已存在")
 	}
 
 	return true, nil

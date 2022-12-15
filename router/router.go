@@ -37,6 +37,8 @@ func Routers(router *gin.Engine) {
 		{
 			system.GET("getAllCompanyList", company.GetAllCompanyList)
 			// 1 平湖 2 桐乡 3 嘉善
+			system.GET("getYhpcList/:area", company.GetYhpcList)
+			system.GET("getDqbgList/:area", company.GetDqbgList)
 			system.GET("getMyCompanyList/:area", company.GetMyCompanyList)
 			system.GET("getPublishedCompanyList/:area", company.GetPublishedCompanyList)
 			system.GET("getCompanyListByPage", company.GetCompanyListByPage)

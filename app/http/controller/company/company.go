@@ -75,6 +75,84 @@ func GetPublishedCompanyList(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
+// 获取隐患排查企业报告列表
+func GetYhpcList(c *gin.Context) {
+
+	var getCompanyListByPageRequest request.GetCompanyListByPageRequest
+
+	if err := c.ShouldBind(&getCompanyListByPageRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	area := c.Param("area")
+
+	companyService := service.NewCompanyService()
+	companyListResp, err := companyService.GetYhpcList(area, getCompanyListByPageRequest)
+
+	// 获取失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: companyListResp,
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// 获取定期报告企业报告列表
+func GetDqbgList(c *gin.Context) {
+
+	var getCompanyListByPageRequest request.GetCompanyListByPageRequest
+
+	if err := c.ShouldBind(&getCompanyListByPageRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	area := c.Param("area")
+
+	companyService := service.NewCompanyService()
+	companyListResp, err := companyService.GetDqbgList(area, getCompanyListByPageRequest)
+
+	// 获取失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: companyListResp,
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
 // 获取我的公司信息
 func GetMyCompanyList(c *gin.Context) {
 

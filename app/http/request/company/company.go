@@ -25,7 +25,10 @@ type UpdateOrCreateCompanyRequest struct {
 	Path              string `form:"path" json:"path" binding:"-"`
 	Plan              string `form:"plan" json:"plan" binding:"-"`
 	Report            string `form:"report" json:"report" binding:"-"`
-	Other             string `form:"other" json:"other" binding:"-"`
+	YhpcReport        string `form:"yhpc_report" json:"yhpc_report" binding:"-"`
+	DqbgReport        string `form:"dqbg_report" json:"dqbg_report" binding:"-"`
+
+	Other string `form:"other" json:"other" binding:"-"`
 }
 
 // CompanyListByPageRequest 账号列表

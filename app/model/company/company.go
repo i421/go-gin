@@ -22,6 +22,8 @@ type Company struct {
 	Plan              string `json:"plan"`                       // 方案
 	Report            string `json:"report"`                     // 报告
 	Other             string `json:"other"`                      // 其他(评论)
+	YhpcReport        string `json:"yhpc_report"`                // 隐患排查页面方案
+	DqbgReport        string `json:"dqbg_report"`                // 定期报告页面方案
 	CreateBy          string `json:"createBy"`                   // 创建人
 	UpdateBy          string `json:"updateBy"`                   // 更新人
 	IsDeleted         bool   `gorm:"default:0" json:"isDeleted"` // 删除标志
