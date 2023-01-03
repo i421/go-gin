@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.31, for Linux (x86_64)
 --
--- Host: localhost    Database: comp
+-- Host: localhost    Database: vben
 -- ------------------------------------------------------
--- Server version	8.0.31-0ubuntu0.22.04.1
+-- Server version	8.0.31-0ubuntu0.20.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,6 +16,44 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `api`
+--
+
+DROP TABLE IF EXISTS `api`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `api` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `code` varchar(255) NOT NULL COMMENT '接口编码',
+  `name` varchar(100) DEFAULT NULL COMMENT '接口名称',
+  `notes` varchar(200) DEFAULT NULL COMMENT '接口描述',
+  `method` varchar(20) DEFAULT NULL COMMENT '请求方法',
+  `class_name` varchar(255) DEFAULT NULL COMMENT '类名',
+  `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
+  `path` varchar(255) DEFAULT NULL COMMENT '请求路径',
+  `content_type` varchar(100) DEFAULT NULL COMMENT '响应类型',
+  `service_id` varchar(100) DEFAULT NULL COMMENT '服务ID',
+  `status` char(1) DEFAULT '0' COMMENT 'API状态:0:启用 1:禁用',
+  `auth` char(1) DEFAULT '0' COMMENT '是否认证:0:不认证 1:认证',
+  `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `create_time` int DEFAULT NULL COMMENT '创建时间',
+  `update_time` int DEFAULT NULL COMMENT '更新时间',
+  `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统接口表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `api`
+--
+
+LOCK TABLES `api` WRITE;
+/*!40000 ALTER TABLE `api` DISABLE KEYS */;
+/*!40000 ALTER TABLE `api` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `attachment`
 --
 
@@ -24,7 +62,8 @@ DROP TABLE IF EXISTS `attachment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attachment` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '附件ID',
-  `user_id` bigint DEFAULT NULL COMMENT '用户id',
+  `storage_id` bigint NOT NULL DEFAULT '0' COMMENT '存储ID',
+  `attachment_group_id` int NOT NULL DEFAULT '0' COMMENT '组ID',
   `name` varchar(128) NOT NULL COMMENT '文件名称',
   `size` int NOT NULL COMMENT '文件大小',
   `url` varchar(2080) NOT NULL COMMENT '文件地址',
@@ -37,8 +76,9 @@ CREATE TABLE `attachment` (
   `update_time` int DEFAULT NULL COMMENT '修改时间',
   `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
   `is_recycle` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否加入回收站 0.否|1.是',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='附件表';
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='附件表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,56 +87,247 @@ CREATE TABLE `attachment` (
 
 LOCK TABLES `attachment` WRITE;
 /*!40000 ALTER TABLE `attachment` DISABLE KEYS */;
-INSERT INTO `attachment` VALUES (1,NULL,'timg (3).jpeg',26516,'https://cdn.ckjia.com/10e258da699b4c318ff59e24f2599420.jpeg','10e258da699b4c318ff59e24f2599420.jpeg','',1,NULL,NULL,NULL,NULL,'0',0),(2,NULL,'background.jpg',261548,'https://cdn.ckjia.com/3b8f8e2b5ffb43b0905397b82a6b3ec6.jpg','3b8f8e2b5ffb43b0905397b82a6b3ec6.jpg','',1,NULL,NULL,NULL,NULL,'0',0);
+INSERT INTO `attachment` VALUES (13,0,0,'timg (3).jpeg',26516,'https://cdn.ckjia.com/10e258da699b4c318ff59e24f2599420.jpeg','10e258da699b4c318ff59e24f2599420.jpeg','',1,NULL,NULL,NULL,NULL,'0',0),(16,0,0,'background.jpg',261548,'https://cdn.ckjia.com/3b8f8e2b5ffb43b0905397b82a6b3ec6.jpg','3b8f8e2b5ffb43b0905397b82a6b3ec6.jpg','',1,NULL,NULL,NULL,NULL,'0',0),(17,0,0,'nav-icon-new.active.png',3036,'https://cdn.ckjia.com/5efe50fcd0e744eaa7a2e7c6d851dd82.png','5efe50fcd0e744eaa7a2e7c6d851dd82.png','',1,NULL,NULL,NULL,NULL,'0',0),(18,0,0,'nav-icon-user.active.png',2150,'https://cdn.ckjia.com/90cef6a278b34c1690af938193e2d813.png','90cef6a278b34c1690af938193e2d813.png','',1,NULL,NULL,NULL,NULL,'0',0),(19,0,0,'nav-icon-cat.active.png',3338,'https://cdn.ckjia.com/8ffa2bf6e6e7491b8460bf308abd30de.png','8ffa2bf6e6e7491b8460bf308abd30de.png','',1,NULL,NULL,NULL,NULL,'0',0),(20,0,0,'nav-icon-index.active.png',2754,'https://cdn.ckjia.com/478acfc9aeb140a4b79c6402ba3bd021.png','478acfc9aeb140a4b79c6402ba3bd021.png','',1,NULL,NULL,NULL,NULL,'0',0),(21,0,0,'baiduzhifu2x.png',19415,'https://cdn.ckjia.com/5ba794ec8d054ce995d37d364c5a9836.png','5ba794ec8d054ce995d37d364c5a9836.png','',1,NULL,NULL,NULL,NULL,'0',0),(22,0,0,'h_seckill.png',6008,'https://cdn.ckjia.com/897d70b0635f48999baa635d6debbbee.png','897d70b0635f48999baa635d6debbbee.png','',1,NULL,NULL,NULL,NULL,'0',0),(24,0,0,'mate-bg2.jpeg',79028,'https://cdn.ckjia.com/7667a4086d3c40948207dc8e02b52ff9.jpeg','7667a4086d3c40948207dc8e02b52ff9.jpeg','',1,NULL,NULL,NULL,NULL,'0',0);
 /*!40000 ALTER TABLE `attachment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `company`
+-- Table structure for table `blacklist`
 --
 
-DROP TABLE IF EXISTS `company`;
+DROP TABLE IF EXISTS `blacklist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `company` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '公司ID',
-  `user_id` bigint unsigned NOT NULL COMMENT '用户id',
-  `company_name` varchar(30) DEFAULT NULL COMMENT '企业名称',
-  `province` varchar(20) DEFAULT NULL COMMENT '省份',
-  `city` varchar(20) DEFAULT NULL COMMENT '城市',
-  `area` varchar(20) DEFAULT NULL COMMENT '区域',
-  `address` varchar(40) DEFAULT NULL COMMENT '企业地址',
-  `legal_person` varchar(20) DEFAULT NULL COMMENT '企业法人',
-  `env_person` varchar(20) DEFAULT NULL COMMENT '环保负责人姓名',
-  `env_person_phone` varchar(11) DEFAULT NULL COMMENT '环保负责人手机',
-  `handle_person` varchar(20) DEFAULT NULL COMMENT '经办人姓名',
-  `handle_person_phone` varchar(11) DEFAULT NULL COMMENT '经办人手机',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `path` text,
-  `other` text,
-  `report` text,
-  `plan` text,
-  `dqbg_report` text,
-  `yhpc_report` text,
-  `status` int DEFAULT '1',
+CREATE TABLE `blacklist` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `ip` varchar(20) DEFAULT NULL COMMENT 'IP地址',
+  `request_uri` varchar(100) DEFAULT NULL COMMENT '请求地址',
+  `request_method` varchar(10) DEFAULT NULL COMMENT '请求方法',
+  `start_time` varchar(32) DEFAULT NULL COMMENT '开始时间',
+  `end_time` varchar(32) DEFAULT NULL COMMENT '结束时间',
+  `status` char(1) DEFAULT '0' COMMENT '状态：0:关闭 1:开启',
   `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
   `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` int DEFAULT NULL COMMENT '创建时间',
   `update_time` int DEFAULT NULL COMMENT '更新时间',
-  `is_deleted` char(1) NOT NULL DEFAULT '0' COMMENT '逻辑删除',
-  PRIMARY KEY (`id`),
-  KEY `company_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='公司表';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统黑名单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `company`
+-- Dumping data for table `blacklist`
 --
 
-LOCK TABLES `company` WRITE;
-/*!40000 ALTER TABLE `company` DISABLE KEYS */;
-INSERT INTO `company` VALUES (8,8,'桐乡市天运环保科技有限公司','浙江省','嘉兴市','桐乡市','桐乡市天运环保科技有限公司','','',NULL,'','','','','','','','','',1,NULL,NULL,NULL,NULL,'0'),(9,9,'桐乡市新光明印染有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(10,10,'浙江中誉五金有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(11,11,'浙江恒震特种材料股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(12,12,'浙江济丰包装纸业有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(13,13,'合众新能源汽车有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(14,14,'浙江华赢新材科技有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(15,15,'浙江枧洋高分子科技有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(16,16,'嘉兴市铁塔厂','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(17,17,'巨石集团有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(18,18,'新东方油墨有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(19,19,'桐乡市化工有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(20,20,'桐乡市华能铁塔厂','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(21,21,'桐乡市大盛金属表面处理有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(22,22,'桐乡市恒球皮草制品有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(23,23,'桐乡市恒邦新材料有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(24,24,'桐乡市桐德电力配件股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(25,25,'桐乡市益能材料处理有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(26,26,'桐乡市道远裘革科技有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(27,27,'桐乡市铁盛线路器材股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(28,28,'桐乡市高桥皮革有限责任公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(29,29,'桐乡恒泰新材料股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(30,30,'洋紫荆油墨股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(31,31,'浙江中辉裘革科技有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(32,32,'浙江华友钴业股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(33,33,'浙江嘉澳环保科技股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(34,34,'浙江新都绿色能源有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(35,35,'浙江牧羊人实业股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(36,36,'浙江祥隆皮革股份有限公司','浙江省','嘉兴市','桐乡市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(37,39,'嘉兴中粮制桶有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(38,40,'平湖市宇盛钢带有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(39,41,'康迈尔机电（嘉兴）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(40,42,'津上精密机床（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(41,43,'三星精密不锈钢（平湖）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(42,44,'东特（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(43,45,'中部理化铝制品（平湖）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(44,46,'华阳电子科技（平湖）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(45,47,'嘉兴德永纺织品有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(46,48,'嘉兴晨人一信仪表有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(47,49,'嘉兴金利精密电子有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(48,50,'平湖市临港能源有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(49,51,'平湖市全塘轧钢有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(50,52,'平湖市升华五金厂','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(51,53,'平湖市明德金属制品有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(52,54,'平湖市盛泰五金制品有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(53,55,'平湖市金达废料再生燃料实业有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(54,56,'平湖市靖远五金配件有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(55,57,'平湖瑞星金属工艺有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(56,58,'平湖石化有限责任公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(57,59,'平湖联祥电镀科技有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(58,60,'平湖荣成环保科技有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(59,61,'御牧喷墨打印科技(浙江)有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(60,62,'德西福格汽车配件（平湖）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(61,63,'日本电产东测（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(62,64,'日本电产新宝(浙江)有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(63,65,'日本电产汽车马达（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(64,66,'日本电产科宝（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(65,67,'日本电产科宝电子（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(66,68,'日本电产芝浦（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(67,69,'杰富意金属容器（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(68,70,'浙江亚迪纳新材料科技股份有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(69,71,'浙江亦龙新材料有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(70,72,'浙江众立合成材料科技股份有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(71,73,'浙江传化天松新材料有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(72,74,'浙江卫星能源有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(73,75,'浙江平湖华龙实业股份有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(74,76,'浙江德福精密驱动制造有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(75,77,'浙江新合发联宾包装科技有限责任公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(76,78,'浙江星月药物科技有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(77,79,'浙江欧迪恩传动科技股份有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(78,80,'浙江独山能源有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(79,81,'浙江纳特汽车标准件有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(80,82,'浙江英汇汽车部件有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(81,83,'浙江莎普爱思药业股份有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(82,84,'瀚蓝工业服务（嘉兴）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(83,85,'神钢特殊钢线（平湖）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(84,86,'艾迪科精细化工（浙江）有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'0'),(85,87,'浙江凯密特尔表面处理材料有限公司','浙江省','嘉兴市','平湖市',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'','',1,NULL,NULL,NULL,NULL,'0');
-/*!40000 ALTER TABLE `company` ENABLE KEYS */;
+LOCK TABLES `blacklist` WRITE;
+/*!40000 ALTER TABLE `blacklist` DISABLE KEYS */;
+INSERT INTO `blacklist` VALUES (1,NULL,'/**/actuator/**','ALL',NULL,NULL,'1',NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `blacklist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `client`
+--
+
+DROP TABLE IF EXISTS `client`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `client` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `client_id` varchar(48) NOT NULL COMMENT '客户端id',
+  `client_secret` varchar(256) NOT NULL COMMENT '客户端密钥',
+  `resource_ids` varchar(256) DEFAULT NULL COMMENT '资源集合',
+  `scope` varchar(256) NOT NULL COMMENT '授权范围',
+  `authorized_grant_types` varchar(256) NOT NULL COMMENT '授权类型',
+  `web_server_redirect_uri` varchar(256) DEFAULT NULL COMMENT '回调地址',
+  `authorities` varchar(256) DEFAULT NULL COMMENT '权限',
+  `access_token_validity` int NOT NULL COMMENT '令牌过期秒数',
+  `refresh_token_validity` int NOT NULL COMMENT '刷新令牌过期秒数',
+  `additional_information` varchar(4096) DEFAULT NULL COMMENT '附加说明',
+  `autoapprove` varchar(256) DEFAULT NULL COMMENT '自动授权',
+  `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `create_time` int DEFAULT NULL COMMENT '创建时间',
+  `update_time` int DEFAULT NULL COMMENT '更新时间',
+  `status` char(1) NOT NULL DEFAULT '0' COMMENT '状态',
+  `is_deleted` int NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='客户端表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `client`
+--
+
+LOCK TABLES `client` WRITE;
+/*!40000 ALTER TABLE `client` DISABLE KEYS */;
+INSERT INTO `client` VALUES (1,'mate','secret',NULL,'all','refresh_token,password,authorization_code,captcha,sms,social','http://localhost:10001',NULL,3600,3600,NULL,NULL,NULL,NULL,NULL,NULL,'0',0);
+/*!40000 ALTER TABLE `client` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `config`
+--
+
+DROP TABLE IF EXISTS `config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `config` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `parent_id` bigint DEFAULT '0' COMMENT '父主键',
+  `code` varchar(255) DEFAULT NULL COMMENT '码',
+  `c_key` varchar(255) DEFAULT NULL COMMENT '值',
+  `value` varchar(255) DEFAULT NULL COMMENT '名称',
+  `sort` int DEFAULT NULL COMMENT '排序',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `is_deleted` int DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config`
+--
+
+LOCK TABLES `config` WRITE;
+/*!40000 ALTER TABLE `config` DISABLE KEYS */;
+INSERT INTO `config` VALUES (1,0,'oss','default','qiniuoss',0,'默认OSS配置',NULL,NULL,'2020-08-08 01:44:31','2020-12-16 09:37:21',0),(2,1,'alioss','endpoint','oss-cn-beijing.aliyuncs.com',1,'对象存储服务的URL',NULL,NULL,'2020-08-08 01:46:10','2020-08-09 16:14:15',0),(3,1,'alioss','customDomain','mall-zaitong.oss-cn-beijing.aliyuncs.com',2,'自定义域名',NULL,NULL,'2020-08-08 01:46:32','2020-08-09 16:14:08',0),(4,1,'alioss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,'2020-08-08 01:47:21','2020-08-08 01:47:35',0),(5,1,'alioss','accessKey','LTA******rzjrV',4,'Access Key',NULL,NULL,'2020-08-08 01:47:40','2020-08-09 07:53:48',0),(6,1,'alioss','secretKey','9H6Bxg**************bfNoy4E',5,'Access Secret',NULL,NULL,'2020-08-08 01:53:13','2020-08-10 01:31:53',0),(7,1,'alioss','bucketName','m********g',6,'空间名',NULL,NULL,'2020-08-08 01:53:14','2020-08-09 16:13:15',0),(8,1,'qiniuoss','endpoint','s3-cn-south-1.qiniucs.com',1,'对象存储服务的URL',NULL,NULL,'2020-08-08 01:46:10','2020-08-10 01:33:31',0),(9,1,'qiniuoss','customDomain','cd**********com8878556757657',2,'自定义域名',NULL,NULL,'2020-08-08 01:46:32','2020-11-15 20:02:32',0),(10,1,'qiniuoss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,'2020-08-08 01:47:21','2020-08-08 01:47:35',0),(11,1,'qiniuoss','accessKey','pj2M-4k_*********************dQpjb1L',4,'Access Key',NULL,NULL,'2020-08-08 01:47:40','2020-08-10 01:33:31',0),(12,1,'qiniuoss','secretKey','Dx17O-dbR*******************Mxlc4bb',5,'Access Secret',NULL,NULL,'2020-08-08 01:53:13','2020-08-10 01:33:31',0),(13,1,'qiniuoss','bucketName','ckjia',6,'空间名',NULL,NULL,'2020-08-08 01:53:14','2020-08-10 01:33:31',0),(14,1,'miniooss','endpoint','66666',1,'对象存储服务的URL',NULL,NULL,'2020-08-08 01:46:10','2020-08-09 02:03:52',0),(15,1,'miniooss','customDomain','2222',2,'自定义域名',NULL,NULL,'2020-08-08 01:46:32','2020-08-08 16:55:54',0),(16,1,'miniooss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,'2020-08-08 01:47:21','2020-08-08 01:47:35',0),(17,1,'miniooss','accessKey','3333',4,'Access Key',NULL,NULL,'2020-08-08 01:47:40','2020-08-08 16:55:58',0),(18,1,'miniooss','secretKey','4444',5,'Access Secret',NULL,NULL,'2020-08-08 01:53:13','2020-08-08 16:56:02',0),(19,1,'miniooss','bucketName','5555',6,'空间名',NULL,NULL,'2020-08-08 01:53:14','2020-08-08 16:56:06',0);
+/*!40000 ALTER TABLE `config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dept`
+--
+
+DROP TABLE IF EXISTS `dept`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dept` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '部门ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '部门名称',
+  `sort` int NOT NULL DEFAULT '0' COMMENT '排序',
+  `remark` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人',
+  `update_by` varchar(255) DEFAULT NULL COMMENT '更新人',
+  `create_time` int DEFAULT NULL COMMENT '创建时间',
+  `update_time` int DEFAULT NULL COMMENT '修改时间',
+  `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
+  `parent_id` bigint DEFAULT '0' COMMENT '上级ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='组织机构表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dept`
+--
+
+LOCK TABLES `dept` WRITE;
+/*!40000 ALTER TABLE `dept` DISABLE KEYS */;
+INSERT INTO `dept` VALUES (1,'开发部',0,'sssss',0,NULL,NULL,1648194303,1648194303,'0',-1),(2,'开发分部',0,NULL,0,NULL,NULL,NULL,NULL,'1',1),(3,'开发二部',2,'测试更新',0,NULL,NULL,NULL,1648880538,'0',1),(4,'产品部',2,'sa',0,NULL,NULL,NULL,1648880550,'0',-1),(5,'产品一部',1,'da',1,NULL,NULL,NULL,1649231206,'0',4),(6,'sjsj',0,NULL,0,NULL,NULL,NULL,1648886605,'1',-1),(8,'test',1,'test',0,'','',1649830238,1649830238,'0',1);
+/*!40000 ALTER TABLE `dept` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dept_role`
+--
+
+DROP TABLE IF EXISTS `dept_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dept_role` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `role_id` bigint NOT NULL COMMENT '角色ID',
+  `dept_id` bigint NOT NULL COMMENT '部门ID',
+  `create_time` int DEFAULT NULL COMMENT '创建时间',
+  `update_time` int DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色和部门关联表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dept_role`
+--
+
+LOCK TABLES `dept_role` WRITE;
+/*!40000 ALTER TABLE `dept_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dept_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dict`
+--
+
+DROP TABLE IF EXISTS `dict`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dict` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `parent_id` bigint DEFAULT '0' COMMENT '父主键',
+  `code` varchar(255) DEFAULT NULL COMMENT '字典码',
+  `dict_key` varchar(255) DEFAULT NULL COMMENT '字典值',
+  `dict_value` varchar(255) DEFAULT NULL COMMENT '字典名称',
+  `sort` int DEFAULT NULL COMMENT '排序',
+  `remark` varchar(255) DEFAULT NULL COMMENT '字典备注',
+  `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `is_deleted` int DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='字典表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dict`
+--
+
+LOCK TABLES `dict` WRITE;
+/*!40000 ALTER TABLE `dict` DISABLE KEYS */;
+INSERT INTO `dict` VALUES (1,0,'status','-1','状态',1,'',NULL,NULL,'2020-07-01 09:59:15','2020-07-01 10:02:00',0),(2,1,'status','0','启用',1,NULL,NULL,NULL,'2020-07-01 10:02:23','2020-07-01 10:02:59',0),(3,1,'status','1','禁用',2,NULL,NULL,NULL,'2020-07-01 10:02:34','2020-07-01 10:02:59',0),(4,0,'dbtype','-1','数据库类型',1,NULL,NULL,NULL,'2020-07-11 08:47:02',NULL,0),(5,4,'dbtype','mysql','com.mysql.cj.jdbc.Driver',1,NULL,NULL,NULL,'2020-07-11 08:47:44','2020-07-11 08:53:11',0),(6,4,'dbtype','oracle','oracle.jdbc.OracleDriver',2,NULL,NULL,NULL,'2020-07-11 08:48:00','2020-07-11 08:54:05',0),(7,4,'dbtype','oracle12c','oracle.jdbc.OracleDriver',3,NULL,NULL,NULL,'2020-07-11 08:49:10','2020-07-11 08:54:12',0),(24,0,'ok','-1','确认',NULL,NULL,NULL,NULL,'2020-07-19 13:31:16','2020-07-19 21:31:28',0),(25,24,'ok','yes','是',NULL,NULL,NULL,NULL,'2020-07-19 21:31:40','2020-07-20 05:32:12',0),(26,24,'ok','no','否',NULL,NULL,NULL,NULL,'2020-07-20 05:32:06',NULL,0);
+/*!40000 ALTER TABLE `dict` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `log` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `type` char(1) DEFAULT '1' COMMENT '日志类型',
+  `trace_id` varchar(64) DEFAULT NULL COMMENT '跟踪ID',
+  `title` varchar(64) DEFAULT NULL COMMENT '日志标题',
+  `operation` text COMMENT '操作内容',
+  `method` varchar(64) DEFAULT NULL COMMENT '执行方法',
+  `params` text COMMENT '参数',
+  `url` varchar(128) DEFAULT NULL COMMENT '请求路径',
+  `ip` varchar(64) DEFAULT NULL COMMENT 'ip地址',
+  `exception` text,
+  `execute_time` decimal(11,0) DEFAULT NULL COMMENT '耗时',
+  `location` varchar(64) DEFAULT NULL COMMENT '地区',
+  `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
+  `tenant_id` int DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统日志表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log`
+--
+
+LOCK TABLES `log` WRITE;
+/*!40000 ALTER TABLE `log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -113,6 +344,7 @@ CREATE TABLE `menu` (
   `path` varchar(128) DEFAULT NULL COMMENT '路径',
   `component` varchar(128) DEFAULT NULL COMMENT '组件',
   `parent_id` bigint DEFAULT '0' COMMENT '父菜单ID',
+  `tree` varchar(30) NOT NULL COMMENT '树',
   `icon` varchar(32) DEFAULT NULL COMMENT '菜单图标',
   `sort` int DEFAULT '1' COMMENT '排序值',
   `keep_alive` char(1) DEFAULT '0' COMMENT '是否缓存该页面: 1:是  0:不是',
@@ -126,7 +358,7 @@ CREATE TABLE `menu` (
   `status` char(1) DEFAULT NULL COMMENT '状态',
   `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2442 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='菜单权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=2072 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='菜单权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +367,7 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES (1000,'系统管理','','/system','Layout',0,'ant-design:appstore-outlined',20,'0','0','0','0',NULL,NULL,NULL,1671093565,'0','0'),(1100,'用户管理','','/system/account','/system/account/index',1000,'ant-design:user-outlined',1,'0','1','0','0',NULL,NULL,NULL,1668263255,'0','0'),(1101,'用户新增','sys:user:add','',NULL,1100,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1102,'用户修改','sys:user:edit',NULL,NULL,1100,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1103,'用户删除','sys:user:delete',NULL,NULL,1100,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1104,'用户启用','sys:user:enable',NULL,NULL,1100,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1105,'用户禁用','sys:user:disable',NULL,NULL,1100,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1106,'用户导出','sys:user:export',NULL,NULL,1100,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1200,'角色管理','','/system/role','/system/role/index',1000,'ant-design:team-outlined',2,'0','1','0','0',NULL,NULL,NULL,1668263290,'0','0'),(1201,'角色新增','sys:role:add',NULL,NULL,1200,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1202,'角色修改','sys:role:edit',NULL,NULL,1200,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1203,'角色删除','sys:role:delete',NULL,NULL,1200,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1204,'角色导出','sys:role:export',NULL,NULL,1200,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1205,'角色权限','sys:role:perm',NULL,NULL,1200,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1300,'菜单管理','','/system/menu','/system/menu/index',1000,'ant-design:menu-unfold-outlined',3,'0','1','0','0',NULL,NULL,NULL,1668263305,'0','0'),(1301,'桐乡删除','tongxiang:company:delete',NULL,NULL,2064,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1302,'桐乡切换','tongxiang:company:toggle',NULL,NULL,2064,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1303,'嘉善删除','jiashan:company:delete',NULL,NULL,2064,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1304,'嘉善切换','jiashan:company:toggle',NULL,NULL,2064,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1305,'平湖删除','pinghu:company:delete',NULL,NULL,2064,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1306,'平湖切换','pinghu:company:toggle',NULL,NULL,2064,NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2064,'工作台','','/dashboard','Layout',0,'ant-design:windows-outlined',1,'0','0','0','0',NULL,NULL,NULL,1668071516,'0','0'),(2065,'公司列表','','/dashboard','/dashboard/analysis/index',2064,'ant-design:rise-outlined',1,'0','1','0','0',NULL,NULL,NULL,1668769246,'0','0'),(2401,'公司列表','','/company/index','/company/index',2400,'ant-design:amazon-circle-filled',1,'0','1','0','0','','',1668221086,1668221970,'0','0'),(2404,'平湖','','/pinghu','Layout',0,'ant-design:bank-outlined',3,'0','0','0','0','','',1668225879,1668239820,'0','0'),(2405,'桐乡','','/tongxiang','Layout',0,'ant-design:bank-outlined',5,'0','0','0','0','','',1668225922,1668225922,'0','0'),(2406,'嘉善','','/jiashan','Layout',0,'ant-design:bank-outlined',6,'0','0','0','0','','',1668225998,1668225998,'0','0'),(2410,'工业企业土壤和地下水自行监测-平湖','','/pinghu/zxjc','/pinghu/zxjc/index',2404,'ant-design:align-center-outlined',1,'0','1','0','0','','',1668226594,1668239831,'0','0'),(2411,'土壤和地下水自行监测报告信息公开-平湖','','/pinghu/xxgk','/pinghu/xxgk/index',2404,'ant-design:align-center-outlined',2,'0','1','0','0','','',1668226620,1668226670,'0','0'),(2412,'重点监管单位土壤污染隐患排查-平湖','','/pinghu/yhpc','/pinghu/yhpc/index',2404,'ant-design:align-center-outlined',3,'0','1','0','0','','',1668226650,1668226650,'0','0'),(2413,'有毒有害物质排放定期报告-平湖','','/pinghu/dqbg','/pinghu/dqbg/index',2404,'ant-design:align-center-outlined',4,'0','1','0','0','','',1668226716,1668226716,'0','0'),(2414,'企业拆除活动污染防治方案-平湖','','/pinghu/fzfa','/pinghu/fzfa/index',2404,'ant-design:align-center-outlined',5,'0','1','0','0','','',1668226762,1668227532,'0','0'),(2415,'地下水污染风险管控-平湖','','/pinghu/fxgk','/pinghu/fxgk/index',2404,'ant-design:align-center-outlined',6,'0','1','0','0','','',1668226803,1668226803,'0','0'),(2416,'土壤污染状况调查地块现场采样质控-平湖','','/pinghu/cyzk','/pinghu/cyzk/index',2404,'ant-design:align-center-outlined',7,'0','1','0','0','','',1668226852,1668226852,'0','0'),(2417,'土壤污染状况调查地块检测分析外部质控-平湖','','/pinghu/wbzk','/pinghu/wbzk/index',2404,'ant-design:align-center-outlined',8,'0','1','0','0','','',1668226920,1668226920,'0','0'),(2418,'工业企业土壤和地下水自行监测-桐乡','','/tongxiang/zxjc','/tongxiang/zxjc/index',2405,'ant-design:align-center-outlined',1,'0','1','0','0','','',1668227188,1668227188,'0','0'),(2419,'土壤和地下水自行监测报告信息公开-桐乡','','/tongxiang/xxgk','/tongxiang/xxgk/index',2405,'ant-design:align-center-outlined',2,'0','1','0','0','','',1668227236,1668227236,'0','0'),(2420,'重点监管单位土壤污染隐患排查-桐乡','','/tongxiang/yhpc','/tongxiang/yhpc/index',2405,'ant-design:align-center-outlined',3,'0','1','0','0','','',1668227279,1668227279,'0','0'),(2421,'有毒有害物质排放定期报告-桐乡','','/tongxiang/dqbg','/tongxiang/dqbg/index',2405,'ant-design:align-center-outlined',4,'0','1','0','0','','',1668227325,1668227325,'0','0'),(2422,'企业拆除活动污染防治方案-桐乡','','/tongxiang/fzfa','/tongxiang/fzfa/index',2405,'ant-design:align-center-outlined',5,'0','1','0','0','','',1668227402,1668227402,'0','0'),(2423,'地下水污染风险管控-桐乡','','/tongxiang/fxgk','/tongxiang/fxgk/index',2405,'ant-design:align-center-outlined',6,'0','1','0','0','','',1668227570,1668227570,'0','0'),(2424,'土壤污染状况调查地块现场采样质控-桐乡','','/tongxiang/cyzk','/tongxiang/cyzk/index',2405,'ant-design:align-center-outlined',7,'0','1','0','0','','',1668227598,1668227598,'0','0'),(2425,'土壤污染状况调查地块检测分析外部质控-桐乡','','/tongxiang/wbzk','/tongxiang/wbzk/index',2405,'ant-design:align-center-outlined',8,'0','1','0','0','','',1668227630,1668227630,'0','0'),(2426,'工业企业土壤和地下水自行监测-嘉善','','/jiashan/zxjc','/jiashan/zxjc/index',2406,'ant-design:align-center-outlined',1,'0','1','0','0','','',1668227690,1668227690,'0','0'),(2427,'土壤和地下水自行监测报告信息公开-嘉善','','/jiashan/xxgk','/jiashan/xxgk/index',2406,'ant-design:align-center-outlined',2,'0','1','0','0','','',1668227747,1668227747,'0','0'),(2428,'重点监管单位土壤污染隐患排查-嘉善','','/jiashan/yhpc','/jiashan/yhpc/index',2406,'ant-design:align-center-outlined',3,'0','1','0','0','','',1668227788,1668227788,'0','0'),(2429,'有毒有害物质排放定期报告-嘉善','','/jiashan/dqbg','/jiashan/dqbg/index',2406,'ant-design:align-center-outlined',4,'0','1','0','0','','',1668227823,1668227823,'0','0'),(2430,'企业拆除活动污染防治方案-嘉善','','/jiashan/fzfa','/jiashan/fzfa/index',2406,'ant-design:align-center-outlined',5,'0','1','0','0','','',1668227882,1668227882,'0','0'),(2431,'地下水污染风险管控-嘉善','','/jiashan/fxgk','/jiashan/fxgk/index',2406,'ant-design:align-center-outlined',6,'0','1','0','0','','',1668227926,1668227926,'0','0'),(2432,'土壤污染状况调查地块现场采样质控-嘉善','','/jiashan/cyzk','/jiashan/cyzk/index',2406,'ant-design:align-center-outlined',7,'0','1','0','0','','',1668227977,1668227977,'0','0'),(2433,'土壤污染状况调查地块检测分析外部质控-嘉善','','/jiashan/wbzk','/jiashan/wbzk/index',2406,'ant-design:align-center-outlined',8,'0','1','0','0','','',1668228065,1668228065,'0','0'),(2434,'重置密码','','/system/changePassword','/system/password/index',1000,'ant-design:appstore-outlined',4,'0','1','0','0','','',1669428047,1669428724,'0','0'),(2435,'信息公开','','/dashboard/public-info','/dashboard/publicInfo/index',2064,'ant-design:align-left-outlined',2,'0','1','0','0','','',1670653988,1670653988,'0','0'),(2436,'南湖','','/nanhu','Layout',0,'ant-design:bank-filled',7,'0','1','0','0','','',1671093321,1671093763,'0','0'),(2437,'秀洲','','/xiuzhou','Layout',0,'ant-design:bank-outlined',8,'0','1','0','0','','',1671093471,1671093775,'0','0'),(2438,'经开','','/jingkai','Layout',0,'ant-design:bank-outlined',9,'0','1','0','0','','',1671093490,1671093782,'0','0'),(2439,'海宁','','/haining','Layout',0,'ant-design:bank-outlined',11,'0','1','0','0','','',1671093542,1671093798,'0','0'),(2440,'海盐','','/haiyan','Layout',0,'ant-design:bank-outlined',10,'0','1','0','0','','',1671093620,1671093791,'0','0'),(2441,'港区','','/gangqu','Layout',0,'ant-design:bank-outlined',12,'0','1','0','0','','',1671093696,1671093805,'0','0');
+INSERT INTO `menu` VALUES (1000,'系统管理',NULL,'/system','Layout',0,'','ant-design:appstore-outlined',1,'0','0','0','1',NULL,NULL,NULL,NULL,'0','0'),(1100,'用户管理',NULL,'/system/account','/system/account/index',1000,'','ant-design:user-outlined',2,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1101,'用户新增','sys:user:add','',NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1102,'用户修改','sys:user:edit',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1103,'用户删除','sys:user:delete',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1104,'用户启用','sys:user:enable',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1105,'用户禁用','sys:user:disable',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1106,'用户导出','sys:user:export',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1200,'角色管理',NULL,'/system/role','/system/role/index',1000,'','ant-design:team-outlined',3,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1201,'角色新增','sys:role:add',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1202,'角色修改','sys:role:edit',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1203,'角色删除','sys:role:delete',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1204,'角色导出','sys:role:export',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1205,'角色权限','sys:role:perm',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1300,'菜单管理',NULL,'/system/menu','/system/menu/index',1000,'','ant-design:menu-unfold-outlined',3,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1301,'菜单新增','sys:menu:add',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1302,'菜单修改','sys:menu:edit',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1303,'菜单删除','sys:menu:delete',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1304,'菜单启用','sys:menu:enable',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1305,'菜单禁用','sys:menu:disable',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1306,'菜单导出','sys:menu:export',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1400,'部门管理',NULL,'/system/dept','/system/dept/index',1000,'','ant-design:apartment-outlined',1,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1401,'部门新增','sys:depart:add',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1402,'部门修改','sys:depart:edit',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1403,'部门删除','sys:depart:delete',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1404,'部门导出','sys:depart:export',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2032,'操作日志',NULL,'/system/log','/system/log/index',1000,'','ant-design:ordered-list-outlined',8,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(2033,'详细日志','sys:log:detail',NULL,NULL,2032,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2034,'日志删除','sys:log:delete',NULL,NULL,2032,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2035,'字典管理',NULL,'/system/dict','/system/dict/index',1000,'','ant-design:read-outlined',6,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(2036,'新增字典','sys:dict:add',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2037,'修改字典','sys:dict:edit',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2038,'删除字典','sys:dict:delete',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2064,'工作台',NULL,'/dashboard','Layout',0,'','ant-design:windows-outlined',0,'0','0','0','0',NULL,NULL,NULL,NULL,'0','0'),(2065,'分析页',NULL,'/dashboard','/dashboard/analysis/index',2064,'','ant-design:rise-outlined',0,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0'),(2068,'工作台',NULL,'/dashboard/workbench','/dashboard/workbench/index',2064,'','ant-design:block-outlined',2,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0'),(2069,'关于Artemis',NULL,'/about/index','/sys/about/index',0,'','ant-design:info-circle-outlined',100,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +385,7 @@ CREATE TABLE `permission_role` (
   `create_time` int DEFAULT NULL COMMENT '创建时间',
   `update_time` int DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1330 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=3163 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +394,7 @@ CREATE TABLE `permission_role` (
 
 LOCK TABLES `permission_role` WRITE;
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
-INSERT INTO `permission_role` VALUES (960,2064,6,0,0),(961,2065,6,0,0),(962,2404,6,0,0),(963,2410,6,0,0),(964,2411,6,0,0),(965,2412,6,0,0),(966,2413,6,0,0),(967,2414,6,0,0),(968,2415,6,0,0),(969,2416,6,0,0),(970,2417,6,0,0),(971,1000,6,0,0),(972,2434,6,0,0),(973,2435,6,0,0),(974,2064,7,0,0),(975,2065,7,0,0),(976,2404,7,0,0),(977,2410,7,0,0),(978,2411,7,0,0),(979,2412,7,0,0),(980,2413,7,0,0),(981,2414,7,0,0),(982,2415,7,0,0),(983,2416,7,0,0),(984,2417,7,0,0),(985,1000,7,0,0),(986,2434,7,0,0),(987,2435,7,0,0),(1021,2064,10,0,0),(1022,2065,10,0,0),(1023,2406,10,0,0),(1024,2426,10,0,0),(1025,2427,10,0,0),(1026,2428,10,0,0),(1027,2429,10,0,0),(1028,2430,10,0,0),(1029,2431,10,0,0),(1030,2432,10,0,0),(1031,2433,10,0,0),(1032,1000,10,0,0),(1033,2434,10,0,0),(1034,2435,10,0,0),(1035,2064,11,0,0),(1036,2065,11,0,0),(1037,2406,11,0,0),(1038,2426,11,0,0),(1039,2427,11,0,0),(1040,2428,11,0,0),(1041,2429,11,0,0),(1042,2430,11,0,0),(1043,2431,11,0,0),(1044,2432,11,0,0),(1045,2433,11,0,0),(1046,1000,11,0,0),(1047,2434,11,0,0),(1048,2435,11,0,0),(1082,2064,14,0,0),(1083,2065,14,0,0),(1084,2405,14,0,0),(1085,2418,14,0,0),(1086,2419,14,0,0),(1087,2420,14,0,0),(1088,2421,14,0,0),(1089,2422,14,0,0),(1090,2423,14,0,0),(1091,2424,14,0,0),(1092,2425,14,0,0),(1093,1000,14,0,0),(1094,2434,14,0,0),(1095,2435,14,0,0),(1096,2064,15,0,0),(1097,2065,15,0,0),(1098,2405,15,0,0),(1099,2418,15,0,0),(1100,2419,15,0,0),(1101,2420,15,0,0),(1102,2421,15,0,0),(1103,2422,15,0,0),(1104,2423,15,0,0),(1105,2424,15,0,0),(1106,2425,15,0,0),(1107,1000,15,0,0),(1108,2434,15,0,0),(1109,2435,15,0,0),(1126,2064,5,0,0),(1127,1305,5,0,0),(1128,1306,5,0,0),(1129,2065,5,0,0),(1130,2404,5,0,0),(1131,2410,5,0,0),(1132,2411,5,0,0),(1133,2412,5,0,0),(1134,2413,5,0,0),(1135,2414,5,0,0),(1136,2415,5,0,0),(1137,2416,5,0,0),(1138,2417,5,0,0),(1139,1000,5,0,0),(1140,2434,5,0,0),(1141,2435,5,0,0),(1142,2064,8,0,0),(1143,1306,8,0,0),(1144,2065,8,0,0),(1145,2404,8,0,0),(1146,2410,8,0,0),(1147,2411,8,0,0),(1148,2412,8,0,0),(1149,2413,8,0,0),(1150,2414,8,0,0),(1151,2415,8,0,0),(1152,2416,8,0,0),(1153,2417,8,0,0),(1154,1000,8,0,0),(1155,2434,8,0,0),(1156,2435,8,0,0),(1157,2064,9,0,0),(1158,1303,9,0,0),(1159,1304,9,0,0),(1160,2065,9,0,0),(1161,2406,9,0,0),(1162,2426,9,0,0),(1163,2427,9,0,0),(1164,2428,9,0,0),(1165,2429,9,0,0),(1166,2430,9,0,0),(1167,2431,9,0,0),(1168,2432,9,0,0),(1169,2433,9,0,0),(1170,1000,9,0,0),(1171,2434,9,0,0),(1172,2435,9,0,0),(1173,2064,12,0,0),(1174,1304,12,0,0),(1175,2065,12,0,0),(1176,2406,12,0,0),(1177,2426,12,0,0),(1178,2427,12,0,0),(1179,2428,12,0,0),(1180,2429,12,0,0),(1181,2430,12,0,0),(1182,2431,12,0,0),(1183,2432,12,0,0),(1184,2433,12,0,0),(1185,1000,12,0,0),(1186,2434,12,0,0),(1187,2435,12,0,0),(1188,2064,13,0,0),(1189,1301,13,0,0),(1190,1302,13,0,0),(1191,2065,13,0,0),(1192,2405,13,0,0),(1193,2418,13,0,0),(1194,2419,13,0,0),(1195,2420,13,0,0),(1196,2421,13,0,0),(1197,2422,13,0,0),(1198,2423,13,0,0),(1199,2424,13,0,0),(1200,2425,13,0,0),(1201,1000,13,0,0),(1202,2434,13,0,0),(1203,2435,13,0,0),(1204,2064,16,0,0),(1205,1302,16,0,0),(1206,2065,16,0,0),(1207,2405,16,0,0),(1208,2418,16,0,0),(1209,2419,16,0,0),(1210,2420,16,0,0),(1211,2421,16,0,0),(1212,2422,16,0,0),(1213,2423,16,0,0),(1214,2424,16,0,0),(1215,2425,16,0,0),(1216,1000,16,0,0),(1217,2434,16,0,0),(1218,2435,16,0,0),(1272,1000,1,0,0),(1273,1100,1,0,0),(1274,1101,1,0,0),(1275,1104,1,0,0),(1276,1102,1,0,0),(1277,1103,1,0,0),(1278,1105,1,0,0),(1279,1106,1,0,0),(1280,1200,1,0,0),(1281,1205,1,0,0),(1282,1204,1,0,0),(1283,1201,1,0,0),(1284,1202,1,0,0),(1285,1203,1,0,0),(1286,1300,1,0,0),(1287,2434,1,0,0),(1288,2064,1,0,0),(1289,1301,1,0,0),(1290,1302,1,0,0),(1291,2065,1,0,0),(1292,1306,1,0,0),(1293,1305,1,0,0),(1294,1304,1,0,0),(1295,1303,1,0,0),(1296,2435,1,0,0),(1297,2404,1,0,0),(1298,2410,1,0,0),(1299,2411,1,0,0),(1300,2412,1,0,0),(1301,2413,1,0,0),(1302,2414,1,0,0),(1303,2415,1,0,0),(1304,2416,1,0,0),(1305,2417,1,0,0),(1306,2405,1,0,0),(1307,2418,1,0,0),(1308,2419,1,0,0),(1309,2420,1,0,0),(1310,2421,1,0,0),(1311,2422,1,0,0),(1312,2423,1,0,0),(1313,2424,1,0,0),(1314,2425,1,0,0),(1315,2406,1,0,0),(1316,2426,1,0,0),(1317,2427,1,0,0),(1318,2428,1,0,0),(1319,2429,1,0,0),(1320,2430,1,0,0),(1321,2431,1,0,0),(1322,2432,1,0,0),(1323,2433,1,0,0),(1324,2436,1,0,0),(1325,2437,1,0,0),(1326,2438,1,0,0),(1327,2440,1,0,0),(1328,2439,1,0,0),(1329,2441,1,0,0);
+INSERT INTO `permission_role` VALUES (2767,2064,1,0,0),(2768,2065,1,0,0),(2769,2068,1,0,0),(2770,1000,1,0,0),(2771,1300,1,0,0),(2772,1304,1,0,0),(2773,1301,1,0,0),(2774,1302,1,0,0),(2775,1303,1,0,0),(2776,1305,1,0,0),(2777,1306,1,0,0),(2778,1100,1,0,0),(2779,1106,1,0,0),(2780,1105,1,0,0),(2781,1104,1,0,0),(2782,1103,1,0,0),(2783,1102,1,0,0),(2784,1101,1,0,0),(2785,1400,1,0,0),(2786,1401,1,0,0),(2787,1402,1,0,0),(2788,1403,1,0,0),(2789,1404,1,0,0),(2790,1200,1,0,0),(2791,1202,1,0,0),(2792,1201,1,0,0),(2793,1203,1,0,0),(2794,1204,1,0,0),(2795,1205,1,0,0),(2796,2035,1,0,0),(2797,2036,1,0,0),(2798,2037,1,0,0),(2799,2038,1,0,0),(2806,2032,1,0,0),(2807,2033,1,0,0),(2808,2034,1,0,0),(2832,2069,1,0,0),(2833,2064,2,0,0),(2834,2065,2,0,0),(2835,2068,2,0,0),(2836,1000,2,0,0),(2837,1300,2,0,0),(2838,1304,2,0,0),(2839,1301,2,0,0),(2840,1302,2,0,0),(2841,1303,2,0,0),(2842,1305,2,0,0),(2843,1306,2,0,0),(2844,1100,2,0,0),(2845,1106,2,0,0),(2846,1105,2,0,0),(2847,1104,2,0,0),(2848,1103,2,0,0),(2849,1102,2,0,0),(2850,1101,2,0,0),(2851,1400,2,0,0),(2852,1401,2,0,0),(2853,1402,2,0,0),(2854,1403,2,0,0),(2855,1404,2,0,0),(2856,1200,2,0,0),(2857,1202,2,0,0),(2858,1201,2,0,0),(2859,1203,2,0,0),(2860,1204,2,0,0),(2861,1205,2,0,0),(2862,2035,2,0,0),(2863,2036,2,0,0),(2864,2037,2,0,0),(2865,2038,2,0,0),(2872,2032,2,0,0),(2873,2033,2,0,0),(2874,2034,2,0,0),(2897,2069,2,0,0),(3137,1000,8,0,0),(3138,1100,8,0,0),(3139,1101,8,0,0),(3140,1102,8,0,0),(3141,1103,8,0,0),(3142,1104,8,0,0),(3143,1105,8,0,0),(3144,1106,8,0,0),(3145,2064,8,0,0),(3146,2068,8,0,0),(3152,1000,9,0,0),(3153,1300,9,0,0),(3154,1301,9,0,0),(3155,2064,9,0,0),(3156,2065,9,0,0);
 /*!40000 ALTER TABLE `permission_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,7 +421,7 @@ CREATE TABLE `role` (
   UNIQUE KEY `role_name` (`role_name`),
   UNIQUE KEY `role_code` (`role_code`),
   KEY `idx_role_role_code` (`role_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,7 +430,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'超级管理员','superAdmin','superAdmin',1,'0',NULL,NULL,1649578786,1671093731,'0'),(5,'平湖-企业','pinghu-company','company',10,'0','','',1668242543,1670833617,'0'),(6,'平湖-专家','pinghu-expert','expert',11,'0','','',1668242632,1670654162,'0'),(7,'平湖-质控单位','pinghu-zk','zk',12,'0','','',1668242695,1670654167,'0'),(8,'平湖-管理部门','pinghu-gl','gl',13,'0','','',1668242729,1670833632,'0'),(9,'嘉善-企业','jiashan-company','company',20,'0','','',1668242793,1670833638,'0'),(10,'嘉善-专家','jiashan-expert','expert',21,'0','','',1668242824,1670654186,'0'),(11,'嘉善-质控单位','jiashan-zk','zk',22,'0','','',1668242917,1670654192,'0'),(12,'嘉善-管理部门','jiashan-gl','gl',23,'0','','',1668242943,1670833653,'0'),(13,'桐乡-企业','tongxiang-company','company',30,'0','','',1668242973,1670833661,'0'),(14,'桐乡-专家','tongxiang-expert','expert',31,'0','','',1668243004,1670654228,'0'),(15,'桐乡-质控单位','tongxiang-zk','zk',32,'0','','',1668243043,1670654231,'0'),(16,'桐乡-管理部门','tongxiang-gl','gl',33,'0','','',1668243096,1670833676,'0');
+INSERT INTO `role` VALUES (1,'超级管理员','super','超级管理员组',1,'0',NULL,NULL,1649578786,1649934648,'0'),(2,'管理员','admin','管理员',2,'0',NULL,NULL,1649578786,1649934663,'0'),(8,'测试角色','test','test',3,'0','','',1649925084,1650809651,'0');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,7 +450,7 @@ CREATE TABLE `role_user` (
   PRIMARY KEY (`id`),
   KEY `role_user_user_id_foreign` (`user_id`),
   KEY `role_user_role_id_foreign` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=132 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,7 +459,7 @@ CREATE TABLE `role_user` (
 
 LOCK TABLES `role_user` WRITE;
 /*!40000 ALTER TABLE `role_user` DISABLE KEYS */;
-INSERT INTO `role_user` VALUES (26,37,15,0,0),(27,38,16,0,0),(28,8,13,NULL,NULL),(29,9,13,NULL,NULL),(30,10,13,NULL,NULL),(31,11,13,NULL,NULL),(32,12,13,NULL,NULL),(33,13,13,NULL,NULL),(34,14,13,NULL,NULL),(35,15,13,NULL,NULL),(36,16,13,NULL,NULL),(37,17,13,NULL,NULL),(38,18,13,NULL,NULL),(39,19,13,NULL,NULL),(40,20,13,NULL,NULL),(41,21,13,NULL,NULL),(42,22,13,NULL,NULL),(43,23,13,NULL,NULL),(44,24,13,NULL,NULL),(45,25,13,NULL,NULL),(46,26,13,NULL,NULL),(47,27,13,NULL,NULL),(48,28,13,NULL,NULL),(49,29,13,NULL,NULL),(50,30,13,NULL,NULL),(51,31,13,NULL,NULL),(52,32,13,NULL,NULL),(53,33,13,NULL,NULL),(54,34,13,NULL,NULL),(55,35,13,NULL,NULL),(56,36,13,NULL,NULL),(57,37,15,NULL,NULL),(58,38,16,NULL,NULL),(80,1,1,0,0),(81,39,5,NULL,NULL),(82,40,5,NULL,NULL),(83,41,5,NULL,NULL),(84,42,5,NULL,NULL),(85,43,5,NULL,NULL),(86,44,5,NULL,NULL),(87,45,5,NULL,NULL),(88,46,5,NULL,NULL),(89,47,5,NULL,NULL),(90,48,5,NULL,NULL),(91,49,5,NULL,NULL),(92,50,5,NULL,NULL),(93,51,5,NULL,NULL),(94,52,5,NULL,NULL),(95,53,5,NULL,NULL),(96,54,5,NULL,NULL),(97,55,5,NULL,NULL),(98,56,5,NULL,NULL),(99,57,5,NULL,NULL),(100,58,5,NULL,NULL),(101,59,5,NULL,NULL),(102,60,5,NULL,NULL),(103,61,5,NULL,NULL),(104,62,5,NULL,NULL),(105,63,5,NULL,NULL),(106,64,5,NULL,NULL),(107,65,5,NULL,NULL),(108,66,5,NULL,NULL),(109,67,5,NULL,NULL),(110,68,5,NULL,NULL),(111,69,5,NULL,NULL),(112,70,5,NULL,NULL),(113,71,5,NULL,NULL),(114,72,5,NULL,NULL),(115,73,5,NULL,NULL),(116,74,5,NULL,NULL),(117,75,5,NULL,NULL),(118,76,5,NULL,NULL),(119,77,5,NULL,NULL),(120,78,5,NULL,NULL),(121,79,5,NULL,NULL),(122,80,5,NULL,NULL),(123,81,5,NULL,NULL),(124,82,5,NULL,NULL),(125,83,5,NULL,NULL),(126,84,5,NULL,NULL),(127,85,5,NULL,NULL),(128,86,5,NULL,NULL),(129,87,5,NULL,NULL),(130,37,7,NULL,NULL),(131,88,8,NULL,NULL);
+INSERT INTO `role_user` VALUES (2,3,2,NULL,NULL),(9,22,2,0,0),(10,2,1,0,0),(11,23,2,0,0),(14,25,2,0,0),(15,26,2,0,0),(17,27,2,0,0),(18,28,2,0,0),(19,29,2,0,0),(21,30,8,0,0);
 /*!40000 ALTER TABLE `role_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -245,6 +477,11 @@ CREATE TABLE `user` (
   `nickname` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '昵称',
   `real_name` varchar(10) DEFAULT NULL COMMENT '真名',
   `avatar` varchar(200) DEFAULT NULL COMMENT '头像',
+  `email` varchar(45) DEFAULT NULL COMMENT '邮箱',
+  `telephone` varchar(45) DEFAULT NULL COMMENT '手机',
+  `birthday` int DEFAULT NULL COMMENT '生日',
+  `sex` smallint DEFAULT NULL COMMENT '性别',
+  `dept_id` bigint DEFAULT '0' COMMENT '部门id',
   `status` char(1) DEFAULT NULL COMMENT '状态',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
@@ -254,7 +491,7 @@ CREATE TABLE `user` (
   `is_deleted` char(1) NOT NULL DEFAULT '0' COMMENT '逻辑删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +500,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','lbd4pvfpICb1pX6gf3ar1Q==','admi1','超级管理员','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','0','test',NULL,NULL,NULL,NULL,'0'),(8,'桐乡市天运环保科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(9,'桐乡市新光明印染有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(10,'浙江中誉五金有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(11,'浙江恒震特种材料股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(12,'浙江济丰包装纸业有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(13,'合众新能源汽车有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(14,'浙江华赢新材科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(15,'浙江枧洋高分子科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(16,'嘉兴市铁塔厂','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(17,'巨石集团有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(18,'新东方油墨有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(19,'桐乡市化工有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(20,'桐乡市华能铁塔厂','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(21,'桐乡市大盛金属表面处理有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(22,'桐乡市恒球皮草制品有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(23,'桐乡市恒邦新材料有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(24,'桐乡市桐德电力配件股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(25,'桐乡市益能材料处理有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(26,'桐乡市道远裘革科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(27,'桐乡市铁盛线路器材股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(28,'桐乡市高桥皮革有限责任公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(29,'桐乡恒泰新材料股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(30,'洋紫荆油墨股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(31,'浙江中辉裘革科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(32,'浙江华友钴业股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(33,'浙江嘉澳环保科技股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(34,'浙江新都绿色能源有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(35,'浙江牧羊人实业股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(36,'浙江祥隆皮革股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(37,'浙江清华长三角研究院','lbd4pvfpICb1pX6gf3ar1Q==','浙江清华长三角研究院','','','0','','','',0,0,'0'),(38,'嘉兴市生态环境局桐乡分局','lbd4pvfpICb1pX6gf3ar1Q==','嘉兴市生态环境局桐乡分局','','','0','','','',0,0,'0'),(39,'嘉兴中粮制桶有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(40,'平湖市宇盛钢带有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(41,'康迈尔机电（嘉兴）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(42,'津上精密机床（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(43,'三星精密不锈钢（平湖）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(44,'东特（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(45,'中部理化铝制品（平湖）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(46,'华阳电子科技（平湖）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(47,'嘉兴德永纺织品有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(48,'嘉兴晨人一信仪表有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(49,'嘉兴金利精密电子有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(50,'平湖市临港能源有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(51,'平湖市全塘轧钢有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(52,'平湖市升华五金厂','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(53,'平湖市明德金属制品有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(54,'平湖市盛泰五金制品有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(55,'平湖市金达废料再生燃料实业有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(56,'平湖市靖远五金配件有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(57,'平湖瑞星金属工艺有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(58,'平湖石化有限责任公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(59,'平湖联祥电镀科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(60,'平湖荣成环保科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(61,'御牧喷墨打印科技(浙江)有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(62,'德西福格汽车配件（平湖）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(63,'日本电产东测（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(64,'日本电产新宝(浙江)有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(65,'日本电产汽车马达（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(66,'日本电产科宝（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(67,'日本电产科宝电子（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(68,'日本电产芝浦（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(69,'杰富意金属容器（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(70,'浙江亚迪纳新材料科技股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(71,'浙江亦龙新材料有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(72,'浙江众立合成材料科技股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(73,'浙江传化天松新材料有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(74,'浙江卫星能源有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(75,'浙江平湖华龙实业股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(76,'浙江德福精密驱动制造有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(77,'浙江新合发联宾包装科技有限责任公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(78,'浙江星月药物科技有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(79,'浙江欧迪恩传动科技股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(80,'浙江独山能源有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(81,'浙江纳特汽车标准件有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(82,'浙江英汇汽车部件有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(83,'浙江莎普爱思药业股份有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(84,'瀚蓝工业服务（嘉兴）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(85,'神钢特殊钢线（平湖）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(86,'艾迪科精细化工（浙江）有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(87,'浙江凯密特尔表面处理材料有限公司','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(88,'嘉兴市生态环境局平湖分局','lbd4pvfpICb1pX6gf3ar1Q==',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0');
+INSERT INTO `user` VALUES (2,'vben','lbd4pvfpICb1pX6gf3ar1Q==','admi1','超级管理员','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','vben@mate.vip1','18810001000',NULL,1,1,'1','test',NULL,NULL,NULL,NULL,'0'),(3,'amin2','lbd4pvfpICb1pX6gf3ar1Q==','amin2','杨幂','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mat02e@mate.vip','18910001002',NULL,1,4,'0',NULL,NULL,NULL,NULL,NULL,'0'),(4,'amin4','lbd4pvfpICb1pX6gf3ar1Q==','adin4','刘德华','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mate3@mate.vip','18910001004',NULL,1,1,'0',NULL,NULL,NULL,NULL,NULL,'0'),(6,'adm6n','lbd4pvfpICb1pX6gf3ar1Q==','adin6','mate6','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mat6e@mate.vip','18910001006',NULL,1,1,'0',NULL,NULL,NULL,NULL,NULL,'1'),(22,'pp1','lbd4pvfpICb1pX6gf3ar1Q==','pp1','11','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','pp1@163.com','1899',NULL,2,1,'0','',NULL,NULL,NULL,NULL,'0'),(30,'test','lbd4pvfpICb1pX6gf3ar1Q==','test','','','test@gmail.com','',0,0,1,'','tests','','',0,0,'0');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -276,4 +513,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-15 16:48:54
+-- Dump completed on 2023-01-03 14:28:09
