@@ -1,8 +1,6 @@
 package router
 
 import (
-	"i421/app/http/controller/address"
-	"i421/app/http/controller/company"
 	"i421/app/http/controller/home"
 	"i421/app/http/controller/menu"
 	"i421/app/http/controller/role"
@@ -19,33 +17,18 @@ func Routers(router *gin.Engine) {
 	router.Use(cors.Next())
 	router.GET("/", home.Index)
 	router.POST("/basic-api/login", user.Login)
-	router.GET("/basic-api/province", address.ProvinceList)
-	router.GET("/basic-api/city", address.CityList)
-	router.GET("/basic-api/area", address.AreaList)
 	router.GET("basic-api/getUserInfo", authorization.CheckToken(), user.GetUserInfo)
 	router.GET("basic-api/getPermCode", authorization.CheckToken(), menu.GetPermCode)
 	router.GET("basic-api/getMenuList", authorization.CheckToken(), menu.GetRoleMenuList)
 	router.GET("basic-api/logout", authorization.CheckToken(), user.Logout)
 	router.GET("basic-api/getRegisterRoleList", role.GetRegisterRoleList)
 	router.POST("basic-api/createAccount", user.UpdateOrCreateAccount)
-	router.GET("basic-api/getPublishedCompany/:area", company.GetPublishedCompanyList)
 
 	// system 路由
 	system := router.Group("basic-api/system/")
 	{
 		system.Use(authorization.CheckToken())
 		{
-			system.GET("getAllCompanyList", company.GetAllCompanyList)
-			// 1 平湖 2 桐乡 3 嘉善
-			system.GET("getYhpcList/:area", company.GetYhpcList)
-			system.GET("getDqbgList/:area", company.GetDqbgList)
-			system.GET("getMyCompanyList/:area", company.GetMyCompanyList)
-			system.GET("getPublishedCompanyList/:area", company.GetPublishedCompanyList)
-			system.GET("getCompanyListByPage", company.GetCompanyListByPage)
-			system.POST("updateOrCreateCompany", company.UpdateOrCreateCompany)
-			system.DELETE("deleteCompany", company.DeleteCompany)
-			system.POST("setCompanyStatus", company.SetCompanyStatus)
-
 			system.GET("getMenuList", menu.GetMenuList)
 			system.POST("updateOrCreateMenu", menu.UpdateOrCreateMenu)
 			system.DELETE("deleteMenu", menu.DeleteMenu)
