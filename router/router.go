@@ -1,6 +1,7 @@
 package router
 
 import (
+	"i421/app/http/controller/dept"
 	"i421/app/http/controller/home"
 	"i421/app/http/controller/menu"
 	"i421/app/http/controller/role"
@@ -29,6 +30,10 @@ func Routers(router *gin.Engine) {
 	{
 		system.Use(authorization.CheckToken())
 		{
+			system.GET("getDeptList", dept.GetDeptList)
+			system.POST("updateOrCreateDept", dept.UpdateOrCreateDept)
+			system.DELETE("deleteDept", dept.DeleteDept)
+
 			system.GET("getMenuList", menu.GetMenuList)
 			system.POST("updateOrCreateMenu", menu.UpdateOrCreateMenu)
 			system.DELETE("deleteMenu", menu.DeleteMenu)
