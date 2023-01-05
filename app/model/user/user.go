@@ -11,6 +11,7 @@ type User struct {
 	Password   string      `json:"password"`                         // 密码
 	Nickname   string      `json:"nickname"`                         // 昵称
 	RealName   string      `json:"realName"`                         // 真名
+	DeptId     int64       `gorm:"default:0" json:"dept_id"`         // 部门
 	Avatar     string      `json:"avatar"`                           // 头像
 	Status     int         `json:"status"`                           // 默认
 	Remark     string      `json:"remark"`                           // 默认备注
@@ -30,6 +31,7 @@ type UserAppendRoleIds struct {
 	Nickname   string      `json:"nickname"`                                   // 昵称
 	RealName   string      `json:"realName"`                                   // 真名
 	Avatar     string      `json:"avatar"`                                     // 头像
+	DeptId     int64       `gorm:"default:0" json:"dept_id"`                   // 部门
 	Status     int         `json:"status"`                                     // 默认
 	Remark     string      `json:"remark"`                                     // 默认备注
 	CreateBy   string      `json:"createBy"`                                   // 创建人

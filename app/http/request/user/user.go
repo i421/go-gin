@@ -22,6 +22,7 @@ type AccountListRequest struct {
 	Page     int    `form:"page", json:"page" binding:"required"`
 	PageSize int    `form:"pageSize" json:"pageSize" binding:"required"`
 	Account  string `form:"account" json:"account,omitempty" binding:"-"`
+	DeptId   int64  `form:"deptId" json:"deptId,omitempty" binding:"-"`
 	Nickname string `form:"nickname" json:"nickname,omitempty" binding:"-"`
 }
 
