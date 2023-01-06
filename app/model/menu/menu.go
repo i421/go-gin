@@ -14,6 +14,7 @@ type Menu struct {
 	ParentId   int64  `gorm:"default:-1" json:"parentId"` // 父菜单ID
 	Icon       string `json:"icon"`                       // 菜单图标
 	Sort       int    `gorm:"default:1" json:"sort"`      // 排序
+	Tree       string `gorm:"default:''" json:"tree"`     // tree
 	KeepAlive  bool   `gorm:"default:0" json:"keepAlive"` // 是否缓存改页面 1是
 	Type       int    `gorm:"default:0" json:"type"`      // 菜单类型
 	Hidden     int    `gorm:"default:0" json:"hidden"`    // 是否显示
