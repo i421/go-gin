@@ -7,13 +7,12 @@ import (
 // log
 type Log struct {
 	model.BaseModel
-	UserId    string `json:"user_id"`                    // 用户
+	UserId    int64  `json:"user_id"`                    // 用户
 	Type      int64  `gorm:"default:1" json:"type"`      // 类型
 	Title     string `json:"title"`                      // 标题
 	Operation string `json:"operation"`                  // 标题
 	Method    string `json:"method"`                     // 方法
 	Params    string `json:"params"`                     // 参数
-	Remark    string `json:"remark"`                     // 备注
 	Url       string `json:"url"`                        // Url地址
 	Ip        string `json:"ip"`                         // IP
 	Location  string `json:"location"`                   // 地址

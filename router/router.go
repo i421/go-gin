@@ -11,6 +11,7 @@ import (
 	"i421/app/http/controller/user"
 	"i421/app/http/middleware/authorization"
 	"i421/app/http/middleware/cors"
+	"i421/app/http/middleware/ilog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,7 @@ func Routers(router *gin.Engine) {
 	system := router.Group("basic-api/system/")
 	{
 		system.Use(authorization.CheckToken())
+		system.Use(ilog.Record())
 		{
 			system.GET("getConfigList", config.GetConfigList)
 			system.POST("updateOrCreateConfig", config.UpdateOrCreateConfig)
