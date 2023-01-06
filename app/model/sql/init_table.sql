@@ -156,7 +156,7 @@ CREATE TABLE `config` (
 
 LOCK TABLES `config` WRITE;
 /*!40000 ALTER TABLE `config` DISABLE KEYS */;
-INSERT INTO `config` VALUES (1,0,'oss','default','qiniuoss',0,'默认OSS配置',NULL,NULL,1672727702,1672727702,0),(2,1,'alioss','endpoint','oss-cn-beijing.aliyuncs.com',1,'对象存储服务的URL',NULL,NULL,1672727702,1672727702,0),(3,1,'alioss','customDomain','mall-zaitong.oss-cn-beijing.aliyuncs.com',2,'自定义域名',NULL,NULL,1672727702,1672727702,0),(4,1,'alioss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,1672727702,0),(5,1,'alioss','accessKey','LTA******rzjrV',4,'Access Key',NULL,NULL,1672727702,1672727702,0),(6,1,'alioss','secretKey','9H6Bxg**************bfNoy4E',5,'Access Secret',NULL,NULL,1672727702,1672727702,0),(7,1,'alioss','bucketName','m********g',6,'空间名',NULL,NULL,1672727702,1672727702,0),(8,1,'qiniuoss','endpoint','s3-cn-south-1.qiniucs.com',1,'对象存储服务的URL',NULL,NULL,1672727702,1672727702,0),(9,1,'qiniuoss','customDomain','cd**********com8878556757657',2,'自定义域名',NULL,NULL,1672727702,1672727702,0),(10,1,'qiniuoss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,1672727702,0),(11,1,'qiniuoss','accessKey','pj2M-4k_*********************dQpjb1L',4,'Access Key',NULL,NULL,1672727702,1672727702,0),(12,1,'qiniuoss','secretKey','Dx17O-dbR*******************Mxlc4bb',5,'Access Secret',NULL,NULL,1672727702,1672727702,0),(13,1,'qiniuoss','bucketName','ckjia',6,'空间名',NULL,NULL,1672727702,1672727702,0),(14,1,'miniooss','endpoint','66666',1,'对象存储服务的URL',NULL,NULL,1672727702,1672727702,0),(15,1,'miniooss','customDomain','2222',2,'自定义域名',NULL,NULL,1672727702,1672727702,0),(16,1,'miniooss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,1672727702,0),(17,1,'miniooss','accessKey','3333',4,'Access Key',NULL,NULL,1672727702,1672727702,0),(18,1,'miniooss','secretKey','4444',5,'Access Secret',NULL,NULL,1672727702,1672727702,0),(19,1,'miniooss','bucketName','5555',6,'空间名',NULL,NULL,1672727702,1672727702,0);
+INSERT INTO `config` VALUES (1,0,'oss','default','qiniuoss',1,'默认OSS1111',NULL,NULL,1672727702,NULL,0),(3,1,'alioss','customDomain','mall-zaitong.oss-cn-beijing.aliyuncs.com',2,'自定义域名',NULL,NULL,1672727702,NULL,0),(4,1,'alioss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,NULL,0),(5,1,'alioss','accessKey','LTA******rzjrV',4,'Access Key',NULL,NULL,1672727702,NULL,0),(6,1,'alioss','secretKey','9H6Bxg**************bfNoy4E',5,'Access Secret',NULL,NULL,1672727702,NULL,0),(7,1,'alioss','bucketName','m********g',6,'空间名',NULL,NULL,1672727702,NULL,0),(8,1,'qiniuoss','endpoint','s3-cn-south-1.qiniucs.com',1,'对象存储服务的URL',NULL,NULL,1672727702,NULL,0),(9,1,'qiniuoss','customDomain','cd**********com8878556757657',2,'自定义域名',NULL,NULL,1672727702,NULL,0),(10,1,'qiniuoss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,NULL,0),(11,1,'qiniuoss','accessKey','pj2M-4k_*********************dQpjb1L',4,'Access Key',NULL,NULL,1672727702,NULL,0),(12,1,'qiniuoss','secretKey','Dx17O-dbR*******************Mxlc4bb',5,'Access Secret',NULL,NULL,1672727702,NULL,0),(13,1,'qiniuoss','bucketName','ckjia',6,'空间名',NULL,NULL,1672727702,NULL,0),(14,1,'miniooss','endpoint','66666',1,'对象存储服务的URL',NULL,NULL,1672727702,NULL,0),(15,1,'miniooss','customDomain','2222',2,'自定义域名',NULL,NULL,1672727702,NULL,0),(16,1,'miniooss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,NULL,0),(17,1,'miniooss','accessKey','3333',4,'Access Key',NULL,NULL,1672727702,NULL,0),(18,1,'miniooss','secretKey','4444',5,'Access Secret',NULL,NULL,1672727702,NULL,0),(19,1,'miniooss','bucketName','5555',6,'空间名',NULL,NULL,1672727702,NULL,0);
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -271,12 +271,12 @@ CREATE TABLE `log` (
   `url` varchar(128) DEFAULT NULL COMMENT '请求路径',
   `ip` varchar(64) DEFAULT NULL COMMENT 'ip地址',
   `location` varchar(64) DEFAULT NULL COMMENT '地区',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` int DEFAULT NULL,
+  `update_time` int DEFAULT NULL,
   `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `log_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -285,6 +285,7 @@ CREATE TABLE `log` (
 
 LOCK TABLES `log` WRITE;
 /*!40000 ALTER TABLE `log` DISABLE KEYS */;
+INSERT INTO `log` VALUES (1,1,'1','tett',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0');
 /*!40000 ALTER TABLE `log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -471,4 +472,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-06 14:27:52
+-- Dump completed on 2023-01-06 15:27:37
