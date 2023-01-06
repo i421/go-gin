@@ -43,6 +43,7 @@ func InitDb() (err error) {
 	)
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.Configs.MysqlConf.Username, config.Configs.MysqlConf.Password, config.Configs.MysqlConf.Host, config.Configs.MysqlConf.DbName)
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: newLogger})
+	// Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
 	if err != nil {
 		return err
 	}

@@ -18,7 +18,7 @@ type UpdateOrCreateMenuRequest struct {
 	Show       int    `form:"show" json:"show" binding:"-"`
 	IsExt      int    `form:"isExt" json:"isExt" binding:"-"`
 	Type       int    `form:"type" json:"type" binding:"-"`
-	ParentMenu int64  `form:"parentMenu" json:"parentMenu" binding:"-"`
+	ParentId   int64  `form:"parentId" json:"parentId" binding:"-"`
 }
 
 // 删除

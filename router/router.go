@@ -1,8 +1,10 @@
 package router
 
 import (
+	"i421/app/http/controller/config"
 	"i421/app/http/controller/dept"
 	"i421/app/http/controller/home"
+	"i421/app/http/controller/log"
 	"i421/app/http/controller/menu"
 	"i421/app/http/controller/role"
 	"i421/app/http/controller/upload"
@@ -30,6 +32,13 @@ func Routers(router *gin.Engine) {
 	{
 		system.Use(authorization.CheckToken())
 		{
+			system.GET("getConfigList", config.GetConfigList)
+			system.POST("updateOrCreateConfig", config.UpdateOrCreateConfig)
+			system.DELETE("deleteConfig", config.DeleteConfig)
+
+			system.GET("getLogList", log.GetLogList)
+			system.DELETE("deleteLog", log.DeleteLog)
+
 			system.GET("getDeptList", dept.GetDeptList)
 			system.POST("updateOrCreateDept", dept.UpdateOrCreateDept)
 			system.DELETE("deleteDept", dept.DeleteDept)

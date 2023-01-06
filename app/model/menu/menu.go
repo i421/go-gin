@@ -11,7 +11,7 @@ type Menu struct {
 	Permission string `json:"permission"`                 // 菜单权限
 	Path       string `json:"path"`                       // 路径
 	Component  string `json:"component"`                  // 组件
-	ParentId   int64  `gorm:"default:0" json:"parentId"`  // 父菜单ID
+	ParentId   int64  `gorm:"default:-1" json:"parentId"` // 父菜单ID
 	Icon       string `json:"icon"`                       // 菜单图标
 	Sort       int    `gorm:"default:1" json:"sort"`      // 排序
 	KeepAlive  bool   `gorm:"default:0" json:"keepAlive"` // 是否缓存改页面 1是

@@ -16,44 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `api`
---
-
-DROP TABLE IF EXISTS `api`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `api` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `code` varchar(255) NOT NULL COMMENT '接口编码',
-  `name` varchar(100) DEFAULT NULL COMMENT '接口名称',
-  `notes` varchar(200) DEFAULT NULL COMMENT '接口描述',
-  `method` varchar(20) DEFAULT NULL COMMENT '请求方法',
-  `class_name` varchar(255) DEFAULT NULL COMMENT '类名',
-  `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
-  `path` varchar(255) DEFAULT NULL COMMENT '请求路径',
-  `content_type` varchar(100) DEFAULT NULL COMMENT '响应类型',
-  `service_id` varchar(100) DEFAULT NULL COMMENT '服务ID',
-  `status` char(1) DEFAULT '0' COMMENT 'API状态:0:启用 1:禁用',
-  `auth` char(1) DEFAULT '0' COMMENT '是否认证:0:不认证 1:认证',
-  `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `create_time` int DEFAULT NULL COMMENT '创建时间',
-  `update_time` int DEFAULT NULL COMMENT '更新时间',
-  `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统接口表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `api`
---
-
-LOCK TABLES `api` WRITE;
-/*!40000 ALTER TABLE `api` DISABLE KEYS */;
-/*!40000 ALTER TABLE `api` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `attachment`
 --
 
@@ -181,8 +143,8 @@ CREATE TABLE `config` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
   `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `create_time` int DEFAULT NULL,
+  `update_time` int DEFAULT NULL,
   `is_deleted` int DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='配置表';
@@ -194,7 +156,7 @@ CREATE TABLE `config` (
 
 LOCK TABLES `config` WRITE;
 /*!40000 ALTER TABLE `config` DISABLE KEYS */;
-INSERT INTO `config` VALUES (1,0,'oss','default','qiniuoss',0,'默认OSS配置',NULL,NULL,'2020-08-08 01:44:31','2020-12-16 09:37:21',0),(2,1,'alioss','endpoint','oss-cn-beijing.aliyuncs.com',1,'对象存储服务的URL',NULL,NULL,'2020-08-08 01:46:10','2020-08-09 16:14:15',0),(3,1,'alioss','customDomain','mall-zaitong.oss-cn-beijing.aliyuncs.com',2,'自定义域名',NULL,NULL,'2020-08-08 01:46:32','2020-08-09 16:14:08',0),(4,1,'alioss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,'2020-08-08 01:47:21','2020-08-08 01:47:35',0),(5,1,'alioss','accessKey','LTA******rzjrV',4,'Access Key',NULL,NULL,'2020-08-08 01:47:40','2020-08-09 07:53:48',0),(6,1,'alioss','secretKey','9H6Bxg**************bfNoy4E',5,'Access Secret',NULL,NULL,'2020-08-08 01:53:13','2020-08-10 01:31:53',0),(7,1,'alioss','bucketName','m********g',6,'空间名',NULL,NULL,'2020-08-08 01:53:14','2020-08-09 16:13:15',0),(8,1,'qiniuoss','endpoint','s3-cn-south-1.qiniucs.com',1,'对象存储服务的URL',NULL,NULL,'2020-08-08 01:46:10','2020-08-10 01:33:31',0),(9,1,'qiniuoss','customDomain','cd**********com8878556757657',2,'自定义域名',NULL,NULL,'2020-08-08 01:46:32','2020-11-15 20:02:32',0),(10,1,'qiniuoss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,'2020-08-08 01:47:21','2020-08-08 01:47:35',0),(11,1,'qiniuoss','accessKey','pj2M-4k_*********************dQpjb1L',4,'Access Key',NULL,NULL,'2020-08-08 01:47:40','2020-08-10 01:33:31',0),(12,1,'qiniuoss','secretKey','Dx17O-dbR*******************Mxlc4bb',5,'Access Secret',NULL,NULL,'2020-08-08 01:53:13','2020-08-10 01:33:31',0),(13,1,'qiniuoss','bucketName','ckjia',6,'空间名',NULL,NULL,'2020-08-08 01:53:14','2020-08-10 01:33:31',0),(14,1,'miniooss','endpoint','66666',1,'对象存储服务的URL',NULL,NULL,'2020-08-08 01:46:10','2020-08-09 02:03:52',0),(15,1,'miniooss','customDomain','2222',2,'自定义域名',NULL,NULL,'2020-08-08 01:46:32','2020-08-08 16:55:54',0),(16,1,'miniooss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,'2020-08-08 01:47:21','2020-08-08 01:47:35',0),(17,1,'miniooss','accessKey','3333',4,'Access Key',NULL,NULL,'2020-08-08 01:47:40','2020-08-08 16:55:58',0),(18,1,'miniooss','secretKey','4444',5,'Access Secret',NULL,NULL,'2020-08-08 01:53:13','2020-08-08 16:56:02',0),(19,1,'miniooss','bucketName','5555',6,'空间名',NULL,NULL,'2020-08-08 01:53:14','2020-08-08 16:56:06',0);
+INSERT INTO `config` VALUES (1,0,'oss','default','qiniuoss',0,'默认OSS配置',NULL,NULL,1672727702,1672727702,0),(2,1,'alioss','endpoint','oss-cn-beijing.aliyuncs.com',1,'对象存储服务的URL',NULL,NULL,1672727702,1672727702,0),(3,1,'alioss','customDomain','mall-zaitong.oss-cn-beijing.aliyuncs.com',2,'自定义域名',NULL,NULL,1672727702,1672727702,0),(4,1,'alioss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,1672727702,0),(5,1,'alioss','accessKey','LTA******rzjrV',4,'Access Key',NULL,NULL,1672727702,1672727702,0),(6,1,'alioss','secretKey','9H6Bxg**************bfNoy4E',5,'Access Secret',NULL,NULL,1672727702,1672727702,0),(7,1,'alioss','bucketName','m********g',6,'空间名',NULL,NULL,1672727702,1672727702,0),(8,1,'qiniuoss','endpoint','s3-cn-south-1.qiniucs.com',1,'对象存储服务的URL',NULL,NULL,1672727702,1672727702,0),(9,1,'qiniuoss','customDomain','cd**********com8878556757657',2,'自定义域名',NULL,NULL,1672727702,1672727702,0),(10,1,'qiniuoss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,1672727702,0),(11,1,'qiniuoss','accessKey','pj2M-4k_*********************dQpjb1L',4,'Access Key',NULL,NULL,1672727702,1672727702,0),(12,1,'qiniuoss','secretKey','Dx17O-dbR*******************Mxlc4bb',5,'Access Secret',NULL,NULL,1672727702,1672727702,0),(13,1,'qiniuoss','bucketName','ckjia',6,'空间名',NULL,NULL,1672727702,1672727702,0),(14,1,'miniooss','endpoint','66666',1,'对象存储服务的URL',NULL,NULL,1672727702,1672727702,0),(15,1,'miniooss','customDomain','2222',2,'自定义域名',NULL,NULL,1672727702,1672727702,0),(16,1,'miniooss','pathStyleAccess','false',3,'pathStyleAccess',NULL,NULL,1672727702,1672727702,0),(17,1,'miniooss','accessKey','3333',4,'Access Key',NULL,NULL,1672727702,1672727702,0),(18,1,'miniooss','secretKey','4444',5,'Access Secret',NULL,NULL,1672727702,1672727702,0),(19,1,'miniooss','bucketName','5555',6,'空间名',NULL,NULL,1672727702,1672727702,0);
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,9 +178,9 @@ CREATE TABLE `dept` (
   `create_time` int DEFAULT NULL COMMENT '创建时间',
   `update_time` int DEFAULT NULL COMMENT '修改时间',
   `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
-  `parent_id` bigint DEFAULT '0' COMMENT '上级ID',
+  `parent_id` int DEFAULT '-1',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='组织机构表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='组织机构表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,7 +189,7 @@ CREATE TABLE `dept` (
 
 LOCK TABLES `dept` WRITE;
 /*!40000 ALTER TABLE `dept` DISABLE KEYS */;
-INSERT INTO `dept` VALUES (1,'开发部',0,'sssss',0,NULL,NULL,1648194303,1648194303,'0',-1),(2,'开发分部',0,NULL,0,NULL,NULL,NULL,NULL,'1',1),(3,'开发二部',2,'测试更新',0,NULL,NULL,NULL,1648880538,'0',1),(4,'产品部',2,'sa',0,NULL,NULL,NULL,1648880550,'0',-1),(5,'产品一部',1,'da',1,NULL,NULL,NULL,1649231206,'0',4),(6,'sjsj',0,NULL,0,NULL,NULL,NULL,1648886605,'1',-1),(8,'test',1,'test',0,'','',1649830238,1649830238,'0',1);
+INSERT INTO `dept` VALUES (1,'开发部',0,'sssss',0,NULL,NULL,1648194303,1648194303,'0',-1),(2,'开发分部',0,NULL,0,NULL,NULL,NULL,NULL,'1',1),(3,'开发二部',2,'测试更新',0,NULL,NULL,NULL,1648880538,'0',1),(4,'产品部',2,'hha',0,NULL,NULL,NULL,1672883920,'0',-1),(5,'产品一部',1,'da',1,NULL,NULL,NULL,1649231206,'0',4);
 /*!40000 ALTER TABLE `dept` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,24 +262,20 @@ DROP TABLE IF EXISTS `log`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `log` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint unsigned NOT NULL COMMENT '用户id',
   `type` char(1) DEFAULT '1' COMMENT '日志类型',
-  `trace_id` varchar(64) DEFAULT NULL COMMENT '跟踪ID',
   `title` varchar(64) DEFAULT NULL COMMENT '日志标题',
   `operation` text COMMENT '操作内容',
   `method` varchar(64) DEFAULT NULL COMMENT '执行方法',
   `params` text COMMENT '参数',
   `url` varchar(128) DEFAULT NULL COMMENT '请求路径',
   `ip` varchar(64) DEFAULT NULL COMMENT 'ip地址',
-  `exception` text,
-  `execute_time` decimal(11,0) DEFAULT NULL COMMENT '耗时',
   `location` varchar(64) DEFAULT NULL COMMENT '地区',
-  `create_by` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `update_by` varchar(32) DEFAULT NULL COMMENT '更新人',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` char(1) DEFAULT '0' COMMENT '删除标识',
-  `tenant_id` int DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `log_user_id_foreign` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -367,7 +325,7 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES (1000,'系统管理',NULL,'/system','Layout',0,'','ant-design:appstore-outlined',1,'0','0','0','1',NULL,NULL,NULL,NULL,'0','0'),(1100,'用户管理',NULL,'/system/account','/system/account/index',1000,'','ant-design:user-outlined',2,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1101,'用户新增','sys:user:add','',NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1102,'用户修改','sys:user:edit',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1103,'用户删除','sys:user:delete',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1104,'用户启用','sys:user:enable',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1105,'用户禁用','sys:user:disable',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1106,'用户导出','sys:user:export',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1200,'角色管理',NULL,'/system/role','/system/role/index',1000,'','ant-design:team-outlined',3,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1201,'角色新增','sys:role:add',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1202,'角色修改','sys:role:edit',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1203,'角色删除','sys:role:delete',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1204,'角色导出','sys:role:export',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1205,'角色权限','sys:role:perm',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1300,'菜单管理',NULL,'/system/menu','/system/menu/index',1000,'','ant-design:menu-unfold-outlined',3,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1301,'菜单新增','sys:menu:add',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1302,'菜单修改','sys:menu:edit',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1303,'菜单删除','sys:menu:delete',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1304,'菜单启用','sys:menu:enable',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1305,'菜单禁用','sys:menu:disable',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1306,'菜单导出','sys:menu:export',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1400,'部门管理',NULL,'/system/dept','/system/dept/index',1000,'','ant-design:apartment-outlined',1,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1401,'部门新增','sys:depart:add',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1402,'部门修改','sys:depart:edit',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1403,'部门删除','sys:depart:delete',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1404,'部门导出','sys:depart:export',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2032,'操作日志',NULL,'/system/log','/system/log/index',1000,'','ant-design:ordered-list-outlined',8,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(2033,'详细日志','sys:log:detail',NULL,NULL,2032,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2034,'日志删除','sys:log:delete',NULL,NULL,2032,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2035,'字典管理',NULL,'/system/dict','/system/dict/index',1000,'','ant-design:read-outlined',6,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(2036,'新增字典','sys:dict:add',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2037,'修改字典','sys:dict:edit',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2038,'删除字典','sys:dict:delete',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2064,'工作台',NULL,'/dashboard','Layout',0,'','ant-design:windows-outlined',0,'0','0','0','0',NULL,NULL,NULL,NULL,'0','0'),(2065,'分析页',NULL,'/dashboard','/dashboard/analysis/index',2064,'','ant-design:rise-outlined',0,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0'),(2068,'工作台',NULL,'/dashboard/workbench','/dashboard/workbench/index',2064,'','ant-design:block-outlined',2,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0'),(2069,'关于Artemis',NULL,'/about/index','/sys/about/index',0,'','ant-design:info-circle-outlined',100,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0');
+INSERT INTO `menu` VALUES (1000,'系统管理',NULL,'/system','Layout',-1,'','ant-design:appstore-outlined',1,'0','0','0','1',NULL,NULL,NULL,NULL,'0','0'),(1100,'用户管理',NULL,'/system/account','/system/account/index',1000,'','ant-design:user-outlined',2,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1101,'用户新增','sys:user:add','',NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1102,'用户修改','sys:user:edit',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1103,'用户删除','sys:user:delete',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1104,'用户启用','sys:user:enable',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1105,'用户禁用','sys:user:disable',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1106,'用户导出','sys:user:export',NULL,NULL,1100,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1200,'角色管理',NULL,'/system/role','/system/role/index',1000,'','ant-design:team-outlined',3,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1201,'角色新增','sys:role:add',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1202,'角色修改','sys:role:edit',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1203,'角色删除','sys:role:delete',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1204,'角色导出','sys:role:export',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1205,'角色权限','sys:role:perm',NULL,NULL,1200,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1300,'菜单管理',NULL,'/system/menu','/system/menu/index',1000,'','ant-design:menu-unfold-outlined',3,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1301,'菜单新增','sys:menu:add',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1302,'菜单修改','sys:menu:edit',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1303,'菜单删除','sys:menu:delete',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1304,'菜单启用','sys:menu:enable',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1305,'菜单禁用','sys:menu:disable',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1306,'菜单导出','sys:menu:export',NULL,NULL,1300,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1400,'部门管理',NULL,'/system/dept','/system/dept/index',1000,'','ant-design:apartment-outlined',1,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(1401,'部门新增','sys:depart:add',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1402,'部门修改','sys:depart:edit',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1403,'部门删除','sys:depart:delete',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(1404,'部门导出','sys:depart:export',NULL,NULL,1400,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2032,'操作日志',NULL,'/system/log','/system/log/index',1000,'','ant-design:ordered-list-outlined',8,'0','1','0','1',NULL,NULL,NULL,NULL,'0','0'),(2033,'详细日志','sys:log:detail',NULL,NULL,2032,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2034,'日志删除','sys:log:delete',NULL,NULL,2032,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2035,'字典管理','','/system/dict','/system/dict/index',1000,'','ant-design:read-outlined',6,'0','1','0','0',NULL,NULL,NULL,1672985326,'0','0'),(2036,'新增字典','sys:dict:add',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2037,'修改字典','sys:dict:edit',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2038,'删除字典','sys:dict:delete',NULL,NULL,2035,'',NULL,1,'0','2','0','1',NULL,NULL,NULL,NULL,'0','0'),(2064,'工作台',NULL,'/dashboard','Layout',-1,'','ant-design:windows-outlined',0,'0','0','0','0',NULL,NULL,NULL,NULL,'0','0'),(2065,'分析页',NULL,'/dashboard','/dashboard/analysis/index',2064,'','ant-design:rise-outlined',0,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0'),(2068,'工作台','','/dashboard/workbench','/dashboard/workbench/index',2064,'','ant-design:block-outlined',2,'0','1','0','0',NULL,NULL,NULL,1672971001,'0','0'),(2069,'关于Artemis',NULL,'/about/index','/sys/about/index',-1,'','ant-design:info-circle-outlined',100,'0','1','0','0',NULL,NULL,NULL,NULL,'0','0');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -430,7 +388,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'超级管理员','super','超级管理员组',1,'0',NULL,NULL,1649578786,1649934648,'0'),(2,'管理员','admin','管理员',2,'0',NULL,NULL,1649578786,1649934663,'0'),(8,'测试角色','test','test',3,'0','','',1649925084,1650809651,'0');
+INSERT INTO `role` VALUES (1,'超级管理员','super','超级管理员组',1,'0',NULL,NULL,1649578786,1672727702,'0'),(2,'管理员','admin','管理员',2,'0',NULL,NULL,1649578786,1649934663,'0'),(8,'测试角色','test','test',3,'0','','',1649925084,1650809651,'0');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -500,7 +458,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (2,'vben','lbd4pvfpICb1pX6gf3ar1Q==','admi1','超级管理员','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','vben@mate.vip1','18810001000',NULL,1,1,'1','test',NULL,NULL,NULL,NULL,'0'),(3,'amin2','lbd4pvfpICb1pX6gf3ar1Q==','amin2','杨幂','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mat02e@mate.vip','18910001002',NULL,1,4,'0',NULL,NULL,NULL,NULL,NULL,'0'),(4,'amin4','lbd4pvfpICb1pX6gf3ar1Q==','adin4','刘德华','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mate3@mate.vip','18910001004',NULL,1,1,'0',NULL,NULL,NULL,NULL,NULL,'0'),(6,'adm6n','lbd4pvfpICb1pX6gf3ar1Q==','adin6','mate6','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mat6e@mate.vip','18910001006',NULL,1,1,'0',NULL,NULL,NULL,NULL,NULL,'1'),(22,'pp1','lbd4pvfpICb1pX6gf3ar1Q==','pp1','11','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','pp1@163.com','1899',NULL,2,1,'0','',NULL,NULL,NULL,NULL,'0'),(30,'test','lbd4pvfpICb1pX6gf3ar1Q==','test','','','test@gmail.com','',0,0,1,'','tests','','',0,0,'0');
+INSERT INTO `user` VALUES (2,'vben','lbd4pvfpICb1pX6gf3ar1Q==','admi1','超级管理员','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','vben@mate.vip1','18810001000',NULL,1,1,'0','test',NULL,NULL,NULL,NULL,'0'),(3,'amin2','lbd4pvfpICb1pX6gf3ar1Q==','amin2','杨幂','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mat02e@mate.vip','18910001002',NULL,1,4,'0',NULL,NULL,NULL,NULL,NULL,'0'),(4,'amin4','lbd4pvfpICb1pX6gf3ar1Q==','adin4','刘德华','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mate3@mate.vip','18910001004',NULL,1,1,'0',NULL,NULL,NULL,NULL,NULL,'0'),(6,'adm6n','lbd4pvfpICb1pX6gf3ar1Q==','adin6','mate6','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','mat6e@mate.vip','18910001006',NULL,1,1,'0',NULL,NULL,NULL,NULL,NULL,'1'),(22,'pp1','lbd4pvfpICb1pX6gf3ar1Q==','pp1','11','https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2084118128,2518711034&fm=26&gp=0.jpg','pp1@163.com','1899',NULL,2,1,'0','',NULL,NULL,NULL,NULL,'0'),(30,'test','lbd4pvfpICb1pX6gf3ar1Q==','test','','','test@gmail.com','',0,0,1,'0','tests','','',0,0,'0');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -513,4 +471,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-03 14:28:09
+-- Dump completed on 2023-01-06 14:27:52
