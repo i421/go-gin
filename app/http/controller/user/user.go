@@ -18,14 +18,14 @@ import (
 // LoginResp 用户登陆返回结构体
 type LoginResp struct {
 	user.User        // 登陆用户
-	Token     string `json:"token"` // 登陆后添加令牌
+	Token     string `json:"Authorization"` // 登陆后添加令牌
 }
 
 // GetUserInfoResp 用户信息结构体
 type GetUserInfoResp struct {
-	user.User        // 登陆用户
-	Token     string `json:"token"`    // 登陆后添加令牌
-	HomePath  string `json:"homePath"` // 首页地址
+	Permission []string `json:"permissions"` // 权限
+	Username   string   `json:"username"`    // 用户名
+	Avatar     string   `json:"avatar"`      // 头像
 }
 
 // Login 用户登陆
@@ -78,8 +78,6 @@ func GetUserInfo(c *gin.Context) {
 
 	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
 
-	token := c.MustGet("token").(string)
-
 	userService := service.NewUserService()
 	user, err := userService.GetUserInfo(userToken.UserId)
 
@@ -95,10 +93,15 @@ func GetUserInfo(c *gin.Context) {
 	}
 
 	var userInfoResp GetUserInfoResp
+	var permissions []string
 
-	userInfoResp.User = user
-	userInfoResp.Token = token
-	userInfoResp.HomePath = "/dashboard"
+	for _, v := range user.Roles {
+		permissions = append(permissions, v.RoleName)
+	}
+
+	userInfoResp.Permission = permissions
+	userInfoResp.Username = user.Account
+	userInfoResp.Avatar = user.Avatar
 
 	res := Response{
 		Code: 0,

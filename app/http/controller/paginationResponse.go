@@ -9,5 +9,5 @@ type PaginationStruct struct {
 type PaginationResponse struct {
 	Code uint             `json:"code"`              // 1 - 失败, 0 - 成功
 	Msg  string           `json:"message,omitempty"` // 提示
-	Data PaginationStruct `json:"result,omitempty"`  // 数据
+	Data PaginationStruct `json:"data,omitempty"`    // 数据
 }

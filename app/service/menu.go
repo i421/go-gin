@@ -137,9 +137,7 @@ func (ms *MenuService) GetRoleMenuList(userId int64) (tree []RoleMenuTreeList, e
 }
 
 // GetMenuList 获取部门列表
-func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (tree []MenuTreeList, err error) {
-
-	var menuResp []menu.Menu
+func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (menuResp []menu.Menu, err error) {
 
 	// 查询条件结构体
 	var whereCond MenuWhereCond
@@ -155,12 +153,12 @@ func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (tre
 	res := model.Db.Model(&menu.Menu{}).Where("is_deleted != 1").Where(whereCond).Order("sort asc").Find(&menuResp)
 
 	if res.RowsAffected < 1 {
-		return tree, errors.New("查询为空")
+		return menuResp, errors.New("查询为空")
 	}
 
-	tree = ms.GetMenu(menuResp, -1)
+	// tree = ms.GetMenu(menuResp, -1)
 
-	return tree, nil
+	return menuResp, nil
 }
 
 // GetPermCode 获取用户按钮权限ID数组
