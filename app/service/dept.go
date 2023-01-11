@@ -13,7 +13,7 @@ type DeptService struct {
 
 type WhereCond struct {
 	Name   string `json:"name"`
-	Status int    `json:"status"`
+	Status string `json:"status"`
 }
 
 // NewDeptService 实例化
@@ -31,7 +31,7 @@ func (ds *DeptService) GetDeptList(deptListRequest request.DeptListRequest) (dep
 		whereCond.Name = deptListRequest.DeptName
 	}
 
-	if deptListRequest.Status != 0 {
+	if deptListRequest.Status != "" {
 		whereCond.Status = deptListRequest.Status
 	}
 
