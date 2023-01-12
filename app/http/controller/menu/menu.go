@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 获取角色菜单
+// 登录获取用户菜单
 func GetRoleMenuList(c *gin.Context) {
 
 	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
@@ -33,6 +33,79 @@ func GetRoleMenuList(c *gin.Context) {
 		Code: 0,
 		Msg:  "success",
 		Data: menuListResp,
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// 登录角色对应菜单
+func GetRoleMenu(c *gin.Context) {
+
+	var roleMenuRequest request.RoleMenuRequest
+
+	if err := c.ShouldBind(&roleMenuRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	menuService := service.NewMenuService()
+	menuListResp, err := menuService.GetMenuOfRole(roleMenuRequest.RoleId)
+
+	// 获取失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: menuListResp,
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// 更新角色对应菜单
+func UpdateRoleMenu(c *gin.Context) {
+
+	var updateRoleMenuRequest request.UpdateRoleMenuRequest
+
+	if err := c.ShouldBind(&updateRoleMenuRequest); err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	menuService := service.NewMenuService()
+	_, err := menuService.UpdateMenuOfRole(updateRoleMenuRequest)
+
+	// 获取失败
+	if err != nil {
+		res := Response{
+			Code: 1,
+			Msg:  err.Error(),
+		}
+
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+	res := Response{
+		Code: 0,
+		Msg:  "success",
 	}
 
 	c.JSON(http.StatusOK, res)

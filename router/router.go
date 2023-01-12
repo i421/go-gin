@@ -47,6 +47,8 @@ func Routers(router *gin.Engine) {
 
 			system.GET("getMenuList", menu.GetMenuList)
 			system.POST("updateOrCreateMenu", menu.UpdateOrCreateMenu)
+			system.POST("getRoleMenu", menu.GetRoleMenu)
+			system.POST("updateRoleMenu", menu.UpdateRoleMenu)
 			system.DELETE("deleteMenu", menu.DeleteMenu)
 
 			system.POST("accountExist", user.AccountExist)

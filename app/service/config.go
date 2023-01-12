@@ -66,7 +66,7 @@ func (cs *ConfigService) DeleteConfig(deleteConfigRequest request.DeleteConfigRe
 // updateConfig 更新配置
 func (cs *ConfigService) UpdateConfig(updateConfig request.UpdateOrCreateConfigRequest) (flag bool, err error) {
 
-	res := model.Db.Model(&config.Config{}).Where("id = ?", updateConfig.ID).Select("code", "c_key", "value", "sort", "remark").Updates(map[string]interface{}{"code": updateConfig.Code, "c_key": updateConfig.CKey, "value": updateConfig.Value, "sort": updateConfig.Order, "remark": updateConfig.Remark})
+	res := model.Db.Model(&config.Config{}).Where("id = ?", updateConfig.ID).Select("code", "c_key", "value", "sort", "remark", "parent_id").Updates(map[string]interface{}{"code": updateConfig.Code, "c_key": updateConfig.CKey, "value": updateConfig.Value, "sort": updateConfig.Order, "remark": updateConfig.Remark, "parent_id": updateConfig.ParentId})
 
 	if res.RowsAffected < 1 {
 		return false, errors.New("更新失败")
@@ -77,7 +77,7 @@ func (cs *ConfigService) UpdateConfig(updateConfig request.UpdateOrCreateConfigR
 // createConfig 创建配置
 func (cs *ConfigService) CreateConfig(createConfigRequest request.UpdateOrCreateConfigRequest) (flag bool, err error) {
 
-	configResp := config.Config{Code: createConfigRequest.Code, CKey: createConfigRequest.CKey, Remark: createConfigRequest.Remark, Value: createConfigRequest.Value, Sort: createConfigRequest.Order}
+	configResp := config.Config{Code: createConfigRequest.Code, CKey: createConfigRequest.CKey, Remark: createConfigRequest.Remark, Value: createConfigRequest.Value, Sort: createConfigRequest.Order, ParentId: createConfigRequest.ParentId}
 
 	res := model.Db.Create(&configResp)
 

@@ -9,12 +9,13 @@ type ConfigListRequest struct {
 
 // 更新配置
 type UpdateOrCreateConfigRequest struct {
-	ID     int64  `form:"id" json:"id" binding:"-"`
-	Code   string `form:"code" json:"code"  binding:"required"`
-	CKey   string `form:"c_key" json:"c_key" binding:"-"`
-	Value  string `form:"value" json:"value" binding:"-"`
-	Order  int64  `form:"order" json:"order" binding:"-"`
-	Remark string `form:"remark" json:"remark" binding:"-"`
+	ID       int64  `form:"id" json:"id" binding:"-"`
+	Code     string `form:"code" json:"code"  binding:"required"`
+	CKey     string `form:"c_key" json:"c_key" binding:"-"`
+	Value    string `form:"value" json:"value" binding:"-"`
+	Order    int64  `form:"sort" json:"sort" binding:"-"`
+	Remark   string `form:"remark" json:"remark" binding:"-"`
+	ParentId int64  `form:"parentId" json:"parentId" binding:"-"`
 }
 
 // 删除

@@ -5,11 +5,12 @@ import (
 	request "i421/app/http/request/menu"
 	"i421/app/model"
 	"i421/app/model/menu"
+	"i421/app/model/permissionRole"
 )
 
 type MenuWhereCond struct {
 	Name   string `json:"name"`
-	Status int    `json:"status"`
+	Status string `json:"status"`
 }
 
 type Meta struct {
@@ -136,6 +137,41 @@ func (ms *MenuService) GetRoleMenuList(userId int64) (tree []RoleMenuTreeList, e
 	return tree, nil
 }
 
+// GetRoleMenu 获取角色对应的菜单
+func (ms *MenuService) GetMenuOfRole(roleId int64) (menuIds []int64, err error) {
+
+	var menuResp []menu.Menu
+	res := model.Db.Raw("SELECT menu.id FROM menu INNER JOIN permission_role ON menu.id = permission_role.menu_id WHERE menu.status != 1 AND menu.is_deleted != 1 AND menu.type < 2 AND permission_role.role_id = ? order by sort asc", roleId).Scan(&menuResp)
+
+	if res.RowsAffected < 1 {
+		return menuIds, errors.New("查询为空")
+	}
+
+	for _, v := range menuResp {
+		menuIds = append(menuIds, v.ID)
+	}
+
+	return menuIds, nil
+}
+
+// UpdateRoleMenu 更新角色对应的菜单
+func (ms *MenuService) UpdateMenuOfRole(updateRoleMenuRequest request.UpdateRoleMenuRequest) (flag bool, err error) {
+
+	var permissionRoles []permissionRole.PermissionRole
+
+	for _, item := range updateRoleMenuRequest.MenuIds {
+		var permissionRole permissionRole.PermissionRole
+		permissionRole.MenuId = item
+		permissionRole.RoleId = updateRoleMenuRequest.RoleId
+		permissionRoles = append(permissionRoles, permissionRole)
+	}
+
+	model.Db.Model(&permissionRole.PermissionRole{}).Where("role_id = ?", updateRoleMenuRequest.RoleId).Delete(&permissionRoles)
+	model.Db.Model(&permissionRole.PermissionRole{}).Create(&permissionRoles)
+
+	return true, nil
+}
+
 // GetMenuList 获取部门列表
 func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (menuResp []menu.Menu, err error) {
 
@@ -146,7 +182,7 @@ func (ms *MenuService) GetMenuList(menuListRequest request.MenuListRequest) (men
 		whereCond.Name = menuListRequest.MenuName
 	}
 
-	if menuListRequest.Status != 0 {
+	if menuListRequest.Status != "" {
 		whereCond.Status = menuListRequest.Status
 	}
 

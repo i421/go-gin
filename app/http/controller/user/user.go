@@ -287,6 +287,8 @@ func AccountExist(c *gin.Context) {
 func UpdatePassword(c *gin.Context) {
 
 	var updatePasswordRequest request.UpdatePasswordRequest
+	userToken := c.MustGet("userToken").(*ijwt.MyClaims)
+	updatePasswordRequest.ID = userToken.UserId
 
 	if err := c.ShouldBind(&updatePasswordRequest); err != nil {
 		res := Response{
