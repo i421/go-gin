@@ -1,7 +1,7 @@
 # go-gin
 
 #### 介绍
-gin Web framework, Frontent: i421-vben, i421-ele.
+gin Web framework, Frontend: i421-vben, i421-ele.
 
 #### 软件架构
 软件架构说明
