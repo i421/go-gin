@@ -1,7 +1,7 @@
 # go-gin
 
 #### 介绍
-gin Web framework, vben-admin-thin-next后台
+gin Web framework, Frontent: i421-vben, i421-ele.
 
 #### 软件架构
 软件架构说明
@@ -9,10 +9,20 @@ gin Web framework, vben-admin-thin-next后台
 
 #### 安装教程
 
+```
 1.  git clone 
 2.  go mod tidy
 3.  go build
+```
+
+#### 配置
+
+```
+cp config/config.yaml.ini config/config.yaml
+```
 
 #### 使用说明
 
+```
 1.  ./i421
+```
